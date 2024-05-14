@@ -16,6 +16,7 @@
 package com.hivemq.adapter.sdk.api.events;
 
 import com.hivemq.adapter.sdk.api.events.model.Event;
+import com.hivemq.adapter.sdk.api.events.model.EventBuilder;
 import com.hivemq.extension.sdk.api.annotations.NotNull;
 import com.hivemq.extension.sdk.api.annotations.Nullable;
 
@@ -32,8 +33,18 @@ public interface EventService {
     void fireEvent(final @NotNull Event event);
 
     /**
+     * @param adapterId  the id of the adapter for which the event is created
+     * @param protocolId the protocol of the adapter for which the event is created
+     * @return a {@link EventBuilder} to add further information and build an {@link Event}
+     */
+    @NotNull EventBuilder adapterEvent(final @NotNull String adapterId, final @NotNull String protocolId);
+
+
+    @NotNull EventBuilder bridgeEvent();
+
+    /**
      * @param sinceTimestamp events before this timestamp will not be returned.
-     * @param limit how many events should be fetched
+     * @param limit          how many events should be fetched
      * @return a sorted list of events from latest events to older events.
      */
     @NotNull List<Event> readEvents(final @Nullable Long sinceTimestamp, final @Nullable Integer limit);

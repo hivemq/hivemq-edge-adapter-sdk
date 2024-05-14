@@ -11,7 +11,6 @@ public interface AdapterFactories {
 
     @NotNull PayloadFactory payloadFactory();
 
-    @NotNull EventBuilderFactory eventBuilderFactory();
 
     @NotNull DataPointFactory dataPointFactory();
 }

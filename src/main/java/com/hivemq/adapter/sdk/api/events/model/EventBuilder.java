@@ -48,4 +48,7 @@ public interface EventBuilder {
      * @return the Event based on the input
      */
     @NotNull Event build();
+
+    void fire();
+
 }
