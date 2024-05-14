@@ -4,6 +4,7 @@ networkNT = "1.0.84"
 swagger = "2.2.21"
 apache-commonsLang = "3.12.0"
 guava = "32.1.3-jre"
+victools="4.35.0"
 
 [libraries]
 jackson-jaxrs-jsonProvider = { module = "com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider", version.ref = "jackson" }
@@ -11,6 +12,9 @@ networkNT = { module = "com.networknt:json-schema-validator", version.ref = "net
 swagger-annotations = { module = "io.swagger.core.v3:swagger-annotations", version.ref = "swagger" }
 apache-commonsLang = { module = "org.apache.commons:commons-lang3", version.ref = "apache-commonsLang" }
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
+victools-generator = { module = "com.github.victools:jsonschema-generator", version.ref = "victools" }
+victools-jsonSchemaModule = { module = "com.github.victools:jsonschema-module-jackson", version.ref = "victools" }
+
 
 [plugins]
 nexusPublish = { id = "io.github.gradle-nexus.publish-plugin", version = "1.3.0" }

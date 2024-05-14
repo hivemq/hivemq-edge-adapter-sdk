@@ -60,14 +60,13 @@ repositories {
 }
 
 dependencies {
+    compileOnly(libs.apache.commonsLang)
     compileOnly(libs.guava)
     compileOnly(libs.jackson.jaxrs.jsonProvider)
     compileOnly(libs.networkNT)
     compileOnly(libs.swagger.annotations)
-    compileOnly(libs.apache.commonsLang)
-
-    compileOnly("com.github.victools:jsonschema-generator:4.35.0")
-    compileOnly("com.github.victools:jsonschema-module-jackson:4.35.0")
+    compileOnly(libs.victools.generator)
+    compileOnly(libs.victools.jsonSchemaModule)
 }
 
 /* ******************** java ******************** */
