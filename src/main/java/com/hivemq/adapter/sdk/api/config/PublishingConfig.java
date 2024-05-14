@@ -5,8 +5,7 @@ import com.hivemq.extension.sdk.api.annotations.Nullable;
 
 import java.util.List;
 
-// TODO the name is still bad
-public interface AdapterSubscription {
+public interface PublishingConfig {
 
     /**
      * @return the topic on which the data will be available
