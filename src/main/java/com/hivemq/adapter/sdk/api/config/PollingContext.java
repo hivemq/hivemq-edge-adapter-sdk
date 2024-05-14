@@ -5,12 +5,12 @@ import com.hivemq.extension.sdk.api.annotations.Nullable;
 
 import java.util.List;
 
-public interface PublishingConfig {
+public interface PollingContext {
 
     /**
      * @return the topic on which the data will be available
      */
-    @Nullable String getDestination();
+    @Nullable String getMqttTopic();
 
     /**
      * @return the Quality-of-Service for the publish containing the data

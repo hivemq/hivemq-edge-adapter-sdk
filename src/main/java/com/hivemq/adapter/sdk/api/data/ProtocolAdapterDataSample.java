@@ -2,7 +2,7 @@ package com.hivemq.adapter.sdk.api.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.hivemq.adapter.sdk.api.config.PublishingConfig;
+import com.hivemq.adapter.sdk.api.config.PollingContext;
 import com.hivemq.extension.sdk.api.annotations.NotNull;
 
 import java.util.List;
@@ -13,10 +13,10 @@ import java.util.List;
  */
 public interface ProtocolAdapterDataSample {
     /**
-     * @return the {@link PublishingConfig} containing information how the data gets published by the broker.
+     * @return the {@link PollingContext} containing information how the data gets published by the broker.
      */
     @JsonIgnore
-    @NotNull PublishingConfig getSubscription();
+    @NotNull PollingContext getSubscription();
 
     /**
      * @return the timestamp when this data sample was taken.
