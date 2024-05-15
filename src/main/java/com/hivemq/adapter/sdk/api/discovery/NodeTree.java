@@ -30,7 +30,7 @@ public interface NodeTree {
      * @param description a description for this node.
      * @param parentId the id of the parent node.
      * @param nodeType the type of the node.
-     * @param selectable TODO: NOT USED IN BACKEND, WHAT DOES IT DO?
+     * @param selectable Whether this node can be selected as a data source.
      */
     void addNode(
             @NotNull String id,
