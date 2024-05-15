@@ -55,10 +55,8 @@ public interface EventBuilder {
     @NotNull EventBuilder withSource(@NotNull TypeIdentifier source);
 
     /**
-     * @return the Event based on the input
+     * This method is to be called after populating the builder with information to fire this event via the EventService.
      */
-    @NotNull Event build();
-
     void fire();
 
 }

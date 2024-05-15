@@ -19,8 +19,18 @@ import com.hivemq.extension.sdk.api.annotations.NotNull;
 import com.hivemq.extension.sdk.api.annotations.Nullable;
 
 public interface ProtocolAdapterStartOutput {
+
+    /**
+     * Signals HiveMQ Edge that this start attempt was successful.
+     */
     void startedSuccessfully();
 
-    void failStart(@NotNull Throwable t, @Nullable String errorMessage);
+    /**
+     * Signals HiveMQ Edge that this start attempt failed.
+     *
+     * @param throwable    a throwable signaling the reason why the start failed.
+     * @param errorMessage Optional error message to be logged
+     */
+    void failStart(@NotNull Throwable throwable, @Nullable String errorMessage);
 
 }

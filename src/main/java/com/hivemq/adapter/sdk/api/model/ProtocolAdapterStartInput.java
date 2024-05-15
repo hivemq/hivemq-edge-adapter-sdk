@@ -18,8 +18,14 @@ package com.hivemq.adapter.sdk.api.model;
 import com.hivemq.adapter.sdk.api.services.ModuleServices;
 import com.hivemq.extension.sdk.api.annotations.NotNull;
 
+/**
+ * Object to access information and Services necessary for the start of adapters.
+ */
 public interface ProtocolAdapterStartInput {
 
+    /**
+     * @return a Object that contains a variety of services useful for the start of a protocol adapter.
+     */
     @NotNull ModuleServices moduleServices();
 
 }

@@ -43,15 +43,13 @@ public interface ProtocolAdapter {
      */
     @NotNull String getId();
 
-
-    // TODO why return the output. Just set the status like we always
     /**
      * Start the adapter, establishing a connection to any internal or external device using the configuration supplied
      * during instantiation.
      *
      * @param input  - the state associated with runtime. Allows the adapter to bind to required services in a decoupled
      *               manner
-     * @param output - the output resulting from the start operation. The adapter will
+     * @param output - the output to signal back to HiveMQ Edge the status of the start attempt.
      */
      void start(
              @NotNull ProtocolAdapterStartInput input, @NotNull ProtocolAdapterStartOutput output);

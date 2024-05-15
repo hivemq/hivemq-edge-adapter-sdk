@@ -8,7 +8,7 @@ import com.hivemq.extension.sdk.api.annotations.Nullable;
 
 import java.util.List;
 
-public interface AdapterSubscriptionFactory {
+public interface PollingContextFactory {
 
     /**
      * @param destination    the mqtt topic on which the data should be published

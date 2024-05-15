@@ -28,11 +28,6 @@ import java.util.List;
 public interface EventService {
 
     /**
-     * @param event the Event that gets published on the event service
-     */
-    void fireEvent(final @NotNull Event event);
-
-    /**
      * @param adapterId  the id of the adapter for which the event is created
      * @param protocolId the protocol of the adapter for which the event is created
      * @return a {@link EventBuilder} to add further information and build an {@link Event}

@@ -7,7 +7,13 @@ import com.hivemq.extension.sdk.api.annotations.NotNull;
  */
 public interface AdapterFactories {
 
-    @NotNull AdapterSubscriptionFactory adapterSubscriptionFactory();
+    /**
+     * @return a factory to create concrete instances of PollingContext
+     */
+    @NotNull PollingContextFactory adapterSubscriptionFactory();
 
+    /**
+     * @return a factory to create concrete instances of DataPoint
+     */
     @NotNull DataPointFactory dataPointFactory();
 }

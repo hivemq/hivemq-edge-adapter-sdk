@@ -19,6 +19,9 @@ import com.hivemq.extension.sdk.api.annotations.NotNull;
 
 /**
  * @author Simon L Johnson
+ *
+ * A generic exception to signal problems within the protocol adapter routines.
+ * Users are free to extends this class to have more specialised exceptions for their needs.
  */
 public class ProtocolAdapterException extends Exception {
 

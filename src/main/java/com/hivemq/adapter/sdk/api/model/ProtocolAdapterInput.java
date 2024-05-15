@@ -23,19 +23,38 @@ import com.hivemq.adapter.sdk.api.state.ProtocolAdapterState;
 import com.hivemq.extension.sdk.api.annotations.NotNull;
 
 /**
+ * Object containing information and services for the construction of adapter instances
  *
- * @param <E>
+ * @param <E> the ProtocolAdapterConfig implementation for this Protocol Adapter
  */
 public interface ProtocolAdapterInput<E extends ProtocolAdapterConfig> {
+    /**
+     * @return the concrete config implementation for this protocol adapters
+     */
     @NotNull E getConfig();
 
+    /**
+     * @return the current Edge Version in form a string
+     */
     @NotNull String getVersion();
 
+    /**
+     * @return the {@link ProtocolAdapterState} for this adapter. Via this object changes in the connection and runtime status of the adapter can made.
+     */
     @NotNull ProtocolAdapterState getProtocolAdapterState();
 
+    /**
+     * @return a Object that contains a variety of services useful for the start of a protocol adapter.
+     */
     @NotNull ModuleServices moduleServices();
 
+    /**
+     * @return a Object that contains a variety of factories for creating concrete implementations of the interfaces within the SDK.
+     */
     @NotNull AdapterFactories adapterFactories();
 
+    /**
+     * @return the {@link ProtocolAdapterMetricsService} to increment and decrement metrics for the adapter.
+     */
     @NotNull ProtocolAdapterMetricsService getProtocolAdapterMetricsHelper();
 }
