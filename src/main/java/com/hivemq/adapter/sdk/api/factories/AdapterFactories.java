@@ -10,7 +10,7 @@ public interface AdapterFactories {
     /**
      * @return a factory to create concrete instances of PollingContext
      */
-    @NotNull PollingContextFactory adapterSubscriptionFactory();
+    @NotNull PollingContextFactory pollingContextFactory();
 
     /**
      * @return a factory to create concrete instances of DataPoint
