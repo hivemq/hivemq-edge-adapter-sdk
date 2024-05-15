@@ -9,8 +9,5 @@ public interface AdapterFactories {
 
     @NotNull AdapterSubscriptionFactory adapterSubscriptionFactory();
 
-    @NotNull PayloadFactory payloadFactory();
-
-
     @NotNull DataPointFactory dataPointFactory();
 }
