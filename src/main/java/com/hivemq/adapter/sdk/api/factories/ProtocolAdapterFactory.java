@@ -54,15 +54,19 @@ public interface ProtocolAdapterFactory<E extends ProtocolAdapterConfig> {
      * @param config       a map containing the configuration of the adapter
      * @return a parsed confif object for this adapter
      */
-    @NotNull E convertConfigObject(final @NotNull ObjectMapper objectMapper, final @NotNull Map<String, Object> config);
+     default @NotNull E convertConfigObject(final @NotNull ObjectMapper objectMapper, final @NotNull Map<String, Object> config){
+         return objectMapper.convertValue(config, getConfigClass());
+     }
 
     /**
      * @param objectMapper the object mapper that converts the actual config to a map
      * @param config       the config for this adapter
      * @return a map containing the configuration of the adapter
      */
-    @NotNull Map<String, Object> unconvertConfigObject(
-            final @NotNull ObjectMapper objectMapper, final @NotNull ProtocolAdapterConfig config);
+    default @NotNull Map<String, Object> unconvertConfigObject(
+            final @NotNull ObjectMapper objectMapper, final @NotNull ProtocolAdapterConfig config){
+        return objectMapper.convertValue(config, Map.class);
+    }
 
     /**
      * A bean class that will be reflected upon by the framework to determine the structural requirements of the

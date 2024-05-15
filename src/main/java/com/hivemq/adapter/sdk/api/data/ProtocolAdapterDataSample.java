@@ -16,7 +16,7 @@ public interface ProtocolAdapterDataSample {
      * @return the {@link PollingContext} containing information how the data gets published by the broker.
      */
     @JsonIgnore
-    @NotNull PollingContext getSubscription();
+    @NotNull PollingContext getPollingContext();
 
     /**
      * @return the timestamp when this data sample was taken.
