@@ -1,15 +1,14 @@
-package com.hivemq.adapter.sdk.api;
+package com.hivemq.adapter.sdk.api.polling;
 
+import com.hivemq.adapter.sdk.api.ProtocolAdapter;
 import com.hivemq.adapter.sdk.api.config.PollingContext;
-import com.hivemq.adapter.sdk.api.data.ProtocolAdapterDataSample;
 import com.hivemq.extension.sdk.api.annotations.NotNull;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 public interface PollingProtocolAdapter extends ProtocolAdapter {
 
-    @NotNull CompletableFuture<? extends ProtocolAdapterDataSample> poll(@NotNull PollingContext pollingContext);
+    void poll(@NotNull PollingInput pollingInput, @NotNull PollingOutput pollingOutput);
 
     @NotNull List<? extends PollingContext> getSubscriptions();
 

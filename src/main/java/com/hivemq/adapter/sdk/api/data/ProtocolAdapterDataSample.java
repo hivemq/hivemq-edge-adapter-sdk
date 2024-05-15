@@ -32,6 +32,8 @@ public interface ProtocolAdapterDataSample {
      */
     void addDataPoint(@NotNull String tagName, @NotNull Object tagValue);
 
+    void addDataPoint(@NotNull DataPoint dataPoint);
+
     /**
      * Sets/Overwrites all data points of the sample with the given argument.
      * @param list the new list of data points for this sample.

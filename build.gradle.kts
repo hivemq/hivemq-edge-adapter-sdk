@@ -9,7 +9,7 @@ buildscript {
 plugins {
     `java-library`
     `maven-publish`
-    signing
+  //  signing
     alias(libs.plugins.nexusPublish)
     alias(libs.plugins.defaults)
     alias(libs.plugins.metadata)
@@ -27,7 +27,6 @@ dependencies {
 
 group = "com.hivemq"
 description = "SDK for the development of HiveMQ Edge protocol adapters"
-version = "2024.4"
 
 metadata {
     readableName.set("HiveMQ Edge SDK")
@@ -120,12 +119,12 @@ publishing {
     }
 }
 
-signing {
-    val signKey: String? by project
-    val signKeyPass: String? by project
-    useInMemoryPgpKeys(signKey, signKeyPass)
-    sign(publishing.publications["maven"])
-}
+//signing {
+//    val signKey: String? by project
+//    val signKeyPass: String? by project
+//    useInMemoryPgpKeys(signKey, signKeyPass)
+//    sign(publishing.publications["maven"])
+//}
 
 nexusPublishing {
     repositories {
