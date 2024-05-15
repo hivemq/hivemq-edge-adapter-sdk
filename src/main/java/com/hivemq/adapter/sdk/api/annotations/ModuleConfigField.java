@@ -31,99 +31,103 @@ import java.lang.annotation.Target;
 public @interface ModuleConfigField {
 
     /**
-     * Title of properties
+     * @return title of properties
      */
     @Nullable String title() default "";
 
     /**
-     * Description of properties
+     * @return Description of properties
      */
     @Nullable String description() default "";
 
     /**
-     * Format for String properties
+     * @return Format for String properties
      */
     @Nullable FieldType format() default FieldType.UNSPECIFIED;
 
     /**
-     * Default value of properties
+     * @return Default value of properties
      */
     @Nullable String defaultValue() default "";
 
     /**
-     * MultipleOf value for Number properties
+     * @return MultipleOf value for Number properties
      */
     double multipleOf() default 0;
 
     /**
-     * Minimum value for Number properties
+     * @return Minimum value for Number properties
      */
     double numberMin() default Double.MIN_VALUE;
 
     /**
-     * Maximum value for Number properties
+     * @return Maximum value for Number properties
      */
     double numberMax() default Double.MAX_VALUE;
 
     /**
-     * Minimum length for String properties
+     * @return Minimum length for String properties
      */
     int stringMinLength() default 0;
 
     /**
-     * Maximum length for String properties
+     * @return Maximum length for String properties
      */
     int stringMaxLength() default Integer.MAX_VALUE;
 
     /**
-     * Pattern for String properties
+     * @return Pattern for String properties
      */
     @Nullable String stringPattern() default "";
 
     /**
      * Use this on enum types if you wish to override the default display-names for a given enum value
+     *
+     * @return the displayed values for the enum
      */
     String @NotNull [] enumDisplayValues() default {};
 
     /**
-     * Required properties, properties can't be null
+     * @return boolean indicating whether the property must be set and may not be null
      */
     boolean required() default false;
 
     /**
      * Ignore field/ method during the process of generation of json schema
+     *
+     * @return true: the field/method will not be regarded when json are generated. false: They are part of the json generation.
      */
     boolean ignore() default false;
 
     /**
-     * Minimum items in array
+     * @return minimum items in array
      */
     int arrayMinItems() default 0;
 
     /**
-     * Maximum items in array
+     * @return maximum items in array
      */
     int arrayMaxItems() default Integer.MAX_VALUE;
 
     /**
-     * Field is read only via API
+     * @return field is read only via API
      */
     boolean readOnly() default false;
 
     /**
-     * Field is write only via API
+     * @return Field is write only via API
      */
     boolean writeOnly() default false;
 
     /**
-     * Array can only contain unique items, no duplicates
+     * @return array can only contain unique items, no duplicates
      */
     boolean arrayUniqueItems() default false;
 
     String @NotNull [] allowableValues() default {};
 
     /**
-     * Custom attributes added to schema info
+     * @return custom attributes added to schema info
      */
     CustomAttribute @NotNull [] customAttributes() default {};
 

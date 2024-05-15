@@ -70,7 +70,7 @@ public interface ProtocolAdapterFactory<E extends ProtocolAdapterConfig> {
      * with
      *
      * @return The class that represents (and will encapsulate) the configuration requirements of the adapter
-     * @ModuleConfigField annotations.
+     * \\@ModuleConfigField annotations.
      */
     @NotNull Class<E> getConfigClass();
 }

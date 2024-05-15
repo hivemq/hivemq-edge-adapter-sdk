@@ -28,19 +28,19 @@ import java.util.List;
 public interface ProtocolAdapterInformation {
 
     /**
-     * The technically correct protocol name as defined by the standard, for example "Http" or "Mqtt".
+     * @return the technically correct protocol name as defined by the standard, for example "Http" or "Mqtt".
      */
     @NotNull String getProtocolName();
 
     /**
-     * Protocol ID that will be used by the platform to group types, search and categories.
+     * @return Protocol ID that will be used by the platform to group types, search and categories.
      * NOTE: The format of this ID is important, it must be alpha-numeric without spaces and unique
      * within the system.
      */
     @NotNull String getProtocolId();
 
     /**
-     * The visual name to display in the protocol adapter catalog for example "HTTP(s) to MQTT Protocol Adapter"
+     * @return The visual name to display in the protocol adapter catalog for example "HTTP(s) to MQTT Protocol Adapter"
      */
     @NotNull String getDisplayName();
 
@@ -54,18 +54,21 @@ public interface ProtocolAdapterInformation {
 
     /**
      * The entity (person or company) who is responsible for producing the adapter
+     *
      * @return the name of the authoring entity
      */
     @NotNull String getAuthor();
 
     /**
      * An adapter can be in a single category. This helps discovery purposes
+     *
      * @return the category in which the adapter resides
      */
     @Nullable ProtocolAdapterCategory getCategory();
 
     /**
      * Tag represents the keywords that can be associated with this type of adapter
+     *
      * @return a list of associated tags that can be used for search purposes
      */
     @Nullable List<ProtocolAdapterTag> getTags();
@@ -76,7 +79,7 @@ public interface ProtocolAdapterInformation {
      *
      * @return an {@link EnumSet} containing the capabilities of the adapter
      */
-    default @NotNull EnumSet<ProtocolAdapterCapability> getCapabilities(){
+    default @NotNull EnumSet<ProtocolAdapterCapability> getCapabilities() {
         return EnumSet.of(ProtocolAdapterCapability.READ, ProtocolAdapterCapability.DISCOVER);
     }
 }
