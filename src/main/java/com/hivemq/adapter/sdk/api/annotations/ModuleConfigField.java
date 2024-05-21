@@ -24,7 +24,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation to enrich configuration fields with user facing information
+ * Annotation to enrich configuration fields with user facing information.
+ * <p>
+ * This information is used to display and validate the annotated configuration value in the API as well as the UI.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.METHOD})

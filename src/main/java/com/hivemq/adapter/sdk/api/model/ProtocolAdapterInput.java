@@ -34,22 +34,22 @@ public interface ProtocolAdapterInput<E extends ProtocolAdapterConfig> {
     @NotNull E getConfig();
 
     /**
-     * @return the current Edge Version in form a string
+     * @return the current HiveMQ Edge version
      */
     @NotNull String getVersion();
 
     /**
-     * @return the {@link ProtocolAdapterState} for this adapter. Via this object changes in the connection and runtime status of the adapter can made.
+     * @return the {@link ProtocolAdapterState} for this adapter. Via this object changes in the connection and runtime status of the adapter can be made.
      */
     @NotNull ProtocolAdapterState getProtocolAdapterState();
 
     /**
-     * @return a Object that contains a variety of services useful for the start of a protocol adapter.
+     * @return Object that contains a variety of services useful for the start of a protocol adapter.
      */
     @NotNull ModuleServices moduleServices();
 
     /**
-     * @return a Object that contains a variety of factories for creating concrete implementations of the interfaces within the SDK.
+     * @return Object that contains a variety of factories for creating concrete implementations of the interfaces within the SDK.
      */
     @NotNull AdapterFactories adapterFactories();
 

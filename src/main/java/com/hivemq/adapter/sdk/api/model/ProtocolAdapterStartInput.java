@@ -24,7 +24,7 @@ import com.hivemq.extension.sdk.api.annotations.NotNull;
 public interface ProtocolAdapterStartInput {
 
     /**
-     * @return a Object that contains a variety of services useful for the start of a protocol adapter.
+     * @return Object that contains a variety of services useful for the start of a protocol adapter.
      */
     @NotNull ModuleServices moduleServices();
 

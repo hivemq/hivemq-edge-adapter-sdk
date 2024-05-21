@@ -20,7 +20,7 @@ public interface Event {
     @NotNull String getMessage();
 
     /**
-     * @return the {@link Payload} of this event
+     * @return the {@link Payload} associated with this event
      */
     @Nullable Payload getPayload();
 

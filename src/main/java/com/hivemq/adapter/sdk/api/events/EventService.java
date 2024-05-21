@@ -22,9 +22,6 @@ import com.hivemq.extension.sdk.api.annotations.Nullable;
 
 import java.util.List;
 
-/**
- * @author Simon L Johnson
- */
 public interface EventService {
 
     /**
@@ -32,17 +29,24 @@ public interface EventService {
      * @param protocolId the protocol of the adapter for which the event is created
      * @return a {@link EventBuilder} to add further information and build an {@link Event}
      */
-    @NotNull EventBuilder adapterEvent(final @NotNull String adapterId, final @NotNull String protocolId);
+    @NotNull
+    EventBuilder adapterEvent(final @NotNull String adapterId, final @NotNull String protocolId);
 
 
-    @NotNull EventBuilder bridgeEvent();
+    @NotNull
+    EventBuilder bridgeEvent();
 
     /**
+     * Reads the currently available events.
+     * <p>
+     * The amount of events stored is limited and therefore this list may not contain the full history of all events.
+     *
      * @param sinceTimestamp events before this timestamp will not be returned.
      * @param limit          how many events should be fetched
      * @return a sorted list of events from latest events to older events.
      */
-    @NotNull List<Event> readEvents(final @Nullable Long sinceTimestamp, final @Nullable Integer limit);
+    @NotNull
+    List<Event> readEvents(final @Nullable Long sinceTimestamp, final @Nullable Integer limit);
 
 
 }

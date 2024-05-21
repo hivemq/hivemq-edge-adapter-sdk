@@ -17,9 +17,6 @@ package com.hivemq.adapter.sdk.api.discovery;
 
 import com.hivemq.extension.sdk.api.annotations.Nullable;
 
-/**
- * @author Simon L Johnson
- */
 public interface ProtocolAdapterDiscoveryInput {
 
     /**

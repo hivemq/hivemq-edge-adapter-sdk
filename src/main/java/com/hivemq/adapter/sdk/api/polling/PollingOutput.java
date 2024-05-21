@@ -12,8 +12,6 @@ import com.hivemq.extension.sdk.api.annotations.NotNull;
  *   <li>Finish the polling
  *   <li>Failing the polling
  * </ul>
- *
- * @author Daniel Krüger
  */
 public interface PollingOutput {
 
@@ -39,10 +37,10 @@ public interface PollingOutput {
     void finish();
 
     /**
-     * Signals Edge that something went wronf during the polling of the data.
-     * As a result no publish is created from data, that might have been added before calling fail().
+     * Signals that something went wrong during polling.
+     * As a result no publish is created from data. Data added before calling fail() will not be processed further.
      *
-     * @param t an throwable indicating what went wrong.
+     * @param t Throwable indicating what went wrong.
      */
     void fail(@NotNull Throwable t);
 

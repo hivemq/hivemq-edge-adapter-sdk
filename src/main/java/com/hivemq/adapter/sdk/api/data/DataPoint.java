@@ -11,12 +11,12 @@ import com.hivemq.extension.sdk.api.annotations.NotNull;
  */
 public interface DataPoint {
     /**
-     * @return the value of the data point.
+     * @return the tag value of the data point.
      */
     @NotNull Object getTagValue();
 
     /**
-     * @return the tag of the data point.
+     * @return the tag name of the data point.
      */
     @NotNull String getTagName();
 }

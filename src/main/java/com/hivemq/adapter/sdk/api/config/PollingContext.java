@@ -13,7 +13,7 @@ public interface PollingContext {
     @Nullable String getMqttTopic();
 
     /**
-     * @return the Quality-of-Service for the publish containing the data
+     * @return the Quality-of-Service for the MQTT publish containing the data
      */
     int getQos();
 
@@ -23,17 +23,17 @@ public interface PollingContext {
     @NotNull MessageHandlingOptions getMessageHandlingOptions();
 
     /**
-     * @return whether the publish should contain the timestamp
+     * @return whether the MQTT publish payload should contain the timestamp
      */
     @NotNull Boolean getIncludeTimestamp();
 
     /**
-     * @return whether the publish should include tag names
+     * @return whether the MQTT publish payload should contain the tag names
      */
     @NotNull Boolean getIncludeTagNames();
 
     /**
-     * @return a list of MQTT user properties that get added to the publish
+     * @return a list of MQTT user properties that are added to the MQTT publish
      */
     @NotNull List<UserProperty> getUserProperties();
 

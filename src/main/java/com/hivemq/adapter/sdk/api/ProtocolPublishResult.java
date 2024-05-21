@@ -17,24 +17,20 @@ package com.hivemq.adapter.sdk.api;
 
 import com.hivemq.extension.sdk.api.annotations.NotNull;
 
-/**
- * @author Florian Limpöck
- * @since 4.0.0
- */
 public enum ProtocolPublishResult {
 
     /**
-     * the publish was delivered.
+     * the MQTT publish was delivered.
      */
     DELIVERED(0),
 
     /**
-     * the publish has no matching subscribers.
+     * the MQTT publish has no matching subscribers.
      */
     NO_MATCHING_SUBSCRIBERS(1),
 
     /**
-     * the publish deliveration failed
+     * the MQTT publish delivery failed
      */
     FAILED(2);
 

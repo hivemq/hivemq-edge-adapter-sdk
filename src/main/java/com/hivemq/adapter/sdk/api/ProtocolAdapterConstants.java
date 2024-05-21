@@ -15,9 +15,6 @@
  */
 package com.hivemq.adapter.sdk.api;
 
-/**
- * @author Simon L Johnson
- */
 public interface ProtocolAdapterConstants {
 
 

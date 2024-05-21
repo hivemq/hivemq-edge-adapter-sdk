@@ -4,7 +4,7 @@ import com.hivemq.extension.sdk.api.annotations.NotNull;
 
 /**
  * Interface for parsing mqtt user properties in adapter configurations.
- * The UserPropertyImpl in the HiveMQ Edge code will be used automatically to create instances during conversion:
+ * The implementation in the HiveMQ Edge code will be used to automatically create instances during conversion:
  * <p>
  *     \\@JsonProperty("propertyName")
  *     \\@ModuleConfigField(title = "Property Name", description = "Name of the associated property")
@@ -22,7 +22,7 @@ public interface UserProperty {
 
     /**
      *
-     * @param propertyName the name for this user property. The same name may be used for multiple user properties of a publish.
+     * @param propertyName the name for this user property. The same name may be used for multiple user properties of a MQTT publish.
      */
     void setName(@NotNull String propertyName);
 

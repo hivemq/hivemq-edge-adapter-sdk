@@ -35,7 +35,7 @@ import java.util.concurrent.CompletableFuture;
 public interface ProtocolAdapter {
 
     /**
-     * The adapter Id represents a unique id/name of the instance within the runtime. This value should be considered
+     * The adapter identifier represents a unique id/name of the instance within the runtime. This value should be considered
      * immutable.
      *
      * @return A string ID conform to the regex ([a-zA-Z_0-9-_])* which uniquely identifies the instance of
@@ -55,7 +55,7 @@ public interface ProtocolAdapter {
              @NotNull ProtocolAdapterStartInput input, @NotNull ProtocolAdapterStartOutput output);
 
     /**
-     * Stop the adapter. Stopping the adapter will release any network interface connections or local resources
+     * Stop the adapter. Stopping the adapter must release any network interface connections or local resources
      * associated with the connection to the device. State relating to the connection however will be retained allowing
      * the start method to restart the adapter.
      *

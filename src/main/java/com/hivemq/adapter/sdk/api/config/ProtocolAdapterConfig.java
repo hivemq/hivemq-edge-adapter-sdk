@@ -18,8 +18,7 @@ package com.hivemq.adapter.sdk.api.config;
 import com.hivemq.extension.sdk.api.annotations.NotNull;
 
 /**
- * Marker Interface for the config of Protocol Adapters.
- *
+ * Interface for the configuration of Protocol Adapters.
  */
 
 public interface ProtocolAdapterConfig {
@@ -29,5 +28,13 @@ public interface ProtocolAdapterConfig {
     int PORT_MIN = 1;
     int PORT_MAX = 65535;
 
-    @NotNull String getId();
+    /**
+     * Unique identifier for this protocol adapter instance.
+     * <p>
+     * Can only contain a-z, A-Z, 0-9, hyphen and underscore.
+     *
+     * @return the identifier
+     */
+    @NotNull
+    String getId();
 }
