@@ -2,12 +2,11 @@
 :hivemq-edge: https://github.com/hivemq/hivemq-edge
 :hivemq-website: http://www.hivemq.com
 :hivemq-community-forum: https://community.hivemq.com/
-:hivemq-marketplace: http://www.hivemq.com/extensions/
 
 = HiveMQ Edge Adapter SDK
 
-image:https://maven-badges.herokuapp.com/maven-central/com.hivemq/hivemq-edge-extension-sdk/badge.svg?style=for-the-badge["Maven Central",link="https://maven-badges.herokuapp.com/maven-central/com.hivemq/hivemq-edge-extension-sdk"]
-image:https://javadoc.io/badge2/com.hivemq/hivemq-edge-extension-sdk/javadoc.svg?style=for-the-badge["javadoc",link=https://javadoc.io/doc/com.hivemq/hivemq-edge-extension-sdk]
+image:https://maven-badges.herokuapp.com/maven-central/com.hivemq/hivemq-edge-adapter-sdk/badge.svg?style=for-the-badge["Maven Central",link="https://maven-badges.herokuapp.com/maven-central/com.hivemq/hivemq-edge-adapter-sdk"]
+image:https://javadoc.io/badge2/com.hivemq/hivemq-edge-adapter-sdk/javadoc.svg?style=for-the-badge["javadoc",link=https://javadoc.io/doc/com.hivemq/hivemq-edge-adapter-sdk]
 
 {hivemq-edge}[HiveMQ Edge] offers this free, open source adapter SDK.
 The HiveMQ Edge adapter framework provides an open API that allows developers to create custom protocol adapter that suit their specific infrastructures.
@@ -35,7 +34,7 @@ To use the SDK, add the following dependency to your Maven project:
 
 == Contributing
 
-If you want to contribute to the HiveMQ Extension SDK, see the link:CONTRIBUTING.md[contribution guidelines].
+If you want to contribute to the HiveMQ Adapter SDK, see the link:CONTRIBUTING.md[contribution guidelines].
 
 == License
 
