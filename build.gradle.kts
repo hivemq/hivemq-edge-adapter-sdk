@@ -46,6 +46,10 @@ metadata {
             fullName.set("Simon Johnson")
             email.set("simon.johnson@hivemq.com")
         }
+        register("danielkruger") {
+            fullName.set("Daniel Krüger")
+            email.set("daniel.krueger@hivemq.com")
+        }
     }
     github {
         org.set("hivemq")
