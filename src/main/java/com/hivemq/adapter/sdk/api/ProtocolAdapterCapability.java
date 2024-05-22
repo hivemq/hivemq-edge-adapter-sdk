@@ -22,10 +22,6 @@ public enum ProtocolAdapterCapability {
      **/
      READ,
 
-    /**
-     * can the adapter-type write values from the local broker publish them into the system
-     **/
-     WRITE,
 
     /**
      * can the adapter-type discover tags/names from the external source

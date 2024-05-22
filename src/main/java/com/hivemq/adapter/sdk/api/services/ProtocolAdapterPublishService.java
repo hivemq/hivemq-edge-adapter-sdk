@@ -18,7 +18,13 @@ package com.hivemq.adapter.sdk.api.services;
 import com.hivemq.adapter.sdk.api.ProtocolAdapterPublishBuilder;
 import com.hivemq.extension.sdk.api.annotations.NotNull;
 
+/**
+ * Service to create and send publishes to HiveMQ Edge.
+ */
 public interface ProtocolAdapterPublishService {
 
-    @NotNull ProtocolAdapterPublishBuilder publish();
+    /**
+     * @return a {@link ProtocolAdapterPublishBuilder} instance to create and sent a publish.
+     */
+    @NotNull ProtocolAdapterPublishBuilder createPublish();
 }

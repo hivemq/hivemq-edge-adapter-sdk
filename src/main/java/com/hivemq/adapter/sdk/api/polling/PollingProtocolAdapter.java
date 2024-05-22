@@ -38,12 +38,4 @@ public interface PollingProtocolAdapter extends ProtocolAdapter {
      * and the adapter gets stopped.
      */
     int getMaxPollingErrorsBeforeRemoval();
-
-    /**
-     * Optional method to implement callback logic in case the scheduling of an adapter gets stopped by the framework.
-     */
-    default void onSamplerClosed() {
-
-    }
-
 }

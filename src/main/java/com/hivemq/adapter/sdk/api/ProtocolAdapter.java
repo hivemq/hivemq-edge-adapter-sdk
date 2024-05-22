@@ -39,7 +39,7 @@ public interface ProtocolAdapter {
      * immutable.
      *
      * @return A string ID conform to the regex ([a-zA-Z_0-9-_])* which uniquely identifies the instance of
-     *         the adapter.
+     * the adapter.
      */
     @NotNull String getId();
 
@@ -51,8 +51,8 @@ public interface ProtocolAdapter {
      *               manner
      * @param output - the output to signal back to HiveMQ Edge the status of the start attempt.
      */
-     void start(
-             @NotNull ProtocolAdapterStartInput input, @NotNull ProtocolAdapterStartOutput output);
+    void start(
+            @NotNull ProtocolAdapterStartInput input, @NotNull ProtocolAdapterStartOutput output);
 
     /**
      * Stop the adapter. Stopping the adapter must release any network interface connections or local resources
@@ -63,6 +63,12 @@ public interface ProtocolAdapter {
      */
     @NotNull CompletableFuture<Void> stop();
 
+    /**
+     * This method needs to implemented in case the adapter provides the possibility to discover values at the PLC.
+     * @param input an input object containting information during the discovery process
+     * @param output an output object to set the discovered nodes on.
+     * @return a completable future to signal the finishing of the discovery process
+     */
     default @NotNull CompletableFuture<Void> discoverValues(
             @NotNull ProtocolAdapterDiscoveryInput input,
             @NotNull ProtocolAdapterDiscoveryOutput output) {
@@ -70,6 +76,9 @@ public interface ProtocolAdapter {
                 "Adapter type does not support discovery"));
     }
 
+    /**
+     * @return the {@link ProtocolAdapterInformation} containing information about this protocol adapter instance.
+     */
     @NotNull ProtocolAdapterInformation getProtocolAdapterInformation();
 
     /**

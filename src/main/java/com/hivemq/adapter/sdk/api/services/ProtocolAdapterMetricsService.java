@@ -35,8 +35,5 @@ public interface ProtocolAdapterMetricsService {
      */
     void increment(@NotNull String metricName);
 
-    /**
-     * Removes all metrics created via this service for the adapter.
-     */
-    void clearAll();
+
 }

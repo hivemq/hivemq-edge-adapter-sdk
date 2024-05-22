@@ -2,6 +2,7 @@ package com.hivemq.adapter.sdk.api.polling;
 
 import com.hivemq.adapter.sdk.api.data.DataPoint;
 import com.hivemq.extension.sdk.api.annotations.NotNull;
+import com.hivemq.extension.sdk.api.annotations.Nullable;
 
 /**
  * Output parameter provided to the poll method of an {@link PollingProtocolAdapter}.
@@ -41,7 +42,16 @@ public interface PollingOutput {
      * As a result no publish is created from data. Data added before calling fail() will not be processed further.
      *
      * @param t Throwable indicating what went wrong.
+     * @param errorMessage an optional error message delivering further insights.
      */
-    void fail(@NotNull Throwable t);
+    void fail(@NotNull Throwable t, @Nullable String errorMessage);
+
+    /**
+     * Signals that something went wrong during polling.
+     * As a result no publish is created from data. Data added before calling fail() will not be processed further.
+     *
+     * @param errorMessage a message indicating what went wrong.
+     */
+    void fail(@NotNull String errorMessage);
 
 }
