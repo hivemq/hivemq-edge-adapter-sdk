@@ -9,7 +9,7 @@ buildscript {
 plugins {
     `java-library`
     `maven-publish`
-  //  signing
+    signing
     alias(libs.plugins.nexusPublish)
     alias(libs.plugins.defaults)
     alias(libs.plugins.metadata)
@@ -123,12 +123,12 @@ publishing {
     }
 }
 
-//signing {
-//    val signKey: String? by project
-//    val signKeyPass: String? by project
-//    useInMemoryPgpKeys(signKey, signKeyPass)
-//    sign(publishing.publications["maven"])
-//}
+signing {
+    val signKey: String? by project
+    val signKeyPass: String? by project
+    useInMemoryPgpKeys(signKey, signKeyPass)
+    sign(publishing.publications["maven"])
+}
 
 nexusPublishing {
     repositories {
