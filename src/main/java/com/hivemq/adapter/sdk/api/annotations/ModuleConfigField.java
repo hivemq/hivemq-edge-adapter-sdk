@@ -126,7 +126,7 @@ public @interface ModuleConfigField {
      */
     boolean arrayUniqueItems() default false;
 
-    String @NotNull [] allowableValues() default {};
+    String @NotNull [] allowedValues() default {};
 
     /**
      * @return custom attributes added to schema info

@@ -22,11 +22,13 @@ public interface ProtocolAdapterStartOutput {
 
     /**
      * Signals HiveMQ Edge that this start attempt was successful.
+     * This method may be called asynchronously after the start() method of the adapter has ended.
      */
     void startedSuccessfully();
 
     /**
      * Signals HiveMQ Edge that this start attempt failed.
+     * This method may be called asynchronously after the start() method of the adapter has ended.
      *
      * @param throwable    a throwable signaling the reason why the start failed.
      * @param errorMessage Optional error message to be logged

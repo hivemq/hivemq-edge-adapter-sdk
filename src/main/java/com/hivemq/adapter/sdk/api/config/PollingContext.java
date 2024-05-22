@@ -10,7 +10,7 @@ public interface PollingContext {
     /**
      * @return the topic on which the data will be available
      */
-    @Nullable String getMqttTopic();
+    @Nullable String getDestinationMqttTopic();
 
     /**
      * @return the Quality-of-Service for the MQTT publish containing the data

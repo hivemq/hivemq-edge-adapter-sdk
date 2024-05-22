@@ -23,11 +23,6 @@ import com.hivemq.extension.sdk.api.annotations.NotNull;
 
 public interface ProtocolAdapterConfig {
 
-    String ID_REGEX = "^([a-zA-Z_0-9-_])*$";
-
-    int PORT_MIN = 1;
-    int PORT_MAX = 65535;
-
     /**
      * Unique identifier for this protocol adapter instance.
      * <p>

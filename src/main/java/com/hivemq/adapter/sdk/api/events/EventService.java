@@ -30,7 +30,7 @@ public interface EventService {
      * @return a {@link EventBuilder} to add further information and build an {@link Event}
      */
     @NotNull
-    EventBuilder adapterEvent(final @NotNull String adapterId, final @NotNull String protocolId);
+    EventBuilder createAdapterEvent(final @NotNull String adapterId, final @NotNull String protocolId);
 
 
     @NotNull

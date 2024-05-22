@@ -18,15 +18,18 @@ package com.hivemq.adapter.sdk.api.services;
 import com.hivemq.adapter.sdk.api.events.EventService;
 import com.hivemq.extension.sdk.api.annotations.NotNull;
 
-import java.util.concurrent.ScheduledExecutorService;
-
+/**
+ * This class offers access to various services for adapters.
+ */
 public interface ModuleServices {
 
+    /**
+     * @return the {@link ProtocolAdapterPublishService} that enables adapters to send publishes directly to HiveMQ Edge.
+     */
     @NotNull ProtocolAdapterPublishService adapterPublishService();
 
-    @NotNull ScheduledExecutorService scheduledExecutorService();
-
+    /**
+     * @return the {@link EventService} to send events from this adapter to HiveMQ Edge in case something happens the user should be alerted of.
+     */
     @NotNull EventService eventService();
-
-
 }

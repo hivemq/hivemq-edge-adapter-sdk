@@ -1,6 +1,5 @@
 package com.hivemq.adapter.sdk.api.events.model;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hivemq.adapter.sdk.api.events.EventService;
 import com.hivemq.extension.sdk.api.annotations.NotNull;
 
@@ -30,11 +29,10 @@ public interface EventBuilder {
                                       final @NotNull String content);
 
     /**
-     * @param mapper the {@link ObjectMapper} that is used to create a Json from the object
      * @param data a Jackson annotated Object from which the object mapper creates a json from.
      * @return the builder for a fluent api
      */
-    @NotNull EventBuilder withPayload(final @NotNull ObjectMapper mapper, final @NotNull Object data);
+    @NotNull EventBuilder withPayload( final @NotNull Object data);
 
     /**
      * @param timestamp the unix timestamp of this event
