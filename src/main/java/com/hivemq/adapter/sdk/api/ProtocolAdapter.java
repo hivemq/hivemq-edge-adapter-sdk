@@ -19,6 +19,8 @@ import com.hivemq.adapter.sdk.api.discovery.ProtocolAdapterDiscoveryInput;
 import com.hivemq.adapter.sdk.api.discovery.ProtocolAdapterDiscoveryOutput;
 import com.hivemq.adapter.sdk.api.model.ProtocolAdapterStartInput;
 import com.hivemq.adapter.sdk.api.model.ProtocolAdapterStartOutput;
+import com.hivemq.adapter.sdk.api.model.ProtocolAdapterStopInput;
+import com.hivemq.adapter.sdk.api.model.ProtocolAdapterStopOutput;
 import com.hivemq.extension.sdk.api.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
@@ -59,9 +61,10 @@ public interface ProtocolAdapter {
      * associated with the connection to the device. State relating to the connection however will be retained allowing
      * the start method to restart the adapter.
      *
-     * @return a completable future which can be used to check on the status of the stop operation.
+     * @param input  the input for the stop (currently empty)
+     * @param output the output to signal back to HiveMQ Edge the status of the stop attempt.
      */
-    @NotNull CompletableFuture<Void> stop();
+     void stop(@NotNull ProtocolAdapterStopInput input, @NotNull ProtocolAdapterStopOutput output);
 
     /**
      * This method needs to implemented in case the adapter provides the possibility to discover values at the PLC.

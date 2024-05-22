@@ -13,37 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.adapter.sdk.api.discovery;
+package com.hivemq.adapter.sdk.api.model;
 
 import com.hivemq.extension.sdk.api.annotations.NotNull;
 import com.hivemq.extension.sdk.api.annotations.Nullable;
 
-
-public interface ProtocolAdapterDiscoveryOutput {
+public interface ProtocolAdapterStopOutput {
 
     /**
-     * @return the tree to which the discovered nodes should be added.
+     * Signals HiveMQ Edge that this stop attempt was successful.
+     * This method may be called asynchronously after the stop() method of the adapter has ended.
      */
-    @NotNull NodeTree getNodeTree();
+    void stoppedSuccessfully();
 
     /**
-     * Signals Edge that all data is discovered.
-     */
-    void finish();
-
-    /**
-     * Signals that something went wrong during discovery.
+     * Signals HiveMQ Edge that this stop attempt failed.
+     * This method may be called asynchronously after the stop() method of the adapter has ended.
      *
-     * @param t Throwable indicating what went wrong.
-     * @param errorMessage an optional error message delivering further insights.
+     * @param throwable    a throwable signaling the reason why the start failed.
+     * @param errorMessage Optional error message to be logged
      */
-    void fail(@NotNull Throwable t, @Nullable String errorMessage);
-
-    /**
-     * Signals that something went wrong during discovery.
-     *
-     * @param errorMessage a message indicating what went wrong.
-     */
-    void fail(@NotNull String errorMessage);
+    void failStop(@NotNull Throwable throwable, @Nullable String errorMessage);
 
 }
