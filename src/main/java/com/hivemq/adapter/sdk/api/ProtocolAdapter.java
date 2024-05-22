@@ -67,7 +67,7 @@ public interface ProtocolAdapter {
      void stop(@NotNull ProtocolAdapterStopInput input, @NotNull ProtocolAdapterStopOutput output);
 
     /**
-     * This method needs to implemented in case the adapter provides the possibility to discover values at the PLC.
+     * This method needs to be implemented in case the adapter provides the possibility to discover values at the PLC.
      * @param input an input object containting information during the discovery process
      * @param output an output object to set the discovered nodes on.
      * @return a completable future to signal the finishing of the discovery process
