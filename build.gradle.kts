@@ -29,7 +29,7 @@ group = "com.hivemq"
 description = "SDK for the development of HiveMQ Edge protocol adapters"
 
 metadata {
-    readableName.set("HiveMQ Edge SDK")
+    readableName.set("HiveMQ Edge Adapter SDK")
     organization {
         name.set("HiveMQ GmbH")
         url.set("https://www.hivemq.com/")
