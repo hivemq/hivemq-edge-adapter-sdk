@@ -15,7 +15,7 @@
  */
 package com.hivemq.adapter.sdk.api.exceptions;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A generic exception to signal problems within the protocol adapter routines.

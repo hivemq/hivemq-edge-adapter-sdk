@@ -15,8 +15,8 @@
  */
 package com.hivemq.adapter.sdk.api.discovery;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * This interface is used to create a tree of nodes representing the available tags discovered by this adapter.

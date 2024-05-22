@@ -16,7 +16,7 @@
 package com.hivemq.adapter.sdk.api.services;
 
 import com.hivemq.adapter.sdk.api.ProtocolAdapterPublishBuilder;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Service to create and send publishes to HiveMQ Edge.

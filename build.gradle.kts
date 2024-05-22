@@ -22,7 +22,7 @@ plugins.withId("com.hivemq.version-updater") {
 }
 
 dependencies {
-    api("com.hivemq:hivemq-extension-sdk:${property("hivemq.extension.sdk.version")}")
+    api("org.jetbrains:annotations:24.1.0")
 }
 
 group = "com.hivemq"

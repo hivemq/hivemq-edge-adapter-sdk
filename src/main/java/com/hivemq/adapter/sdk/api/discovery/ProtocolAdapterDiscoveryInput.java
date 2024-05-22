@@ -15,7 +15,7 @@
  */
 package com.hivemq.adapter.sdk.api.discovery;
 
-import com.hivemq.extension.sdk.api.annotations.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public interface ProtocolAdapterDiscoveryInput {
 

@@ -1,8 +1,8 @@
 package com.hivemq.adapter.sdk.api.events.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Payload of an {@link Event} representing information on the event

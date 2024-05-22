@@ -16,7 +16,7 @@
 package com.hivemq.adapter.sdk.api.model;
 
 import com.hivemq.adapter.sdk.api.services.ModuleServices;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Object to access information and Services necessary for the start of adapters.

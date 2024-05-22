@@ -16,7 +16,7 @@
 package com.hivemq.adapter.sdk.api.services;
 
 import com.hivemq.adapter.sdk.api.events.EventService;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * This class offers access to various services for adapters.

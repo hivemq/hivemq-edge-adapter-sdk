@@ -1,7 +1,7 @@
 package com.hivemq.adapter.sdk.api.state;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * This class represents the current status of a protocol adapter.

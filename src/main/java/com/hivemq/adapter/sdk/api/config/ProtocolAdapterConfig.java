@@ -15,7 +15,7 @@
  */
 package com.hivemq.adapter.sdk.api.config;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Interface for the configuration of Protocol Adapters.

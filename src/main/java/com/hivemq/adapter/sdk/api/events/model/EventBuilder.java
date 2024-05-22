@@ -1,7 +1,7 @@
 package com.hivemq.adapter.sdk.api.events.model;
 
 import com.hivemq.adapter.sdk.api.events.EventService;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Builder interface to create {@link Event} for the {@link EventService} to notify HiveMQ Edge of any event regarding

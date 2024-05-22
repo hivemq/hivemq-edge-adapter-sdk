@@ -1,6 +1,6 @@
 package com.hivemq.adapter.sdk.api.services;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Service class to increment and decrement adapter specific metrics.

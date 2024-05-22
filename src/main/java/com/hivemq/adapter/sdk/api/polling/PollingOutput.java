@@ -1,8 +1,8 @@
 package com.hivemq.adapter.sdk.api.polling;
 
 import com.hivemq.adapter.sdk.api.data.DataPoint;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Output parameter provided to the poll method of an {@link PollingProtocolAdapter}.

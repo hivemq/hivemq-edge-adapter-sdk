@@ -1,7 +1,7 @@
 package com.hivemq.adapter.sdk.api.factories;
 
 import com.hivemq.adapter.sdk.api.data.DataPoint;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 public interface DataPointFactory {
 

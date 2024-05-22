@@ -1,6 +1,6 @@
 package com.hivemq.adapter.sdk.api.events.model;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Interface for a unique type identifier used by Edge to reference various entities, e.g. bridges or adapters.

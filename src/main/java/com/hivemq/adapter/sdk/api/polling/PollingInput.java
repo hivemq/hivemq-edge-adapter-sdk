@@ -1,7 +1,7 @@
 package com.hivemq.adapter.sdk.api.polling;
 
 import com.hivemq.adapter.sdk.api.config.PollingContext;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Input Object for the poll() method of an {@link PollingProtocolAdapter} containing information tu use during the poll.

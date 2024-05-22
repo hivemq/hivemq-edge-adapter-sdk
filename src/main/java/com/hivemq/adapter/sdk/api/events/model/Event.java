@@ -1,8 +1,8 @@
 package com.hivemq.adapter.sdk.api.events.model;
 
 import com.hivemq.adapter.sdk.api.events.EventService;
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Interface for events for the {@link EventService}.

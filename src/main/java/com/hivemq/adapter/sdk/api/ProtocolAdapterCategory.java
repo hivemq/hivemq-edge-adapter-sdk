@@ -1,7 +1,7 @@
 package com.hivemq.adapter.sdk.api;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
-import com.hivemq.extension.sdk.api.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public enum ProtocolAdapterCategory {
     CONNECTIVITY("Connectivity", "A standard connectivity based protocol, typically web standard.", null),

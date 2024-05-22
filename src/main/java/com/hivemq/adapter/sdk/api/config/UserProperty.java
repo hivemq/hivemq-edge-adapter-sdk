@@ -1,6 +1,6 @@
 package com.hivemq.adapter.sdk.api.config;
 
-import com.hivemq.extension.sdk.api.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Interface for parsing mqtt user properties in adapter configurations.
