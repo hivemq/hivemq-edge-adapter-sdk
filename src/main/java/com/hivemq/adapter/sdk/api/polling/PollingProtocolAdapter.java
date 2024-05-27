@@ -25,14 +25,14 @@ import java.util.List;
  * This interface is used for protocol adapters which implement polling algorithms from PLC endpoints.
  * The scheduling is done by the adapter framework in HiveMQ Edge.
  */
-public interface PollingProtocolAdapter extends ProtocolAdapter {
+public interface PollingProtocolAdapter<T extends PollingContext> extends ProtocolAdapter {
 
     /**
      * This method gets invoked by the HiveMQ Edge adapter framework to collect data points from the plc.
      * @param pollingInput input object containing information what and how to poll the data
      * @param pollingOutput output object to add data for this poll and to signalize edge polling is done or failed.
      */
-    void poll(@NotNull PollingInput pollingInput, @NotNull PollingOutput pollingOutput);
+    void poll(@NotNull PollingInput<T> pollingInput, @NotNull PollingOutput pollingOutput);
 
     /**
      * This method gets invoked by HiveMQ Edge to receive all polling contexts for this adapter.
@@ -40,7 +40,7 @@ public interface PollingProtocolAdapter extends ProtocolAdapter {
      * the poll method will be indicated separately.
      * @return A list of polling contexts for this adapter instance.
      */
-    @NotNull List<? extends PollingContext> getPollingContexts();
+    @NotNull List<T> getPollingContexts();
 
     /**
      * @return an integer representing the milliseconds between starts of polls
