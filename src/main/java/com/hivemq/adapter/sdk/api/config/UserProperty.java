@@ -20,6 +20,8 @@ import com.hivemq.adapter.sdk.api.annotations.ModuleConfigField;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 /**
  * Interface for parsing mqtt user properties in adapter configurations.
  * The implementation in the HiveMQ Edge code will be used to automatically create instances during conversion:
@@ -77,5 +79,35 @@ public class UserProperty {
      */
     public void setValue(final @NotNull String propertyValue) {
         this.propertyValue = propertyValue;
+    }
+
+    @Override
+    public boolean equals(final @Nullable Object o) {
+        if (this == o){
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()){
+            return false;
+        }
+        final UserProperty that = (UserProperty) o;
+        if (!Objects.equals(propertyName, that.propertyName)) {
+            return false;
+        }
+        return Objects.equals(propertyValue, that.propertyValue);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = propertyName != null ? propertyName.hashCode() : 0;
+        result = 31 * result + (propertyValue != null ? propertyValue.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public @NotNull String toString() {
+        return "UserProperty{" +
+                "propertyName='" + propertyName + '\'' +
+                ", propertyValue='" + propertyValue + '\'' +
+                '}';
     }
 }
