@@ -16,7 +16,6 @@
 package com.hivemq.adapter.sdk.api;
 
 
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -83,5 +82,14 @@ public interface ProtocolAdapterInformation {
      */
     default @NotNull EnumSet<ProtocolAdapterCapability> getCapabilities() {
         return EnumSet.of(ProtocolAdapterCapability.READ, ProtocolAdapterCapability.DISCOVER);
+    }
+
+
+    /**
+     *
+     * @return a UI Schema that tells Edge how to render the config in the UI.
+     */
+    default @Nullable String getUiSchema() {
+        return null;
     }
 }
