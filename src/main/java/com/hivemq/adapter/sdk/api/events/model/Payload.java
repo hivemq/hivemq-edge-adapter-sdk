@@ -47,11 +47,15 @@ public interface Payload {
     /**
      * @return the content type of the payload
      */
-
+    @JsonProperty("contentType")
+    @Schema(description = "The content type of the payload that the event contains",
+            required = true)
     @NotNull Payload.ContentType getContentType();
 
     /**
      * @return the content of the payload
      */
+    @JsonProperty("content")
+    @Schema(description = "The content of the payload encoded as a string")
     @NotNull String getContent();
 }

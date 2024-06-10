@@ -15,6 +15,8 @@
  */
 package com.hivemq.adapter.sdk.api.events.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -29,11 +31,16 @@ public interface TypeIdentifier {
     /**
      * @return the type of entity of this identifier
      */
+    @JsonProperty("type")
+    @Schema(description = "The type of the associated object/entity",
+            required = true)
     @NotNull Type getType();
 
     /**
      * @return a string representing the unique id
      */
+    @JsonProperty("identifier")
+    @Schema(description = "The identifier associated with the object, a combination of type and identifier is used to uniquely identify an object in the system")
     @NotNull String getIdentifier();
 
     /**
