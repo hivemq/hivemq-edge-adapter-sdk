@@ -23,16 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /**
- * Interface for parsing mqtt user properties in adapter configurations.
- * The implementation in the HiveMQ Edge code will be used to automatically create instances during conversion:
- * <p>
- * \\@JsonProperty("propertyName")
- * \\@ModuleConfigField(title = "Property Name", description = "Name of the associated property")
- * private @Nullable String propertyName = null;
- * <p>
- * \\@JsonProperty("propertyValue")
- * \\@ModuleConfigField(title = "Property Value", description = "Value of the associated property")
- * private @Nullable String propertyValue = null;
+ * Class to model user properties in the {@link PollingContext} of protocol adapters.
  */
 public class UserProperty {
 
