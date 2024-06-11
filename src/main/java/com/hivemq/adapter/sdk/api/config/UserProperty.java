@@ -15,39 +15,93 @@
  */
 package com.hivemq.adapter.sdk.api.config;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hivemq.adapter.sdk.api.annotations.ModuleConfigField;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 /**
- * Interface for parsing mqtt user properties in adapter configurations.
- * The implementation in the HiveMQ Edge code will be used to automatically create instances during conversion:
- * <p>
- *     \\@JsonProperty("propertyName")
- *     \\@ModuleConfigField(title = "Property Name", description = "Name of the associated property")
- *     private @Nullable String propertyName = null;
- * <p>
- *     \\@JsonProperty("propertyValue")
- *     \\@ModuleConfigField(title = "Property Value", description = "Value of the associated property")
- *     private @Nullable String propertyValue = null;
+ * Class to model user properties in the {@link PollingContext} of protocol adapters.
  */
-public interface UserProperty {
+public class UserProperty {
+
+    @JsonProperty("name")
+    @JsonAlias("propertyName")
+    @ModuleConfigField(title = "Property Name", description = "Name of the associated property")
+    private @Nullable String propertyName = null;
+
+    @JsonProperty("value")
+    @JsonAlias("propertyValue")
+    @ModuleConfigField(title = "Property Value", description = "Value of the associated property")
+    private @Nullable String propertyValue = null;
+
+    public UserProperty() {
+    }
+
+    public UserProperty(@Nullable final String propertyName, @Nullable final String propertyValue) {
+        this.propertyName = propertyName;
+        this.propertyValue = propertyValue;
+    }
+
+
     /**
      * @return the name for this user property.
      */
-    @NotNull String getName();
+    public @NotNull String getName() {
+        return propertyName;
+    }
 
     /**
-     *
      * @param propertyName the name for this user property. The same name may be used for multiple user properties of a MQTT publish.
      */
-    void setName(@NotNull String propertyName);
+    public void setName(final @NotNull String propertyName) {
+        this.propertyName = propertyName;
+    }
 
     /**
      * @return the value of this user property.
      */
-    @NotNull String getValue();
+    public @NotNull String getValue() {
+        return propertyValue;
+    }
 
     /**
      * @param propertyValue the value of the user property.
      */
-    void setValue(@NotNull String propertyValue);
+    public void setValue(final @NotNull String propertyValue) {
+        this.propertyValue = propertyValue;
+    }
+
+    @Override
+    public boolean equals(final @Nullable Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final UserProperty that = (UserProperty) o;
+        if (!Objects.equals(propertyName, that.propertyName)) {
+            return false;
+        }
+        return Objects.equals(propertyValue, that.propertyValue);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = propertyName != null ? propertyName.hashCode() : 0;
+        result = 31 * result + (propertyValue != null ? propertyValue.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public @NotNull String toString() {
+        return "UserProperty{" +
+                "propertyName='" + propertyName + '\'' +
+                ", propertyValue='" + propertyValue + '\'' +
+                '}';
+    }
 }

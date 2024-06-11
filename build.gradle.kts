@@ -21,10 +21,6 @@ plugins.withId("com.hivemq.version-updater") {
     project.ext.set("versionUpdaterFiles", arrayOf("README.adoc"))
 }
 
-dependencies {
-    api("org.jetbrains:annotations:24.1.0")
-}
-
 group = "com.hivemq"
 description = "SDK for the development of HiveMQ Edge protocol adapters"
 
@@ -63,13 +59,10 @@ repositories {
 }
 
 dependencies {
-    compileOnly(libs.apache.commonsLang)
-    compileOnly(libs.guava)
-    compileOnly(libs.jackson.jaxrs.jsonProvider)
-    compileOnly(libs.networkNT)
+    api(libs.jetbrains.annotations)
+    compileOnly(libs.jackson.annotations)
+    compileOnly(libs.jackson.databind)
     compileOnly(libs.swagger.annotations)
-    compileOnly(libs.victools.generator)
-    compileOnly(libs.victools.jsonSchemaModule)
 }
 
 /* ******************** java ******************** */

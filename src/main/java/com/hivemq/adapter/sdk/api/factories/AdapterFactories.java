@@ -23,11 +23,6 @@ import org.jetbrains.annotations.NotNull;
 public interface AdapterFactories {
 
     /**
-     * @return a factory to create concrete instances of PollingContext
-     */
-    @NotNull PollingContextFactory pollingContextFactory();
-
-    /**
      * @return a factory to create concrete instances of DataPoint
      */
     @NotNull DataPointFactory dataPointFactory();
