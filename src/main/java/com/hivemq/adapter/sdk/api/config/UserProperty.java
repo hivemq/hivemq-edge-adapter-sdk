@@ -15,6 +15,7 @@
  */
 package com.hivemq.adapter.sdk.api.config;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hivemq.adapter.sdk.api.annotations.ModuleConfigField;
 import org.jetbrains.annotations.NotNull;
@@ -27,11 +28,13 @@ import java.util.Objects;
  */
 public class UserProperty {
 
-    @JsonProperty("propertyName")
+    @JsonProperty("name")
+    @JsonAlias("propertyName")
     @ModuleConfigField(title = "Property Name", description = "Name of the associated property")
     private @Nullable String propertyName = null;
 
-    @JsonProperty("propertyValue")
+    @JsonProperty("value")
+    @JsonAlias("propertyValue")
     @ModuleConfigField(title = "Property Value", description = "Value of the associated property")
     private @Nullable String propertyValue = null;
 
@@ -74,10 +77,10 @@ public class UserProperty {
 
     @Override
     public boolean equals(final @Nullable Object o) {
-        if (this == o){
+        if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()){
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
         final UserProperty that = (UserProperty) o;
