@@ -16,7 +16,9 @@
 package com.hivemq.adapter.sdk.api.config;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.hivemq.adapter.sdk.api.annotations.ModuleConfigField;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,22 +28,25 @@ import java.util.Objects;
 /**
  * Class to model user properties in the {@link PollingContext} of protocol adapters.
  */
+@JsonPropertyOrder({"name", "value"})
 public class UserProperty {
 
     @JsonProperty("name")
     @JsonAlias("propertyName")
-    @ModuleConfigField(title = "Property Name", description = "Name of the associated property")
+    @ModuleConfigField(title = "Property Name", description = "Name of the associated property", required = true)
     private @Nullable String propertyName = null;
 
     @JsonProperty("value")
     @JsonAlias("propertyValue")
-    @ModuleConfigField(title = "Property Value", description = "Value of the associated property")
+    @ModuleConfigField(title = "Property Value", description = "Value of the associated property", required = true)
     private @Nullable String propertyValue = null;
 
     public UserProperty() {
     }
 
-    public UserProperty(@Nullable final String propertyName, @Nullable final String propertyValue) {
+    @JsonCreator
+    public UserProperty(@JsonProperty("name") @Nullable final String propertyName,
+                        @JsonProperty("value") @Nullable final String propertyValue) {
         this.propertyName = propertyName;
         this.propertyValue = propertyValue;
     }
