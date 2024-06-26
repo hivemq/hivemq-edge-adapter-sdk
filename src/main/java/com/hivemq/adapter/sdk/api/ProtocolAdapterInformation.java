@@ -84,9 +84,7 @@ public interface ProtocolAdapterInformation {
         return EnumSet.of(ProtocolAdapterCapability.READ, ProtocolAdapterCapability.DISCOVER);
     }
 
-
     /**
-     *
      * @return a UI Schema that tells Edge how to render the config in the UI.
      */
     default @Nullable String getUiSchema() {
