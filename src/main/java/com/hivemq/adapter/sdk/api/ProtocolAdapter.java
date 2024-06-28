@@ -23,8 +23,6 @@ import com.hivemq.adapter.sdk.api.model.ProtocolAdapterStopInput;
 import com.hivemq.adapter.sdk.api.model.ProtocolAdapterStopOutput;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.CompletableFuture;
-
 
 /**
  * A protocol adapter is the resource responsible for connecting to and providing data from disparate remote or local
@@ -69,14 +67,12 @@ public interface ProtocolAdapter {
     /**
      * This method needs to be implemented in case the adapter provides the possibility to discover values at the PLC.
      * @param input an input object containing information during the discovery process
-     * @param output an output object to set the discovered nodes on.
-     * @return a completable future to signal the finishing of the discovery process
+     * @param output an output object to set the discovered nodes on and signal edge that the discovery process has finished.
      */
-    default @NotNull CompletableFuture<Void> discoverValues(
+    default void discoverValues(
             @NotNull ProtocolAdapterDiscoveryInput input,
             @NotNull ProtocolAdapterDiscoveryOutput output) {
-        return CompletableFuture.failedFuture(new UnsupportedOperationException(
-                "Adapter type does not support discovery"));
+        output.fail("Adapter type does not support discovery");
     }
 
     /**
