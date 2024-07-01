@@ -15,6 +15,7 @@
  */
 package com.hivemq.adapter.sdk.api.config;
 
+import com.hivemq.adapter.sdk.api.data.JsonPayloadCreator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,4 +53,10 @@ public interface PollingContext {
      */
     @NotNull List<UserProperty> getUserProperties();
 
+    /**
+     * @return optional custom implementation of the {@link JsonPayloadCreator} to overwrite the default creation of the mqtt payloads
+     */
+    default @Nullable JsonPayloadCreator getJsonPayloadCreator() {
+        return null;
+    }
 }
