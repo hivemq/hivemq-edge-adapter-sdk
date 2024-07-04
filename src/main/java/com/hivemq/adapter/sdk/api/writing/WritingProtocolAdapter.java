@@ -1,10 +1,17 @@
 package com.hivemq.adapter.sdk.api.writing;
 
+import com.hivemq.adapter.sdk.api.config.WriteContext;
 import org.jetbrains.annotations.NotNull;
 
-public interface WritingProtocolAdapter<T extends WritePayload> {
+import java.util.List;
 
-    void write(@NotNull WriteInput<T> input, @NotNull WriteOutput writeOutput);
+public interface WritingProtocolAdapter<T extends WritePayload, C extends WriteContext> {
 
-    @NotNull Class<T> getPayloadClass();
+    void write(@NotNull WriteInput<T, C> input, @NotNull WriteOutput writeOutput);
+
+    @NotNull
+    Class<T> getPayloadClass();
+
+    @NotNull
+    List<? extends WriteContext> getWriteContexts();
 }
