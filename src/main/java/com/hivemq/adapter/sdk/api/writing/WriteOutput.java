@@ -12,19 +12,17 @@ public interface WriteOutput {
 
     /**
      * Signals that something went wrong during the writing.
-     * // TODO retry? Boolean whether it can be retried?
      *
      * @param t Throwable indicating what went wrong.
      * @param errorMessage an optional error message delivering further insights.
      */
-    void fail(@NotNull Throwable t, @Nullable String errorMessage);
+    void fail(@NotNull Throwable t, @Nullable String errorMessage, boolean retry);
 
     /**
      * Signals that something went wrong during the writing.
-     * // TODO retry? Boolean whether it can be retried?
      *
      * @param errorMessage a message indicating what went wrong.
      */
-    void fail(@NotNull String errorMessage);
+    void fail(@NotNull String errorMessage, boolean retry);
 
 }
