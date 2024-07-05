@@ -17,4 +17,12 @@ public interface WriteContext {
     int getQos();
 
 
+    /**
+     * The minimum time interval between writes. If this is 0 no interval between writes is guaranteed.
+     * This interval is intended to protect constrained devices from an overload because of writes.
+     *
+     * @return long the interval between writes in ms.
+     */
+    long getPeriod();
+
 }
