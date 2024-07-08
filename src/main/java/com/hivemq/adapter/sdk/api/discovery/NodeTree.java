@@ -27,6 +27,8 @@ public interface NodeTree {
      * Add a new node to this tree
      * @param id the unique id of the new node.
      * @param name the name of the new node.
+     * @param value the value that will be used to address this node when creating an mapping from the adapter to MQTT.
+     *              May be identical to id.
      * @param description a description for this node.
      * @param parentId the id of the parent node.
      * @param nodeType the type of the node.
@@ -35,6 +37,7 @@ public interface NodeTree {
     void addNode(
             @NotNull String id,
             @NotNull String name,
+            @NotNull String value,
             @NotNull String description,
             @Nullable String parentId,
             @NotNull NodeType nodeType,
