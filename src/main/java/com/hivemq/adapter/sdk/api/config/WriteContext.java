@@ -15,14 +15,14 @@
  */
 package com.hivemq.adapter.sdk.api.config;
 
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 public interface WriteContext {
 
     /**
      * @return the mqtt topic from which the data will be read
      */
-    @Nullable
+    @NotNull
     String getSourceMqttTopic();
 
 
