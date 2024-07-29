@@ -39,5 +39,4 @@ public interface WriteContext {
      * @return long the interval between writes in ms.
      */
     long getWritingInterval();
-
 }
