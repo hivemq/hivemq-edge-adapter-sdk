@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.hivemq.adapter.sdk.api.ProtocolAdapter;
 import com.hivemq.adapter.sdk.api.config.WriteContext;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -32,7 +33,7 @@ public interface WritingProtocolAdapter<T extends WritePayload, C extends WriteC
     @NotNull
     List<? extends WriteContext> getWriteContexts();
 
-    @NotNull
+    @Nullable
     JsonNode createJsonSchema(@NotNull WriteContext writeContext);
 
 }
