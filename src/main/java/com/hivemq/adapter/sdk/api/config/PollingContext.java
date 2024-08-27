@@ -31,7 +31,7 @@ public interface PollingContext {
     /**
      * @return the Quality-of-Service for the MQTT publish containing the data
      */
-    int getQos();
+    int getMqttQos();
 
     /**
      * @return how the data will be published (one publish for all tags, a separate publish for each tag)
