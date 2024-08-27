@@ -26,13 +26,13 @@ import java.util.List;
 public interface PollingContextFactory {
 
     /**
-     * @param destination    the mqtt topic on which the data should be published
-     * @param qos            the mqtt qos for the data
+     * @param mqttTopic    the mqtt topic on which the data should be published
+     * @param mqttQos            the mqtt qos for the data
      * @param userProperties mqtt user properties for the publish that will contain the data
      * @return an {@link PollingContext} containing information how the data will be published.
      */
     @NotNull PollingContext create(
-            @JsonProperty("destination") @Nullable final String destination,
-            @JsonProperty("qos") final int qos,
+            @JsonProperty("mqttTopic") @Nullable final String mqttTopic,
+            @JsonProperty("mqttQos") final int mqttQos,
             @JsonProperty("userProperties") @Nullable List<UserProperty> userProperties);
 }
