@@ -33,12 +33,12 @@ public class UserProperty {
 
     @JsonProperty("name")
     @JsonAlias("propertyName")
-    @ModuleConfigField(title = "Property Name", description = "Name of the associated property", required = true)
+    @ModuleConfigField(title = "Name", description = "Name of the associated property", required = true)
     private @Nullable String propertyName = null;
 
     @JsonProperty("value")
     @JsonAlias("propertyValue")
-    @ModuleConfigField(title = "Property Value", description = "Value of the associated property", required = true)
+    @ModuleConfigField(title = "Value", description = "Value of the associated property", required = true)
     private @Nullable String propertyValue = null;
 
     public UserProperty() {
