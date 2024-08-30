@@ -41,8 +41,8 @@ public class UserProperty {
     private final @NotNull String propertyValue;
 
     @JsonCreator
-    public UserProperty(@JsonProperty("name") @NotNull final String propertyName,
-                        @JsonProperty("value") @NotNull final String propertyValue) {
+    public UserProperty(@JsonProperty(value = "name", required = true) @NotNull final String propertyName,
+                        @JsonProperty(value = "value", required = true) @NotNull final String propertyValue) {
         this.propertyName = propertyName;
         this.propertyValue = propertyValue;
     }
