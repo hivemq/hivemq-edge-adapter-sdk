@@ -28,29 +28,24 @@ import java.util.Objects;
 /**
  * Class to model user properties in the {@link PollingContext} of protocol adapters.
  */
-@JsonPropertyOrder({"name", "value"})
 public class UserProperty {
 
     @JsonProperty("name")
     @JsonAlias("propertyName")
     @ModuleConfigField(title = "Name", description = "Name of the associated property", required = true)
-    private @Nullable String propertyName = null;
+    private final @NotNull String propertyName;
 
     @JsonProperty("value")
     @JsonAlias("propertyValue")
     @ModuleConfigField(title = "Value", description = "Value of the associated property", required = true)
-    private @Nullable String propertyValue = null;
-
-    public UserProperty() {
-    }
+    private final @NotNull String propertyValue;
 
     @JsonCreator
-    public UserProperty(@JsonProperty("name") @Nullable final String propertyName,
-                        @JsonProperty("value") @Nullable final String propertyValue) {
+    public UserProperty(@JsonProperty("name") @NotNull final String propertyName,
+                        @JsonProperty("value") @NotNull final String propertyValue) {
         this.propertyName = propertyName;
         this.propertyValue = propertyValue;
     }
-
 
     /**
      * @return the name for this user property.
@@ -60,24 +55,10 @@ public class UserProperty {
     }
 
     /**
-     * @param propertyName the name for this user property. The same name may be used for multiple user properties of a MQTT publish.
-     */
-    public void setName(final @NotNull String propertyName) {
-        this.propertyName = propertyName;
-    }
-
-    /**
      * @return the value of this user property.
      */
     public @NotNull String getValue() {
         return propertyValue;
-    }
-
-    /**
-     * @param propertyValue the value of the user property.
-     */
-    public void setValue(final @NotNull String propertyValue) {
-        this.propertyValue = propertyValue;
     }
 
     @Override
@@ -97,8 +78,8 @@ public class UserProperty {
 
     @Override
     public int hashCode() {
-        int result = propertyName != null ? propertyName.hashCode() : 0;
-        result = 31 * result + (propertyValue != null ? propertyValue.hashCode() : 0);
+        int result = propertyName.hashCode();
+        result = 31 * result + propertyValue.hashCode();
         return result;
     }
 
