@@ -18,7 +18,6 @@ package com.hivemq.adapter.sdk.api.config;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.hivemq.adapter.sdk.api.annotations.ModuleConfigField;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,7 +27,7 @@ import java.util.Objects;
 /**
  * Class to model user properties in the {@link PollingContext} of protocol adapters.
  */
-public class UserProperty {
+public class MqttUserProperty {
 
     @JsonProperty("name")
     @JsonAlias("propertyName")
@@ -41,8 +40,8 @@ public class UserProperty {
     private final @NotNull String propertyValue;
 
     @JsonCreator
-    public UserProperty(@JsonProperty(value = "name", required = true) @NotNull final String propertyName,
-                        @JsonProperty(value = "value", required = true) @NotNull final String propertyValue) {
+    public MqttUserProperty(@JsonProperty(value = "name", required = true) @NotNull final String propertyName,
+                            @JsonProperty(value = "value", required = true) @NotNull final String propertyValue) {
         this.propertyName = propertyName;
         this.propertyValue = propertyValue;
     }
@@ -69,7 +68,7 @@ public class UserProperty {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        final UserProperty that = (UserProperty) o;
+        final MqttUserProperty that = (MqttUserProperty) o;
         if (!Objects.equals(propertyName, that.propertyName)) {
             return false;
         }
@@ -85,7 +84,7 @@ public class UserProperty {
 
     @Override
     public @NotNull String toString() {
-        return "UserProperty{" +
+        return "MqttUserProperty{" +
                 "propertyName='" + propertyName + '\'' +
                 ", propertyValue='" + propertyValue + '\'' +
                 '}';

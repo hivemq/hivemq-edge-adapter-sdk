@@ -51,7 +51,7 @@ public interface PollingContext {
     /**
      * @return a list of MQTT user properties that are added to the MQTT publish
      */
-    @NotNull List<UserProperty> getUserProperties();
+    @NotNull List<MqttUserProperty> getUserProperties();
 
     /**
      * @return optional custom implementation of the {@link JsonPayloadCreator} to overwrite the default creation of the mqtt payloads
