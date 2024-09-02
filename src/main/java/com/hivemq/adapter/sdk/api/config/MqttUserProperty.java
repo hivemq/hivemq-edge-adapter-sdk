@@ -15,7 +15,6 @@
  */
 package com.hivemq.adapter.sdk.api.config;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hivemq.adapter.sdk.api.annotations.ModuleConfigField;
@@ -29,35 +28,33 @@ import java.util.Objects;
  */
 public class MqttUserProperty {
 
-    @JsonProperty("name")
-    @JsonAlias("propertyName")
+    @JsonProperty(value = "name", required = true)
     @ModuleConfigField(title = "Name", description = "Name of the associated property", required = true)
-    private final @NotNull String propertyName;
+    private final @NotNull String name;
 
-    @JsonProperty("value")
-    @JsonAlias("propertyValue")
+    @JsonProperty(value = "value", required = true)
     @ModuleConfigField(title = "Value", description = "Value of the associated property", required = true)
-    private final @NotNull String propertyValue;
+    private final @NotNull String value;
 
     @JsonCreator
-    public MqttUserProperty(@JsonProperty(value = "name", required = true) @NotNull final String propertyName,
-                            @JsonProperty(value = "value", required = true) @NotNull final String propertyValue) {
-        this.propertyName = propertyName;
-        this.propertyValue = propertyValue;
+    public MqttUserProperty(@JsonProperty(value = "name", required = true) @NotNull final String name,
+                            @JsonProperty(value = "value", required = true) @NotNull final String value) {
+        this.name = name;
+        this.value = value;
     }
 
     /**
      * @return the name for this user property.
      */
     public @NotNull String getName() {
-        return propertyName;
+        return name;
     }
 
     /**
      * @return the value of this user property.
      */
     public @NotNull String getValue() {
-        return propertyValue;
+        return value;
     }
 
     @Override
@@ -69,24 +66,24 @@ public class MqttUserProperty {
             return false;
         }
         final MqttUserProperty that = (MqttUserProperty) o;
-        if (!Objects.equals(propertyName, that.propertyName)) {
+        if (!Objects.equals(name, that.name)) {
             return false;
         }
-        return Objects.equals(propertyValue, that.propertyValue);
+        return Objects.equals(value, that.value);
     }
 
     @Override
     public int hashCode() {
-        int result = propertyName.hashCode();
-        result = 31 * result + propertyValue.hashCode();
+        int result = name.hashCode();
+        result = 31 * result + value.hashCode();
         return result;
     }
 
     @Override
     public @NotNull String toString() {
         return "MqttUserProperty{" +
-                "propertyName='" + propertyName + '\'' +
-                ", propertyValue='" + propertyValue + '\'' +
+                "name='" + name + '\'' +
+                ", value='" + value + '\'' +
                 '}';
     }
 }
