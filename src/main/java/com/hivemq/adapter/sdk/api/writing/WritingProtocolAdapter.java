@@ -33,5 +33,5 @@ public interface WritingProtocolAdapter<C extends WriteContext> extends Protocol
     JsonNode getMqttPayloadJsonSchema(@NotNull C writeContext);
 
     @NotNull
-    Class<?> getMqttPayloadClass(@NotNull C writeContext);
+    Class<? extends WritePayload> getMqttPayloadClass(@NotNull C writeContext);
 }

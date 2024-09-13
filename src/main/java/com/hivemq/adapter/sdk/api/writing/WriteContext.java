@@ -20,10 +20,10 @@ import org.jetbrains.annotations.NotNull;
 public interface WriteContext {
 
     /**
-     * @return the mqtt topic from which the data will be read
+     * @return the mqtt topic filter from which the data will be read
      */
     @NotNull
-    String getMqttTopic();
+    String getMqttTopicFilter();
 
     /**
      * @return the Quality-of-Service for the MQTT publish containing the source data that will be written
@@ -32,4 +32,6 @@ public interface WriteContext {
 
     @NotNull
     String getNode();
+
+    long getWritingIntervalMillis();
 }
