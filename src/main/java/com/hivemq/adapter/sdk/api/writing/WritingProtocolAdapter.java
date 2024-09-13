@@ -17,22 +17,21 @@ package com.hivemq.adapter.sdk.api.writing;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.hivemq.adapter.sdk.api.ProtocolAdapter;
-import com.hivemq.adapter.sdk.api.config.WriteContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public interface WritingProtocolAdapter<P extends WritePayload, C extends WriteContext> extends ProtocolAdapter {
+public interface WritingProtocolAdapter<C extends WriteContext> extends ProtocolAdapter {
 
-    void write(@NotNull WriteInput<P, C> input, @NotNull WriteOutput writeOutput);
+    void write(@NotNull WriteInput input, @NotNull WriteOutput writeOutput);
 
     @NotNull
     List<C> getWriteContexts();
 
     @Nullable
-    JsonNode getMqttPayloadJsonSchema(@NotNull C WriteContext);
+    JsonNode getMqttPayloadJsonSchema(@NotNull C writeContext);
 
     @NotNull
-    Class<?> getMqttPayloadClass(@NotNull C WriteContext);
+    Class<?> getMqttPayloadClass(@NotNull C writeContext);
 }

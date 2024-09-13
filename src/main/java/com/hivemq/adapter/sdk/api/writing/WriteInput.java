@@ -15,15 +15,14 @@
  */
 package com.hivemq.adapter.sdk.api.writing;
 
-import com.hivemq.adapter.sdk.api.config.WriteContext;
 import org.jetbrains.annotations.NotNull;
 
-public interface WriteInput<P extends WritePayload, C extends WriteContext> {
+public interface WriteInput {
 
     @NotNull
-    P getWritePayload();
+    WritePayload getWritePayload();
 
     @NotNull
-    C getWriteContext();
+    WriteContext getWriteContext();
 
 }
