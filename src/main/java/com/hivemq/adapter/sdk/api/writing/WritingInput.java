@@ -17,12 +17,12 @@ package com.hivemq.adapter.sdk.api.writing;
 
 import org.jetbrains.annotations.NotNull;
 
-public interface WriteInput {
+public interface WritingInput {
 
     @NotNull
-    WritePayload getWritePayload();
+    WritingPayload getWritingPayload();
 
     @NotNull
-    WriteContext getWriteContext();
+    WritingContext getWritingContext();
 
 }

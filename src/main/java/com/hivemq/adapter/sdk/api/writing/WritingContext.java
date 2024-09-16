@@ -17,7 +17,7 @@ package com.hivemq.adapter.sdk.api.writing;
 
 import org.jetbrains.annotations.NotNull;
 
-public interface WriteContext {
+public interface WritingContext {
 
     /**
      * @return the mqtt topic filter from which the data will be read
@@ -33,5 +33,5 @@ public interface WriteContext {
     @NotNull
     String getNode();
 
-    long getWritingIntervalMillis();
+    long getMinWritingDelayMillis();
 }

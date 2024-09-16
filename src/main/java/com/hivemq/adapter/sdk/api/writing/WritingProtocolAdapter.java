@@ -22,16 +22,16 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public interface WritingProtocolAdapter<C extends WriteContext> extends ProtocolAdapter {
+public interface WritingProtocolAdapter<C extends WritingContext> extends ProtocolAdapter {
 
-    void write(@NotNull WriteInput input, @NotNull WriteOutput writeOutput);
+    void write(@NotNull WritingInput writingInput, @NotNull WritingOutput writingOutput);
 
     @NotNull
-    List<C> getWriteContexts();
+    List<C> getWritingContexts();
 
     @Nullable
     JsonNode getMqttPayloadJsonSchema(@NotNull C writeContext);
 
     @NotNull
-    Class<? extends WritePayload> getMqttPayloadClass();
+    Class<? extends WritingPayload> getMqttPayloadClass();
 }
