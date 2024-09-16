@@ -33,5 +33,4 @@ public interface WritingContext {
     @NotNull
     String getNode();
 
-    long getMinWritingDelayMillis();
 }
