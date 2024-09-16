@@ -18,7 +18,7 @@ package com.hivemq.adapter.sdk.api.writing;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface WriteOutput {
+public interface WritingOutput {
 
     /**
      * Signals Edge that writing is done.
