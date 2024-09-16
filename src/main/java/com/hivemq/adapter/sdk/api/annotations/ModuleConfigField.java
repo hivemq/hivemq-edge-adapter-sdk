@@ -160,7 +160,8 @@ public @interface ModuleConfigField {
         UNSPECIFIED("unspecified"),
         IDENTIFIER("identifier"),
         BOOLEAN("boolean"),
-        MQTT_TOPIC("mqtt-topic");
+        MQTT_TOPIC("mqtt-topic"),
+        MQTT_TOPIC_FILTER("mqtt-topic-filter");
 
         private final @NotNull String name;
 
