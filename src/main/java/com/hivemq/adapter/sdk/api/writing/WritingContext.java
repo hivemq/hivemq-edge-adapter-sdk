@@ -30,7 +30,4 @@ public interface WritingContext {
      */
     int getMqttQos();
 
-    @NotNull
-    String getNode();
-
 }
