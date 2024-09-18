@@ -54,7 +54,7 @@ public interface ProtocolAdapterFactory<E extends ProtocolAdapterConfig> {
      * @param config       a map containing the configuration of the adapter
      * @return a parsed confif object for this adapter
      */
-     default @NotNull E convertConfigObject(final @NotNull ObjectMapper objectMapper, final @NotNull Map<String, Object> config){
+     default @NotNull ProtocolAdapterConfig convertConfigObject(final @NotNull ObjectMapper objectMapper, final @NotNull Map<String, Object> config){
          return objectMapper.convertValue(config, getConfigClass());
      }
 
@@ -76,5 +76,5 @@ public interface ProtocolAdapterFactory<E extends ProtocolAdapterConfig> {
      * @return The class that represents (and will encapsulate) the configuration requirements of the adapter
      * \\@ModuleConfigField annotations.
      */
-    @NotNull Class<E> getConfigClass();
+    @NotNull Class<? extends ProtocolAdapterConfig> getConfigClass();
 }
