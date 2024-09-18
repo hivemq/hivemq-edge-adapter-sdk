@@ -26,8 +26,8 @@ public interface WritingContext {
     String getMqttTopicFilter();
 
     /**
-     * @return the Quality-of-Service for the MQTT publish containing the source data that will be written
+     * @return the maximum Quality-of-Service for the MQTT subscription.
      */
-    int getMqttQos();
+    int getMqttMaxQos();
 
 }
