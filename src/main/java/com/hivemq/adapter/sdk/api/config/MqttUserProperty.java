@@ -24,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /**
- * Class to model user properties in the {@link PollingContext} of protocol adapters.
+ * Class to model MQTT user properties in the {@link PollingContext} of protocol adapters.
  */
 public class MqttUserProperty {
 
