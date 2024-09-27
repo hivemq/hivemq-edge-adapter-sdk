@@ -20,14 +20,12 @@ public enum ProtocolAdapterCapability {
     /**
      * can the adapter-type read values from the external source and publish them into the system
      **/
-     READ,
-
+    READ,
 
     /**
      * can the adapter-type discover tags/names from the external source
      **/
-     DISCOVER,
-
+    DISCOVER,
 
     /**
      * can the adapter-type write values derived from MQTT topic filters to an external destination.
