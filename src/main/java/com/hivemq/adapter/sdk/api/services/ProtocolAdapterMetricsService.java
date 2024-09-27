@@ -34,6 +34,16 @@ public interface ProtocolAdapterMetricsService {
     void incrementReadPublishFailure();
 
     /**
+     * Increments the counter for successful reads. NOTE: For {@link com.hivemq.adapter.sdk.api.writing.WritingProtocolAdapter} this is done by the framework.
+     */
+    void incrementWritePublishSuccess();
+
+    /**
+     * Increments the counter for failed reads. NOTE: For {@link com.hivemq.adapter.sdk.api.writing.WritingProtocolAdapter} this is done by the framework.
+     */
+    void incrementWritePublishFailure();
+
+    /**
      * Increments the metrics for failed connection attempts.
      */
     void incrementConnectionFailure();
