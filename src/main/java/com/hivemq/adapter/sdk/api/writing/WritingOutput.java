@@ -31,13 +31,13 @@ public interface WritingOutput {
      * @param t Throwable indicating what went wrong.
      * @param errorMessage an optional error message delivering further insights.
      */
-    void fail(@NotNull Throwable t, @Nullable String errorMessage, boolean retry);
+    void fail(@NotNull Throwable t, @Nullable String errorMessage);
 
     /**
      * Signals that something went wrong during the writing.
      *
      * @param errorMessage a message indicating what went wrong.
      */
-    void fail(@NotNull String errorMessage, boolean retry);
+    void fail(@NotNull String errorMessage);
 
 }
