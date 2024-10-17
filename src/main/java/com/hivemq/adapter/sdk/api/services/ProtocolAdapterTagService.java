@@ -23,7 +23,7 @@ public interface ProtocolAdapterTagService {
     <T> @NotNull Tag<T> resolveTag(final @NotNull String tagName, final @NotNull Class<T> addressClass);
 
     @NotNull
-    AddStatus addTag(@NotNull Tag<?> tag);
+    AddStatus addTag(@NotNull String adapterId, @NotNull String protocolId, @NotNull Tag<?> tag);
 
 
     enum AddStatus {
