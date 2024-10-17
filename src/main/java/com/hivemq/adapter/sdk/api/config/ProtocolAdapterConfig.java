@@ -37,5 +37,5 @@ public interface ProtocolAdapterConfig {
 
 
     @NotNull
-    List<String> getUsedTags();
+    List<String> calculateAllUsedTags();
 }
