@@ -15,6 +15,7 @@
  */
 package com.hivemq.adapter.sdk.api.writing;
 
+import com.hivemq.adapter.sdk.api.services.ProtocolAdapterTagService;
 import org.jetbrains.annotations.NotNull;
 
 public interface WritingInput {
@@ -25,4 +26,6 @@ public interface WritingInput {
     @NotNull
     WritingContext getWritingContext();
 
+    @NotNull
+    ProtocolAdapterTagService protocolAdapterTagService();
 }
