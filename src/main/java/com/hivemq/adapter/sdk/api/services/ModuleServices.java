@@ -32,4 +32,8 @@ public interface ModuleServices {
      * @return the {@link EventService} to send events from this adapter to HiveMQ Edge in case something happens the user should be alerted of.
      */
     @NotNull EventService eventService();
+
+    @NotNull
+    ProtocolAdapterTagService protocolAdapterTagService();
+
 }
