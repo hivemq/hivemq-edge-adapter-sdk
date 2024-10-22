@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 public interface Tag<T> {
 
     @NotNull
-    T getTagAddress();
+    T getTagDefinition();
 
     @NotNull
     String getTagName();
