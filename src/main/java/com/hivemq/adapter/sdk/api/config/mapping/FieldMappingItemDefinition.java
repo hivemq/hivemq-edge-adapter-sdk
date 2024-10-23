@@ -13,19 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.adapter.sdk.api.writing;
+package com.hivemq.adapter.sdk.api.config.mapping;
 
-import com.hivemq.adapter.sdk.api.services.ProtocolAdapterTagService;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.NotNull;
 
-public interface WritingInput {
+public class FieldMappingItemDefinition {
 
-    @NotNull
-    WritingPayload getWritingPayload();
 
-    @NotNull
-    WritingContext getWritingContext();
+    @JsonProperty("propertyPath")
+    private final @NotNull String propertyPath;
 
-    @NotNull
-    ProtocolAdapterTagService protocolAdapterTagService();
+    public FieldMappingItemDefinition(@JsonProperty("propertyPath") final @NotNull String propertyPath) {
+        this.propertyPath = propertyPath;
+    }
+
+    public @NotNull String getPropertyPath() {
+        return propertyPath;
+    }
 }

@@ -13,27 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.adapter.sdk.api.services;
+package com.hivemq.adapter.sdk.api.factories;
 
 import com.hivemq.adapter.sdk.api.events.EventService;
+import com.hivemq.adapter.sdk.api.services.ProtocolAdapterTagService;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * This class offers access to various services for adapters.
+ * This interface offers access to classes that might be needed during instantiation of a ProtocolAdapterFactory
  */
-public interface ModuleServices {
+public interface ProtocolAdapterFactoryInput {
 
     /**
-     * @return the {@link ProtocolAdapterPublishService} that enables adapters to send publishes directly to HiveMQ Edge.
+     * @return True: Edge has writing enabled, false: Edge does not support writing.
      */
-    @NotNull ProtocolAdapterPublishService adapterPublishService();
+    boolean isWritingEnabled();
 
     /**
-     * @return the {@link EventService} to send events from this adapter to HiveMQ Edge in case something happens the user should be alerted of.
+     * @return {@link ProtocolAdapterTagService} to add and resolve {@link com.hivemq.adapter.sdk.api.tag.Tag}.
      */
-    @NotNull EventService eventService();
-
     @NotNull
     ProtocolAdapterTagService protocolAdapterTagService();
+
+    /**
+     * @return {@link EventService} to create and fire events that are displayed at the UI.
+     */
+    @NotNull
+    EventService eventService();
 
 }

@@ -13,19 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.adapter.sdk.api.writing;
+package com.hivemq.adapter.sdk.api.exceptions;
 
-import com.hivemq.adapter.sdk.api.services.ProtocolAdapterTagService;
 import org.jetbrains.annotations.NotNull;
 
-public interface WritingInput {
-
-    @NotNull
-    WritingPayload getWritingPayload();
-
-    @NotNull
-    WritingContext getWritingContext();
-
-    @NotNull
-    ProtocolAdapterTagService protocolAdapterTagService();
+public class TagDefinitionParseException extends RuntimeException {
+    public TagDefinitionParseException(@NotNull final String message) {
+        super(message);
+    }
 }

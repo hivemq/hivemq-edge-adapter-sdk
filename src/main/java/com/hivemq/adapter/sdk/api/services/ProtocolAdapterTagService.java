@@ -15,25 +15,20 @@
  */
 package com.hivemq.adapter.sdk.api.services;
 
-import com.hivemq.adapter.sdk.api.events.EventService;
+import com.hivemq.adapter.sdk.api.tag.Tag;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * This class offers access to various services for adapters.
- */
-public interface ModuleServices {
+public interface ProtocolAdapterTagService {
 
-    /**
-     * @return the {@link ProtocolAdapterPublishService} that enables adapters to send publishes directly to HiveMQ Edge.
-     */
-    @NotNull ProtocolAdapterPublishService adapterPublishService();
-
-    /**
-     * @return the {@link EventService} to send events from this adapter to HiveMQ Edge in case something happens the user should be alerted of.
-     */
-    @NotNull EventService eventService();
+    <T> @NotNull Tag<T> resolveTag(final @NotNull String tagName, final @NotNull Class<T> addressClass);
 
     @NotNull
-    ProtocolAdapterTagService protocolAdapterTagService();
+    AddStatus addTag(@NotNull String adapterId, @NotNull String protocolId, @NotNull Tag<?> tag);
 
+
+    enum AddStatus {
+        SUCCESS,
+        ALREADY_PRESENT
+    }
 }
+
