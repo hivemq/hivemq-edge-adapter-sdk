@@ -17,6 +17,8 @@ package com.hivemq.adapter.sdk.api.config;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
  * Interface for the configuration of Protocol Adapters.
  */
@@ -32,4 +34,8 @@ public interface ProtocolAdapterConfig {
      */
     @NotNull
     String getId();
+
+
+    @NotNull
+    List<String> calculateAllUsedTags();
 }

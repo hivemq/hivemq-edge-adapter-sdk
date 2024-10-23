@@ -13,19 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.adapter.sdk.api.writing;
+package com.hivemq.adapter.sdk.api.tag;
 
-import com.hivemq.adapter.sdk.api.services.ProtocolAdapterTagService;
 import org.jetbrains.annotations.NotNull;
 
-public interface WritingInput {
+public interface Tag<T> {
 
     @NotNull
-    WritingPayload getWritingPayload();
+    T getTagDefinition();
 
     @NotNull
-    WritingContext getWritingContext();
+    String getTagName();
 
-    @NotNull
-    ProtocolAdapterTagService protocolAdapterTagService();
+
 }
