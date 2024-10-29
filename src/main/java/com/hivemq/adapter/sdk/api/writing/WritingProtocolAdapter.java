@@ -29,7 +29,7 @@ public interface WritingProtocolAdapter<C extends WritingContext> extends Protoc
     @NotNull
     List<C> getWritingContexts();
 
-    @NotNull CompletableFuture<@NotNull JsonNode> createMqttPayloadJsonSchema(@NotNull C writeContext);
+    @NotNull CompletableFuture<@NotNull JsonNode> createMqttPayloadJsonSchema(@NotNull String tagName);
 
     @NotNull
     Class<? extends WritingPayload> getMqttPayloadClass();
