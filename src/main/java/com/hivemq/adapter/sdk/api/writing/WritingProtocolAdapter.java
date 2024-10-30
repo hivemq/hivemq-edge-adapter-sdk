@@ -17,6 +17,8 @@ package com.hivemq.adapter.sdk.api.writing;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.hivemq.adapter.sdk.api.ProtocolAdapter;
+import com.hivemq.adapter.sdk.api.schema.TagSchemaCreationInput;
+import com.hivemq.adapter.sdk.api.schema.TagSchemaCreationOutput;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -28,8 +30,6 @@ public interface WritingProtocolAdapter<C extends WritingContext> extends Protoc
 
     @NotNull
     List<C> getWritingContexts();
-
-    @NotNull CompletableFuture<@NotNull JsonNode> createMqttPayloadJsonSchema(@NotNull String tagName);
 
     @NotNull
     Class<? extends WritingPayload> getMqttPayloadClass();

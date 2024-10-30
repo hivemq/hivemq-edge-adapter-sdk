@@ -15,13 +15,18 @@
  */
 package com.hivemq.adapter.sdk.api;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.hivemq.adapter.sdk.api.discovery.ProtocolAdapterDiscoveryInput;
 import com.hivemq.adapter.sdk.api.discovery.ProtocolAdapterDiscoveryOutput;
 import com.hivemq.adapter.sdk.api.model.ProtocolAdapterStartInput;
 import com.hivemq.adapter.sdk.api.model.ProtocolAdapterStartOutput;
 import com.hivemq.adapter.sdk.api.model.ProtocolAdapterStopInput;
 import com.hivemq.adapter.sdk.api.model.ProtocolAdapterStopOutput;
+import com.hivemq.adapter.sdk.api.schema.TagSchemaCreationInput;
+import com.hivemq.adapter.sdk.api.schema.TagSchemaCreationOutput;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.concurrent.CompletableFuture;
 
 
 /**
@@ -70,8 +75,8 @@ public interface ProtocolAdapter {
      * @param output an output object to set the discovered nodes on and signal edge that the discovery process has finished.
      */
     default void discoverValues(
-            @NotNull ProtocolAdapterDiscoveryInput input,
-            @NotNull ProtocolAdapterDiscoveryOutput output) {
+            final @NotNull ProtocolAdapterDiscoveryInput input,
+            final @NotNull ProtocolAdapterDiscoveryOutput output) {
         output.fail("Adapter type does not support discovery");
     }
 
@@ -86,4 +91,17 @@ public interface ProtocolAdapter {
     default void destroy() {
 
     }
+
+
+    /**
+     * This method is intended to retrieve the json schema that represents the data of a tag on a PLC.
+     * The json schema is used to create mappings between incoming and outgoing data.
+     *
+     * @param input the input object holding information necessary for the operation.
+     * @param output the output object on which the result of the operation can be set.
+     */
+    default void createTagSchema(@NotNull final TagSchemaCreationInput input, @NotNull final TagSchemaCreationOutput output){
+        output.notSupported();
+    }
+
 }
