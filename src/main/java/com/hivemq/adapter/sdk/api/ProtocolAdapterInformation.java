@@ -16,6 +16,8 @@
 package com.hivemq.adapter.sdk.api;
 
 
+import com.hivemq.adapter.sdk.api.config.ProtocolAdapterConfig;
+import com.hivemq.adapter.sdk.api.tag.Tag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -73,6 +75,37 @@ public interface ProtocolAdapterInformation {
      * @return a list of associated tags that can be used for search purposes
      */
     @Nullable List<ProtocolAdapterTag> getTags();
+
+
+
+    /**
+     * A bean class that will be reflected upon by the framework to determine the structural requirements of the
+     * tag configuration associated with an adapter instance. It is expected that the bean class supplied, be marked up
+     * with
+     *
+     * @return The class that represents (and will encapsulate) the configuration requirements of the adapter's tags
+     */
+    @NotNull Class<? extends Tag<?>> tagConfigurationClass();
+
+    /**
+     * A bean class that will be reflected upon by the framework to determine the structural requirements of the
+     * configuration associated with an adapter instance. It is expected that the bean class supplied, be marked up
+     * with
+     *
+     * @return The class that represents (and will encapsulate) the configuration requirements of the adapter
+     * \\@ModuleConfigField annotations.
+     */
+    @NotNull Class<? extends ProtocolAdapterConfig> configurationClassReading();
+
+    /**
+     * A bean class that will be reflected upon by the framework to determine the structural requirements of the
+     * configuration associated with an adapter instance. It is expected that the bean class supplied, be marked up
+     * with
+     *
+     * @return The class that represents (and will encapsulate) the configuration requirements of the adapter
+     * \\@ModuleConfigField annotations.
+     */
+    @NotNull Class<? extends ProtocolAdapterConfig> configurationClassWriting();
 
     /**
      * Get the capabilities associated with the adapter. For more information on capabilities, please refer to the

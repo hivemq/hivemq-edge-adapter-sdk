@@ -36,4 +36,7 @@ public interface ModuleServices {
     @NotNull
     ProtocolAdapterTagService protocolAdapterTagService();
 
+    @NotNull
+    ProtocolAdapterWritingService protocolAdapterWritingService();
+
 }

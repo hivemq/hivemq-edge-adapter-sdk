@@ -15,6 +15,7 @@
  */
 package com.hivemq.adapter.sdk.api.config;
 
+import com.hivemq.adapter.sdk.api.tag.Tag;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -38,4 +39,12 @@ public interface ProtocolAdapterConfig {
 
     @NotNull
     List<String> calculateAllUsedTags();
+
+    /**
+     * Get all tags defined for this protocol adapter instance.
+     *
+     * @return List of tag definitions owned by this protocol adapter instance
+     */
+    List<? extends Tag> getTags();
+
 }

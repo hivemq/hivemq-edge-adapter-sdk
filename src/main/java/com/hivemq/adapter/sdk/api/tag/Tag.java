@@ -17,6 +17,8 @@ package com.hivemq.adapter.sdk.api.tag;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
+
 public interface Tag<T> {
 
     @NotNull
@@ -25,5 +27,7 @@ public interface Tag<T> {
     @NotNull
     String getTagName();
 
+    @NotNull
+    String getDescription();
 
 }

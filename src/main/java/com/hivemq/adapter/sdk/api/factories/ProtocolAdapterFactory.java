@@ -54,8 +54,12 @@ public interface ProtocolAdapterFactory<E extends ProtocolAdapterConfig> {
      * @param config       a map containing the configuration of the adapter
      * @return a parsed confif object for this adapter
      */
-     default @NotNull ProtocolAdapterConfig convertConfigObject(final @NotNull ObjectMapper objectMapper, final @NotNull Map<String, Object> config){
-         return objectMapper.convertValue(config, getConfigClass());
+     default @NotNull ProtocolAdapterConfig convertConfigObject(final @NotNull ObjectMapper objectMapper, final @NotNull Map<String, Object> config, final boolean writingEnabled){
+         if(writingEnabled) {
+            return objectMapper.convertValue(config, getInformation().configurationClassWriting());
+         } else {
+             return objectMapper.convertValue(config, getInformation().configurationClassReading());
+         }
      }
 
     /**
@@ -67,14 +71,4 @@ public interface ProtocolAdapterFactory<E extends ProtocolAdapterConfig> {
             final @NotNull ObjectMapper objectMapper, final @NotNull ProtocolAdapterConfig config){
         return objectMapper.convertValue(config, Map.class);
     }
-
-    /**
-     * A bean class that will be reflected upon by the framework to determine the structural requirements of the
-     * configuration associated with an adapter instance. It is expected that the bean class supplied, be marked up
-     * with
-     *
-     * @return The class that represents (and will encapsulate) the configuration requirements of the adapter
-     * \\@ModuleConfigField annotations.
-     */
-    @NotNull Class<? extends ProtocolAdapterConfig> getConfigClass();
 }
