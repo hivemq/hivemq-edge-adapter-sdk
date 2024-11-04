@@ -13,26 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.adapter.sdk.api.writing;
+package com.hivemq.adapter.sdk.api.schema;
 
-import com.hivemq.adapter.sdk.api.tag.Tag;
 import org.jetbrains.annotations.NotNull;
 
-public interface WritingContext {
+public interface TagSchemaCreationInput {
 
-
-    @NotNull
-    String getTagName();
-
-    /**
-     * @return the mqtt topic filter from which the data will be read
-     */
-    @NotNull
-    String getMqttTopicFilter();
-
-    /**
-     * @return the maximum Quality-of-Service for the MQTT subscription.
-     */
-    int getMqttMaxQos();
+    @NotNull String getTagName();
 
 }
