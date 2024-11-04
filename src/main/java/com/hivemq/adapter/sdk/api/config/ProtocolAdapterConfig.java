@@ -19,6 +19,7 @@ import com.hivemq.adapter.sdk.api.tag.Tag;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for the configuration of Protocol Adapters.
@@ -38,7 +39,7 @@ public interface ProtocolAdapterConfig {
 
 
     @NotNull
-    List<String> calculateAllUsedTags();
+    Set<String> calculateAllUsedTags();
 
     /**
      * Get all tags defined for this protocol adapter instance.

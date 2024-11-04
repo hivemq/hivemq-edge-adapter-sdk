@@ -23,6 +23,7 @@ import com.hivemq.adapter.sdk.api.model.ProtocolAdapterInput;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * The factory is responsible for constructing and managing the lifecycle of the various aspects of the adapter
@@ -56,9 +57,13 @@ public interface ProtocolAdapterFactory<E extends ProtocolAdapterConfig> {
      */
      default @NotNull ProtocolAdapterConfig convertConfigObject(final @NotNull ObjectMapper objectMapper, final @NotNull Map<String, Object> config, final boolean writingEnabled){
          if(writingEnabled) {
-            return objectMapper.convertValue(config, getInformation().configurationClassWriting());
+             ProtocolAdapterConfig protocolAdapterConfig = objectMapper.convertValue(config, getInformation().configurationClassWriting());
+             verifyTags(protocolAdapterConfig);
+             return protocolAdapterConfig;
          } else {
-             return objectMapper.convertValue(config, getInformation().configurationClassReading());
+             ProtocolAdapterConfig protocolAdapterConfig = objectMapper.convertValue(config, getInformation().configurationClassReading());
+             verifyTags(protocolAdapterConfig);
+             return protocolAdapterConfig;
          }
      }
 
@@ -70,5 +75,13 @@ public interface ProtocolAdapterFactory<E extends ProtocolAdapterConfig> {
     default @NotNull Map<String, Object> unconvertConfigObject(
             final @NotNull ObjectMapper objectMapper, final @NotNull ProtocolAdapterConfig config){
         return objectMapper.convertValue(config, Map.class);
+    }
+
+    default void verifyTags(ProtocolAdapterConfig cfg) {
+        final Set<String> usedTags = cfg.calculateAllUsedTags();
+        cfg.getTags().forEach(tag -> usedTags.remove(tag.getName()));
+        if (!usedTags.isEmpty()) {
+            throw new IllegalArgumentException("The following tags are used in mappings but not configured on the adapter: " + usedTags);
+        }
     }
 }
