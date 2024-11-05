@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 public interface ProtocolAdapterTagService {
 
     @NotNull
-    AddStatus addTag(@NotNull String adapterId, @NotNull String protocolId, @NotNull Tag<?> tag);
+    AddStatus addTag(@NotNull String adapterId, @NotNull String protocolId, @NotNull Tag tag);
 
 
     enum AddStatus {

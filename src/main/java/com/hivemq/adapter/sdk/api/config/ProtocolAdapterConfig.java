@@ -41,11 +41,4 @@ public interface ProtocolAdapterConfig {
     @NotNull
     Set<String> calculateAllUsedTags();
 
-    /**
-     * Get all tags defined for this protocol adapter instance.
-     *
-     * @return List of tag definitions owned by this protocol adapter instance
-     */
-    List<? extends Tag> getTags();
-
 }

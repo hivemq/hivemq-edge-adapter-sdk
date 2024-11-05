@@ -20,10 +20,12 @@ import com.hivemq.adapter.sdk.api.ProtocolAdapter;
 import com.hivemq.adapter.sdk.api.ProtocolAdapterInformation;
 import com.hivemq.adapter.sdk.api.config.ProtocolAdapterConfig;
 import com.hivemq.adapter.sdk.api.model.ProtocolAdapterInput;
+import com.hivemq.adapter.sdk.api.tag.Tag;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * The factory is responsible for constructing and managing the lifecycle of the various aspects of the adapter
@@ -53,18 +55,23 @@ public interface ProtocolAdapterFactory<E extends ProtocolAdapterConfig> {
     /**
      * @param objectMapper the object mapper that converts the map to the actual config
      * @param config       a map containing the configuration of the adapter
-     * @return a parsed confif object for this adapter
+     * @return a parsed config object for this adapter
      */
      default @NotNull ProtocolAdapterConfig convertConfigObject(final @NotNull ObjectMapper objectMapper, final @NotNull Map<String, Object> config, final boolean writingEnabled){
          if(writingEnabled) {
-             ProtocolAdapterConfig protocolAdapterConfig = objectMapper.convertValue(config, getInformation().configurationClassWriting());
-             verifyTags(protocolAdapterConfig);
-             return protocolAdapterConfig;
+             return objectMapper.convertValue(config, getInformation().configurationClassWriting());
          } else {
-             ProtocolAdapterConfig protocolAdapterConfig = objectMapper.convertValue(config, getInformation().configurationClassReading());
-             verifyTags(protocolAdapterConfig);
-             return protocolAdapterConfig;
+             return objectMapper.convertValue(config, getInformation().configurationClassReading());
          }
+     }
+
+    /**
+     * @param objectMapper the object mapper that converts the map to the actual tag
+     * @param tagList      a list of maps where each entry is a tag
+     * @return a parsed tag object for this adapter
+     */
+     default @NotNull List<? extends Tag> convertTagDefinitionObjects(final @NotNull ObjectMapper objectMapper, final @NotNull List<Map<String, Object>> tagList){
+         return tagList.stream().map(tagMap -> objectMapper.convertValue(tagMap, getInformation().tagConfigurationClass())).collect(Collectors.toList());
      }
 
     /**
@@ -75,13 +82,5 @@ public interface ProtocolAdapterFactory<E extends ProtocolAdapterConfig> {
     default @NotNull Map<String, Object> unconvertConfigObject(
             final @NotNull ObjectMapper objectMapper, final @NotNull ProtocolAdapterConfig config){
         return objectMapper.convertValue(config, Map.class);
-    }
-
-    default void verifyTags(ProtocolAdapterConfig cfg) {
-        final Set<String> usedTags = cfg.calculateAllUsedTags();
-        cfg.getTags().forEach(tag -> usedTags.remove(tag.getName()));
-        if (!usedTags.isEmpty()) {
-            throw new IllegalArgumentException("The following tags are used in mappings but not configured on the adapter: " + usedTags);
-        }
     }
 }

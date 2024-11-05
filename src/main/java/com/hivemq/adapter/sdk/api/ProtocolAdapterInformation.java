@@ -85,7 +85,7 @@ public interface ProtocolAdapterInformation {
      *
      * @return The class that represents (and will encapsulate) the configuration requirements of the adapter's tags
      */
-    @NotNull Class<? extends Tag<?>> tagConfigurationClass();
+    @NotNull Class<? extends Tag> tagConfigurationClass();
 
     /**
      * A bean class that will be reflected upon by the framework to determine the structural requirements of the
@@ -106,6 +106,7 @@ public interface ProtocolAdapterInformation {
      * \\@ModuleConfigField annotations.
      */
     @NotNull Class<? extends ProtocolAdapterConfig> configurationClassWriting();
+
 
     /**
      * Get the capabilities associated with the adapter. For more information on capabilities, please refer to the

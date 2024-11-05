@@ -17,10 +17,10 @@ package com.hivemq.adapter.sdk.api.tag;
 
 import org.jetbrains.annotations.NotNull;
 
-public interface Tag<T> {
+public interface Tag {
 
     @NotNull
-    T getDefinition();
+    TagDefinition getDefinition();
 
     @NotNull
     String getName();
