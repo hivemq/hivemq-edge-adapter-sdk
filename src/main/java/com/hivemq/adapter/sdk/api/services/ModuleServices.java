@@ -34,9 +34,6 @@ public interface ModuleServices {
     @NotNull EventService eventService();
 
     @NotNull
-    ProtocolAdapterTagService protocolAdapterTagService();
-
-    @NotNull
     ProtocolAdapterWritingService protocolAdapterWritingService();
 
 }

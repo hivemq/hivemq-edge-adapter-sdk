@@ -16,7 +16,6 @@
 package com.hivemq.adapter.sdk.api.polling;
 
 import com.hivemq.adapter.sdk.api.config.PollingContext;
-import com.hivemq.adapter.sdk.api.services.ProtocolAdapterTagService;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -30,10 +29,4 @@ public interface PollingInput<T extends PollingContext> {
      */
     @NotNull
     T getPollingContext();
-
-    /**
-     * @return the {@link ProtocolAdapterTagService} to resolve tags to tag address.
-     */
-    @NotNull
-    ProtocolAdapterTagService protocolAdapterTagService();
 }
