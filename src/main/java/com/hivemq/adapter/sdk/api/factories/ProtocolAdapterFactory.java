@@ -20,9 +20,12 @@ import com.hivemq.adapter.sdk.api.ProtocolAdapter;
 import com.hivemq.adapter.sdk.api.ProtocolAdapterInformation;
 import com.hivemq.adapter.sdk.api.config.ProtocolAdapterConfig;
 import com.hivemq.adapter.sdk.api.model.ProtocolAdapterInput;
+import com.hivemq.adapter.sdk.api.tag.Tag;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * The factory is responsible for constructing and managing the lifecycle of the various aspects of the adapter
@@ -52,10 +55,23 @@ public interface ProtocolAdapterFactory<E extends ProtocolAdapterConfig> {
     /**
      * @param objectMapper the object mapper that converts the map to the actual config
      * @param config       a map containing the configuration of the adapter
-     * @return a parsed confif object for this adapter
+     * @return a parsed config object for this adapter
      */
-     default @NotNull ProtocolAdapterConfig convertConfigObject(final @NotNull ObjectMapper objectMapper, final @NotNull Map<String, Object> config){
-         return objectMapper.convertValue(config, getConfigClass());
+     default @NotNull ProtocolAdapterConfig convertConfigObject(final @NotNull ObjectMapper objectMapper, final @NotNull Map<String, Object> config, final boolean writingEnabled){
+         if(writingEnabled) {
+             return objectMapper.convertValue(config, getInformation().configurationClassWriting());
+         } else {
+             return objectMapper.convertValue(config, getInformation().configurationClassReading());
+         }
+     }
+
+    /**
+     * @param objectMapper the object mapper that converts the map to the actual tag
+     * @param tagList      a list of maps where each entry is a tag
+     * @return a parsed tag object for this adapter
+     */
+     default @NotNull List<? extends Tag> convertTagDefinitionObjects(final @NotNull ObjectMapper objectMapper, final @NotNull List<Map<String, Object>> tagList){
+         return tagList.stream().map(tagMap -> objectMapper.convertValue(tagMap, getInformation().tagConfigurationClass())).collect(Collectors.toList());
      }
 
     /**
@@ -67,14 +83,4 @@ public interface ProtocolAdapterFactory<E extends ProtocolAdapterConfig> {
             final @NotNull ObjectMapper objectMapper, final @NotNull ProtocolAdapterConfig config){
         return objectMapper.convertValue(config, Map.class);
     }
-
-    /**
-     * A bean class that will be reflected upon by the framework to determine the structural requirements of the
-     * configuration associated with an adapter instance. It is expected that the bean class supplied, be marked up
-     * with
-     *
-     * @return The class that represents (and will encapsulate) the configuration requirements of the adapter
-     * \\@ModuleConfigField annotations.
-     */
-    @NotNull Class<? extends ProtocolAdapterConfig> getConfigClass();
 }

@@ -20,7 +20,10 @@ import com.hivemq.adapter.sdk.api.factories.AdapterFactories;
 import com.hivemq.adapter.sdk.api.services.ModuleServices;
 import com.hivemq.adapter.sdk.api.services.ProtocolAdapterMetricsService;
 import com.hivemq.adapter.sdk.api.state.ProtocolAdapterState;
+import com.hivemq.adapter.sdk.api.tag.Tag;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /**
  * Object containing information and services for the construction of adapter instances
@@ -29,9 +32,15 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface ProtocolAdapterInput<E extends ProtocolAdapterConfig> {
     /**
-     * @return the concrete config implementation for this protocol adapters
+     * @return the concrete config implementation for this protocol adapter
      */
     @NotNull E getConfig();
+
+    /**
+     * @return the concrete list of tags for this protocol adapter
+     */
+    @NotNull
+    List<Tag> getTags();
 
     /**
      * @return the current HiveMQ Edge version
