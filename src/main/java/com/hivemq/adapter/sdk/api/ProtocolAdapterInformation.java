@@ -81,7 +81,7 @@ public interface ProtocolAdapterInformation {
     /**
      * A bean class that will be reflected upon by the framework to determine the structural requirements of the
      * tag configuration associated with an adapter instance. It is expected that the bean class supplied, be marked up
-     * with
+     * with Jackson annotation.
      *
      * @return The class that represents (and will encapsulate) the configuration requirements of the adapter's tags
      */
@@ -89,8 +89,8 @@ public interface ProtocolAdapterInformation {
 
     /**
      * A bean class that will be reflected upon by the framework to determine the structural requirements of the
-     * configuration associated with an adapter instance. It is expected that the bean class supplied, be marked up
-     * with
+     * configuration associated with an adapter instance, in this case for when writing is disabled for this adapter.
+     * It is expected that the bean class supplied, be marked up with Jackson annotation.
      *
      * @return The class that represents (and will encapsulate) the configuration requirements of the adapter
      * \\@ModuleConfigField annotations.
@@ -99,8 +99,9 @@ public interface ProtocolAdapterInformation {
 
     /**
      * A bean class that will be reflected upon by the framework to determine the structural requirements of the
-     * configuration associated with an adapter instance. It is expected that the bean class supplied, be marked up
-     * with
+     * configuration associated with an adapter instance, in this case for when writing is enabled for this adapter.
+     * It is expected that the bean class supplied, be marked up
+     * with Jackson annotation.
      *
      * @return The class that represents (and will encapsulate) the configuration requirements of the adapter
      * \\@ModuleConfigField annotations.
