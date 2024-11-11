@@ -15,17 +15,5 @@
  */
 package com.hivemq.adapter.sdk.api.tag;
 
-import org.jetbrains.annotations.NotNull;
-
-public interface Tag {
-
-    @NotNull
-    TagDefinition getDefinition();
-
-    @NotNull
-    String getName();
-
-    @NotNull
-    String getDescription();
-
+public interface TagDefinition {
 }
