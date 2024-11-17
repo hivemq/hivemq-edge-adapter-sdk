@@ -19,24 +19,11 @@ import com.hivemq.adapter.sdk.api.writing.WritingContext;
 import com.hivemq.adapter.sdk.api.writing.WritingProtocolAdapter;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public interface ProtocolAdapterWritingService {
 
     boolean writingEnabled();
 
-    @NotNull
-    CompletableFuture<Void> startWriting(
-            @NotNull WritingProtocolAdapter<WritingContext> writingProtocolAdapter,
-            @NotNull ProtocolAdapterMetricsService protocolAdapterMetricsService);
-
-    @NotNull
-    CompletableFuture<Void> stopWriting(@NotNull WritingProtocolAdapter<WritingContext> writingProtocolAdapter);
-
-    void addWritingChangedCallback(@NotNull WritingChangedCallback callback);
-
-    @FunctionalInterface
-    interface WritingChangedCallback {
-        void onWritingEnabledChanged();
-    }
 }
