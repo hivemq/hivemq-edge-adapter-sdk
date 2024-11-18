@@ -15,7 +15,7 @@
  */
 package com.hivemq.adapter.sdk.api.model;
 
-import com.hivemq.adapter.sdk.api.config.ProtocolAdapterConfig;
+import com.hivemq.adapter.sdk.api.config.ProtocolSpecificAdapterConfig;
 import com.hivemq.adapter.sdk.api.factories.AdapterFactories;
 import com.hivemq.adapter.sdk.api.services.ModuleServices;
 import com.hivemq.adapter.sdk.api.services.ProtocolAdapterMetricsService;
@@ -30,7 +30,7 @@ import java.util.List;
  *
  * @param <E> the ProtocolAdapterConfig implementation for this Protocol Adapter
  */
-public interface ProtocolAdapterInput<E extends ProtocolAdapterConfig> {
+public interface ProtocolAdapterInput<E extends ProtocolSpecificAdapterConfig> {
     /**
      * @return the concrete config implementation for this protocol adapter
      */

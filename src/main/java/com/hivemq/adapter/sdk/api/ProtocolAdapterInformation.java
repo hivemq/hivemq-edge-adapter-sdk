@@ -16,7 +16,7 @@
 package com.hivemq.adapter.sdk.api;
 
 
-import com.hivemq.adapter.sdk.api.config.ProtocolAdapterConfig;
+import com.hivemq.adapter.sdk.api.config.ProtocolSpecificAdapterConfig;
 import com.hivemq.adapter.sdk.api.tag.Tag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -95,7 +95,7 @@ public interface ProtocolAdapterInformation {
      * @return The class that represents (and will encapsulate) the configuration requirements of the adapter
      * \\@ModuleConfigField annotations.
      */
-    @NotNull Class<? extends ProtocolAdapterConfig> configurationClassReading();
+    @NotNull Class<? extends ProtocolSpecificAdapterConfig> configurationClassReading();
 
     /**
      * A bean class that will be reflected upon by the framework to determine the structural requirements of the
@@ -106,7 +106,7 @@ public interface ProtocolAdapterInformation {
      * @return The class that represents (and will encapsulate) the configuration requirements of the adapter
      * \\@ModuleConfigField annotations.
      */
-    @NotNull Class<? extends ProtocolAdapterConfig> configurationClassWriting();
+    @NotNull Class<? extends ProtocolSpecificAdapterConfig> configurationClassWriting();
 
 
     /**
