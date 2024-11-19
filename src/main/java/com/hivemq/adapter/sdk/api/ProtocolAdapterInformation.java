@@ -106,7 +106,7 @@ public interface ProtocolAdapterInformation {
      * @return The class that represents (and will encapsulate) the configuration requirements of the adapter
      * \\@ModuleConfigField annotations.
      */
-    @NotNull Class<? extends ProtocolSpecificAdapterConfig> configurationClassWriting();
+    @NotNull Class<? extends ProtocolSpecificAdapterConfig> configurationClassWritingAndReading();
 
 
     /**

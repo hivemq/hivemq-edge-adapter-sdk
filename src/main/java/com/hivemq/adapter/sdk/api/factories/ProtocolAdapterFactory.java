@@ -59,7 +59,7 @@ public interface ProtocolAdapterFactory<E extends ProtocolSpecificAdapterConfig>
      */
      default @NotNull ProtocolSpecificAdapterConfig convertConfigObject(final @NotNull ObjectMapper objectMapper, final @NotNull Map<String, Object> config, final boolean writingEnabled){
          if(writingEnabled) {
-             return objectMapper.convertValue(config, getInformation().configurationClassWriting());
+             return objectMapper.convertValue(config, getInformation().configurationClassWritingAndReading());
          } else {
              return objectMapper.convertValue(config, getInformation().configurationClassReading());
          }
