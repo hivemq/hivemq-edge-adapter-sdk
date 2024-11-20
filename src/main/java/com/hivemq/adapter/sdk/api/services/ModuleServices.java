@@ -16,6 +16,7 @@
 package com.hivemq.adapter.sdk.api.services;
 
 import com.hivemq.adapter.sdk.api.events.EventService;
+import com.hivemq.adapter.sdk.api.eventsv2.EventsService;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -32,6 +33,12 @@ public interface ModuleServices {
      * @return the {@link EventService} to send events from this adapter to HiveMQ Edge in case something happens the user should be alerted of.
      */
     @NotNull EventService eventService();
+
+    /**
+     * @return the new EventsService which sends events to both the rest api / frontend and data hub / mqtt
+     */
+    @NotNull
+    EventsService eventServiceV2();
 
     @NotNull
     ProtocolAdapterWritingService protocolAdapterWritingService();
