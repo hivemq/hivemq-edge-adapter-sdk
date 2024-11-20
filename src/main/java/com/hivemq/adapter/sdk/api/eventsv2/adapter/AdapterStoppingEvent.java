@@ -1,0 +1,41 @@
+package com.hivemq.adapter.sdk.api.eventsv2.adapter;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hivemq.adapter.sdk.api.eventsv2.Event;
+import io.swagger.v3.oas.annotations.media.Schema;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Date;
+
+public class AdapterStoppingEvent extends Event {
+
+    @JsonProperty(value = "adapterId", required = true)
+    @Schema(name = "adapterId", description = "ID of the adapter starting")
+    private final @NotNull String adapterId;
+
+    @JsonProperty(value = "protocolId", required = true)
+    @Schema(name = "protocolId", description = "ID of protocol of the adapter")
+    private final @NotNull String protocolId;
+
+    public AdapterStoppingEvent(
+            final String edgeId,
+            final Date timestamp,
+            final String adapterId,
+            final String protocolId) {
+        super("AdapterStoppingEvent",
+                "Adapter is shutting down",
+                edgeId,
+                SEVERITY.INFO,
+                timestamp);
+        this.adapterId = adapterId;
+        this.protocolId = protocolId;
+    }
+
+    public @NotNull String getAdapterId() {
+        return adapterId;
+    }
+
+    public @NotNull String getProtocolId() {
+        return protocolId;
+    }
+}
