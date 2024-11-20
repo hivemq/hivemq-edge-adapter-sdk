@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class AdapterEvent extends Event {
 
@@ -19,21 +20,21 @@ public class AdapterEvent extends Event {
 
     public AdapterEvent(
             @JsonProperty(value = "type", required = true)
-            @NotNull final String type,
+            final @NotNull String type,
             @JsonProperty(value = "title", required = true)
-            @NotNull final String title,
+            final @NotNull String title,
             @JsonProperty(value = "edgeId", required = true)
-            @NotNull final String edgeId,
+            final @NotNull String edgeId,
             @JsonProperty(value = "source", required = true)
-            @NotNull final Source source,
+            final @NotNull Source source,
             @JsonProperty(value = "severity", required = true)
-            @NotNull final Severity severity,
+            final @NotNull Severity severity,
             @JsonProperty(value = "created", required = true)
-            @NotNull final Date created,
+            final @NotNull Date created,
             @JsonProperty(value = "adapterId", required = true)
-            @NotNull final String adapterId,
+            final @NotNull String adapterId,
             @JsonProperty(value = "protocolId", required = true)
-            @NotNull final String protocolId,
+            final @NotNull String protocolId,
             @JsonProperty(value = "transactionId", required = true)
             final @NotNull String transactionId) {
         super(type, title, edgeId, source, severity, created, transactionId);
@@ -54,5 +55,84 @@ public class AdapterEvent extends Event {
         return "eventlog/"+getSource()+"/"+getAdapterId();
     }
 
+    public Builder builder(
+            final @NotNull String adapterId,
+            final @NotNull String protocolId,
+            final @NotNull String edgeId,
+            final @NotNull String transactionId) {
+        return new Builder(adapterId, protocolId, edgeId, transactionId);
+    }
 
+    public static class Builder {
+        final @NotNull String adapterId;
+        final @NotNull String protocolId;
+        final @NotNull String edgeId;
+        final @NotNull String transactionId;
+        final @NotNull Source source;
+        final @NotNull Date created;
+
+        private String type;
+        private String title;
+        private Severity severity;
+
+        public Builder(@NotNull final String adapterId, @NotNull final String protocolId, @NotNull final String edgeId, @NotNull final String transactionId) {
+            this.adapterId = adapterId;
+            this.protocolId = protocolId;
+            this.edgeId = edgeId;
+            this.transactionId = transactionId;
+            this.source = Source.ADAPTER;
+            this.created = new Date();
+        }
+
+        public Builder error() {
+            this.type = "AdapterErrorEvent";
+            this.title = "Adapter encountered an error";
+            this.severity = Severity.ERROR;
+            return this;
+        }
+
+        public Builder starting() {
+            this.type = "AdapterStartingEvent";
+            this.title = "Adapter is starting";
+            this.severity = Severity.INFO;
+            return this;
+        }
+
+        public Builder subscribed() {
+            this.type = "AdapterSubscribedEvent";
+            this.title = "Adapter is subscribed";
+            this.severity = Severity.INFO;
+            return this;
+        }
+
+        public Builder firstTag() {
+            this.type = "AdapterFirstTagEvent";
+            this.title = "Adapter received first tag";
+            this.severity = Severity.INFO;
+            return this;
+        }
+
+        public Builder stopping() {
+            this.type = "AdapterStoppingEvent";
+            this.title = "Adapter is stopping";
+            this.severity = Severity.INFO;
+            return this;
+        }
+
+        public Builder stopped() {
+            this.type = "AdapterStoppedEvent";
+            this.title = "Adapter is stopped";
+            this.severity = Severity.INFO;
+            return this;
+        }
+
+        public AdapterEvent build() {
+            Objects.requireNonNull(type);
+            Objects.requireNonNull(title);
+            Objects.requireNonNull(severity);
+            return new AdapterEvent(type, title, edgeId, source, severity, created, adapterId, protocolId, transactionId);
+        }
+
+    }
+    
 }
