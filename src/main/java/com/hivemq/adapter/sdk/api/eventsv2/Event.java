@@ -46,6 +46,10 @@ public abstract class Event {
     @Schema(name = "created", description = "Time at which the event occured")
     private final @NotNull Date created;
 
+    @JsonProperty(value = "transactionId", required = true)
+    @Schema(name = "transactionId", description = "Backend transaction id")
+    private final @NotNull String transactionId;
+
     @JsonCreator
     public Event(
             @JsonProperty(value = "type",required = true)
@@ -59,13 +63,16 @@ public abstract class Event {
             @JsonProperty(value = "severity",required = true)
             final @NotNull Event.Severity severity,
             @JsonProperty(value = "created",required = true)
-            final @NotNull Date created) {
+            final @NotNull Date created,
+            @JsonProperty(value = "transactionId", required = true)
+            final @NotNull String transactionId) {
         this.type = type;
         this.title = title;
         this.edgeId = edgeId;
         this.severity = severity;
         this.created = created;
         this.source = source;
+        this.transactionId = transactionId;
     }
 
     public @NotNull String getType() {
@@ -92,6 +99,10 @@ public abstract class Event {
         return source;
     }
 
+    public @NotNull String getTransactionId() {
+        return transactionId;
+    }
+
     public abstract String getTopic();
 
     @Override
@@ -103,6 +114,7 @@ public abstract class Event {
                 ", edgeId='" + edgeId + '\'' +
                 ", severity=" + severity +
                 ", created=" + created +
+                ", transactionId='" + transactionId + '\'' +
                 '}';
     }
 
@@ -111,11 +123,11 @@ public abstract class Event {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         final Event event = (Event) o;
-        return Objects.equals(type, event.type) && source == event.source && Objects.equals(title, event.title) && Objects.equals(edgeId, event.edgeId) && severity == event.severity && Objects.equals(created, event.created);
+        return Objects.equals(type, event.type) && source == event.source && Objects.equals(title, event.title) && Objects.equals(edgeId, event.edgeId) && severity == event.severity && Objects.equals(created, event.created) && Objects.equals(transactionId, event.transactionId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, source, title, edgeId, severity, created);
+        return Objects.hash(type, source, title, edgeId, severity, created, transactionId);
     }
 }

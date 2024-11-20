@@ -17,8 +17,26 @@ public class AdapterEvent extends Event {
     @Schema(name = "protocolId", description = "ID of protocol of the adapter")
     private final @NotNull String protocolId;
 
-    public AdapterEvent(@NotNull final String type, @NotNull final String title, @NotNull final String edgeId, @NotNull final Source source, @NotNull final Severity severity, @NotNull final Date created, @NotNull final String adapterId, @NotNull final String protocolId) {
-        super(type, title, edgeId, source, severity, created);
+    public AdapterEvent(
+            @JsonProperty(value = "type", required = true)
+            @NotNull final String type,
+            @JsonProperty(value = "title", required = true)
+            @NotNull final String title,
+            @JsonProperty(value = "edgeId", required = true)
+            @NotNull final String edgeId,
+            @JsonProperty(value = "source", required = true)
+            @NotNull final Source source,
+            @JsonProperty(value = "severity", required = true)
+            @NotNull final Severity severity,
+            @JsonProperty(value = "created", required = true)
+            @NotNull final Date created,
+            @JsonProperty(value = "adapterId", required = true)
+            @NotNull final String adapterId,
+            @JsonProperty(value = "protocolId", required = true)
+            @NotNull final String protocolId,
+            @JsonProperty(value = "transactionId", required = true)
+            final @NotNull String transactionId) {
+        super(type, title, edgeId, source, severity, created, transactionId);
         this.adapterId = adapterId;
         this.protocolId = protocolId;
     }
@@ -35,4 +53,6 @@ public class AdapterEvent extends Event {
     public String getTopic() {
         return "eventlog/"+getSource()+"/"+getAdapterId();
     }
+
+
 }
