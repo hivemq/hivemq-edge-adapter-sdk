@@ -92,6 +92,8 @@ public abstract class Event {
         return source;
     }
 
+    public abstract String getTopic();
+
     @Override
     public String toString() {
         return "Event{" +
