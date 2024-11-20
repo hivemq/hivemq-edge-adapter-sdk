@@ -44,7 +44,7 @@ public abstract class Event {
 
     @JsonProperty(value = "created", required = true)
     @Schema(name = "created", description = "Time at which the event occured")
-    private final @NotNull Date created;
+    private final @NotNull Long created;
 
     @JsonProperty(value = "transactionId", required = true)
     @Schema(name = "transactionId", description = "Backend transaction id")
@@ -63,7 +63,7 @@ public abstract class Event {
             @JsonProperty(value = "severity",required = true)
             final @NotNull Event.Severity severity,
             @JsonProperty(value = "created",required = true)
-            final @NotNull Date created,
+            final @NotNull Long created,
             @JsonProperty(value = "transactionId", required = true)
             final @NotNull String transactionId) {
         this.type = type;
@@ -91,7 +91,7 @@ public abstract class Event {
         return severity;
     }
 
-    public @NotNull Date getCreated() {
+    public @NotNull Long getCreated() {
         return created;
     }
 

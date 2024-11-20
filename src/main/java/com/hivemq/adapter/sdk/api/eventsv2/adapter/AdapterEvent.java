@@ -30,7 +30,7 @@ public class AdapterEvent extends Event {
             @JsonProperty(value = "severity", required = true)
             final @NotNull Severity severity,
             @JsonProperty(value = "created", required = true)
-            final @NotNull Date created,
+            final @NotNull Long created,
             @JsonProperty(value = "adapterId", required = true)
             final @NotNull String adapterId,
             @JsonProperty(value = "protocolId", required = true)
