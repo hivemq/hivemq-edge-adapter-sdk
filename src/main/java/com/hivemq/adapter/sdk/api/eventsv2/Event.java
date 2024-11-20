@@ -6,14 +6,14 @@ import java.util.Date;
 import java.util.Objects;
 
 public abstract class Event {
-    public enum SEVERITY {
+    public enum Severity {
         INFO,
         WARN,
         ERROR,
         CRITICAL
     }
 
-    public enum SOURCE {
+    public enum Source {
         EDGE,
         ADAPTER,
         BRIDGE
@@ -21,13 +21,13 @@ public abstract class Event {
 
     private final @NotNull String type;
 
-    private final @NotNull SOURCE source;
+    private final @NotNull Event.Source source;
 
     private final @NotNull String title;
 
     private final @NotNull String edgeId;
 
-    private final @NotNull SEVERITY severity;
+    private final @NotNull Event.Severity severity;
 
     private final @NotNull Date timestamp;
 
@@ -35,8 +35,8 @@ public abstract class Event {
             final @NotNull String type,
             final @NotNull String title,
             final @NotNull String edgeId,
-            final @NotNull SOURCE source,
-            final @NotNull SEVERITY severity,
+            final @NotNull Event.Source source,
+            final @NotNull Event.Severity severity,
             final @NotNull Date timestamp) {
         this.type = type;
         this.title = title;
@@ -58,7 +58,7 @@ public abstract class Event {
         return edgeId;
     }
 
-    public @NotNull SEVERITY getSeverity() {
+    public @NotNull Event.Severity getSeverity() {
         return severity;
     }
 
@@ -66,7 +66,7 @@ public abstract class Event {
         return timestamp;
     }
 
-    public @NotNull SOURCE getSource() {
+    public @NotNull Event.Source getSource() {
         return source;
     }
 

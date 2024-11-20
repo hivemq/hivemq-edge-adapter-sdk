@@ -25,7 +25,8 @@ public class AdapterStoppedEvent extends Event {
         super("AdapterStoppedEvent",
                 "Adapter has been stopped",
                 edgeId,
-                SEVERITY.INFO,
+                Source.ADAPTER,
+                Severity.INFO,
                 timestamp);
         this.adapterId = adapterId;
         this.protocolId = protocolId;

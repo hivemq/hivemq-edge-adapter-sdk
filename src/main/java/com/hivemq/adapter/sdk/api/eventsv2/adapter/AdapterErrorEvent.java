@@ -25,7 +25,8 @@ public class AdapterErrorEvent extends Event {
         super("AdapterErrorEvent",
                 "Adapter has an error",
                 edgeId,
-                SEVERITY.ERROR,
+                Source.ADAPTER,
+                Severity.ERROR,
                 timestamp);
         this.adapterId = adapterId;
         this.protocolId = protocolId;

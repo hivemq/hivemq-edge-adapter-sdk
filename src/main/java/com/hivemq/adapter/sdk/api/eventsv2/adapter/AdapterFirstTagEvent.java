@@ -25,7 +25,8 @@ public class AdapterFirstTagEvent extends Event {
         super("AdapterFirstTagEvent",
                 "First tag received",
                 edgeId,
-                SEVERITY.INFO,
+                Source.ADAPTER,
+                Severity.INFO,
                 timestamp);
         this.adapterId = adapterId;
         this.protocolId = protocolId;

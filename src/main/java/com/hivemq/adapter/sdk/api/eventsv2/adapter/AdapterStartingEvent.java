@@ -25,7 +25,8 @@ public class AdapterStartingEvent extends Event {
         super("AdapterStartingEvent",
                 "Adapter is starting",
                 edgeId,
-                Event.SEVERITY.INFO,
+                Source.ADAPTER,
+                Severity.INFO,
                 timestamp);
         this.adapterId = adapterId;
         this.protocolId = protocolId;

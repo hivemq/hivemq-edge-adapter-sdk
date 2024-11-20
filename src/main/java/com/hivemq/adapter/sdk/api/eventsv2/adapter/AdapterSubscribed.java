@@ -25,7 +25,8 @@ public class AdapterSubscribed extends Event {
         super("AdapterSubscribed",
                 "Adapter is subscribed",
                 edgeId,
-                SEVERITY.INFO,
+                Source.ADAPTER,
+                Severity.INFO,
                 timestamp);
         this.adapterId = adapterId;
         this.protocolId = protocolId;
