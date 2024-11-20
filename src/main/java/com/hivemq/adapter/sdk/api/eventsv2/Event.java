@@ -1,10 +1,9 @@
 package com.hivemq.adapter.sdk.api.eventsv2;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
+import java.util.Objects;
 
 public abstract class Event {
     public enum SEVERITY {
@@ -14,42 +13,37 @@ public abstract class Event {
         CRITICAL
     }
 
-    @JsonProperty(value = "type",required = true)
-    @Schema(name = "type", description = "Type of the event")
+    public enum SOURCE {
+        EDGE,
+        ADAPTER,
+        BRIDGE
+    }
+
     private final @NotNull String type;
 
-    @JsonProperty(value = "title", required = true)
-    @Schema(name = "title", description = "Human readable title")
+    private final @NotNull SOURCE source;
+
     private final @NotNull String title;
 
-    @JsonProperty(value = "edgeId", required = true)
-    @Schema(name = "edgeId", description = "Globally unique id of the edge broker")
     private final @NotNull String edgeId;
 
-    @JsonProperty(value = "severity", required = true)
-    @Schema(name = "severity", description = "Severity of the event")
     private final @NotNull SEVERITY severity;
 
-    @JsonProperty(value = "timestamp", required = true)
-    @Schema(name = "timestamp", description = "Time at which the event occured")
     private final @NotNull Date timestamp;
 
     public Event(
-            @JsonProperty(value = "type",required = true)
             final @NotNull String type,
-            @JsonProperty(value = "title", required = true)
             final @NotNull String title,
-            @JsonProperty(value = "edgeId", required = true)
             final @NotNull String edgeId,
-            @JsonProperty(value = "severity", required = true)
+            final @NotNull SOURCE source,
             final @NotNull SEVERITY severity,
-            @JsonProperty(value = "timestamp", required = true)
             final @NotNull Date timestamp) {
         this.type = type;
         this.title = title;
         this.edgeId = edgeId;
         this.severity = severity;
         this.timestamp = timestamp;
+        this.source = source;
     }
 
     public @NotNull String getType() {
@@ -70,5 +64,48 @@ public abstract class Event {
 
     public @NotNull Date getTimestamp() {
         return timestamp;
+    }
+
+    public @NotNull SOURCE getSource() {
+        return source;
+    }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "type='" +
+                type +
+                '\'' +
+                ", source=" +
+                source +
+                ", title='" +
+                title +
+                '\'' +
+                ", edgeId='" +
+                edgeId +
+                '\'' +
+                ", severity=" +
+                severity +
+                ", timestamp=" +
+                timestamp +
+                '}';
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final Event event = (Event) o;
+        return Objects.equals(type, event.type) &&
+                source == event.source &&
+                Objects.equals(title, event.title) &&
+                Objects.equals(edgeId, event.edgeId) &&
+                severity == event.severity &&
+                Objects.equals(timestamp, event.timestamp);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, source, title, edgeId, severity, timestamp);
     }
 }
