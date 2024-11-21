@@ -15,6 +15,7 @@
  */
 package com.hivemq.adapter.sdk.api.config.legacy;
 
+import com.hivemq.adapter.sdk.api.config.PollingContext;
 import com.hivemq.adapter.sdk.api.config.ProtocolSpecificAdapterConfig;
 import com.hivemq.adapter.sdk.api.tag.Tag;
 import org.jetbrains.annotations.NotNull;
@@ -30,10 +31,15 @@ import java.util.List;
 public class ConfigTagsTuple {
     private final @NotNull ProtocolSpecificAdapterConfig config;
     private final @NotNull List<? extends Tag> tags;
+    private final @NotNull List<? extends PollingContext> pollingContexts;
 
-    public ConfigTagsTuple(@NotNull final ProtocolSpecificAdapterConfig config, @NotNull final List<? extends Tag> tags) {
+    public ConfigTagsTuple(
+            final @NotNull ProtocolSpecificAdapterConfig config,
+            final @NotNull List<? extends Tag> tags,
+            final @NotNull List<PollingContext> pollingContexts) {
         this.config = config;
         this.tags = tags;
+        this.pollingContexts = pollingContexts;
     }
 
     public @NotNull ProtocolSpecificAdapterConfig getConfig() {
@@ -42,5 +48,9 @@ public class ConfigTagsTuple {
 
     public @NotNull List<? extends Tag> getTags() {
         return tags;
+    }
+
+    public @NotNull List<? extends PollingContext> getPollingContexts() {
+        return pollingContexts;
     }
 }

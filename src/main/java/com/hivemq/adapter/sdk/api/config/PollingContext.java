@@ -26,7 +26,11 @@ public interface PollingContext {
     /**
      * @return the topic on which the data will be available
      */
-    @NotNull String getMqttTopic();
+    @NotNull
+    String getMqttTopic();
+
+    @NotNull
+    String getTagName();
 
     /**
      * @return the Quality-of-Service for the MQTT publish containing the data
@@ -36,27 +40,34 @@ public interface PollingContext {
     /**
      * @return how the data will be published (one publish for all tags, a separate publish for each tag)
      */
-    @NotNull MessageHandlingOptions getMessageHandlingOptions();
+    @NotNull
+    MessageHandlingOptions getMessageHandlingOptions();
 
     /**
      * @return whether the MQTT publish payload should contain the timestamp
      */
-    @NotNull Boolean getIncludeTimestamp();
+    @NotNull
+    Boolean getIncludeTimestamp();
 
     /**
      * @return whether the MQTT publish payload should contain the tag names
      */
-    @NotNull Boolean getIncludeTagNames();
+    @NotNull
+    Boolean getIncludeTagNames();
 
     /**
      * @return a list of MQTT user properties that are added to the MQTT publish
      */
-    @NotNull List<MqttUserProperty> getUserProperties();
+    @NotNull
+    List<MqttUserProperty> getUserProperties();
 
     /**
-     * @return optional custom implementation of the {@link JsonPayloadCreator} to overwrite the default creation of the mqtt payloads
+     * @return optional custom implementation of the {@link JsonPayloadCreator} to overwrite the default creation of the
+     *         mqtt payloads
      */
     default @Nullable JsonPayloadCreator getJsonPayloadCreator() {
         return null;
     }
+
+
 }
