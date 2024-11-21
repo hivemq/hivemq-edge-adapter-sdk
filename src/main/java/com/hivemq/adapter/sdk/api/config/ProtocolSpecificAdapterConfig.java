@@ -25,18 +25,4 @@ import java.util.Set;
 
 public interface ProtocolSpecificAdapterConfig {
 
-    /**
-     * Unique identifier for this protocol adapter instance.
-     * <p>
-     * Can only contain a-z, A-Z, 0-9, hyphen and underscore.
-     *
-     * @return the identifier
-     */
-    @NotNull
-    String getId();
-
-
-    @NotNull
-    Set<String> calculateAllUsedTags();
-
 }

@@ -31,6 +31,12 @@ import java.util.List;
  * @param <E> the ProtocolAdapterConfig implementation for this Protocol Adapter
  */
 public interface ProtocolAdapterInput<E extends ProtocolSpecificAdapterConfig> {
+
+    /**
+     * @return the concrete config implementation for this protocol adapter
+     */
+    @NotNull String getAdapterId();
+
     /**
      * @return the concrete config implementation for this protocol adapter
      */

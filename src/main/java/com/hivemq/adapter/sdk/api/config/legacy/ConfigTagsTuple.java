@@ -29,17 +29,25 @@ import java.util.List;
  */
 @Deprecated()
 public class ConfigTagsTuple {
+
+    private final @NotNull String id;
     private final @NotNull ProtocolSpecificAdapterConfig config;
     private final @NotNull List<? extends Tag> tags;
     private final @NotNull List<? extends PollingContext> pollingContexts;
 
     public ConfigTagsTuple(
+            final @NotNull String id,
             final @NotNull ProtocolSpecificAdapterConfig config,
             final @NotNull List<? extends Tag> tags,
-            final @NotNull List<PollingContext> pollingContexts) {
+            final @NotNull List<? extends PollingContext> pollingContexts) {
+        this.id = id;
         this.config = config;
         this.tags = tags;
         this.pollingContexts = pollingContexts;
+    }
+
+    public @NotNull String getAdapterId() {
+        return id;
     }
 
     public @NotNull ProtocolSpecificAdapterConfig getConfig() {
