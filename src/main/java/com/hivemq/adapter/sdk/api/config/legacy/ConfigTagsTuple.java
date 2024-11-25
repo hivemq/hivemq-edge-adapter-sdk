@@ -35,6 +35,7 @@ public class ConfigTagsTuple {
     private final @NotNull List<? extends Tag> tags;
     private final @NotNull List<? extends PollingContext> pollingContexts;
 
+
     public ConfigTagsTuple(
             final @NotNull String id,
             final @NotNull ProtocolSpecificAdapterConfig config,

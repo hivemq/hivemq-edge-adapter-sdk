@@ -13,25 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.adapter.sdk.api.writing;
+package com.hivemq.adapter.sdk.api.config;
 
+import com.hivemq.adapter.sdk.api.writing.WritingContext;
 import org.jetbrains.annotations.NotNull;
 
-public interface WritingContext {
+import java.util.List;
 
+public interface AdapterConfigWithWritingContexts {
 
     @NotNull
-    String getTagName();
-
-    /**
-     * @return the mqtt topic filter from which the data will be read
-     */
-    @NotNull
-    String getMqttTopicFilter();
-
-    /**
-     * @return the maximum Quality-of-Service for the MQTT subscription.
-     */
-    int getMqttMaxQos();
+    List<? extends WritingContext> getWritingContexts();
 
 }
