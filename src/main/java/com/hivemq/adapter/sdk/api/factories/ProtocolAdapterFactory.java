@@ -40,7 +40,8 @@ public interface ProtocolAdapterFactory<E extends ProtocolSpecificAdapterConfig>
      *
      * @return the instance that provides the adapter information
      */
-    @NotNull ProtocolAdapterInformation getInformation();
+    @NotNull
+    ProtocolAdapterInformation getInformation();
 
     /**
      * This method is called by HiveMQ Edge to create an instance of the adapter
@@ -49,7 +50,8 @@ public interface ProtocolAdapterFactory<E extends ProtocolSpecificAdapterConfig>
      * @param input              wrapper object for various information for the adapter.
      * @return the protocol adapter instance
      */
-    @NotNull ProtocolAdapter createAdapter(
+    @NotNull
+    ProtocolAdapter createAdapter(
             @NotNull ProtocolAdapterInformation adapterInformation, @NotNull ProtocolAdapterInput<E> input);
 
     /**
@@ -57,22 +59,28 @@ public interface ProtocolAdapterFactory<E extends ProtocolSpecificAdapterConfig>
      * @param config       a map containing the configuration of the adapter
      * @return a parsed config object for this adapter
      */
-     default @NotNull ProtocolSpecificAdapterConfig convertConfigObject(final @NotNull ObjectMapper objectMapper, final @NotNull Map<String, Object> config, final boolean writingEnabled){
-         if(writingEnabled) {
-             return objectMapper.convertValue(config, getInformation().configurationClassWritingAndReading());
-         } else {
-             return objectMapper.convertValue(config, getInformation().configurationClassReading());
-         }
-     }
+    default @NotNull ProtocolSpecificAdapterConfig convertConfigObject(
+            final @NotNull ObjectMapper objectMapper,
+            final @NotNull Map<String, Object> config,
+            final boolean writingEnabled) {
+        if (writingEnabled) {
+            return objectMapper.convertValue(config, getInformation().configurationClassWritingAndReading());
+        } else {
+            return objectMapper.convertValue(config, getInformation().configurationClassReading());
+        }
+    }
 
     /**
      * @param objectMapper the object mapper that converts the map to the actual tag
      * @param tagList      a list of maps where each entry is a tag
      * @return a parsed tag object for this adapter
      */
-     default @NotNull List<? extends Tag> convertTagDefinitionObjects(final @NotNull ObjectMapper objectMapper, final @NotNull List<Map<String, Object>> tagList){
-         return tagList.stream().map(tagMap -> objectMapper.convertValue(tagMap, getInformation().tagConfigurationClass())).collect(Collectors.toList());
-     }
+    default @NotNull List<? extends Tag> convertTagDefinitionObjects(
+            final @NotNull ObjectMapper objectMapper, final @NotNull List<Map<String, Object>> tagList) {
+        return tagList.stream()
+                .map(tagMap -> objectMapper.convertValue(tagMap, getInformation().tagConfigurationClass()))
+                .collect(Collectors.toList());
+    }
 
     /**
      * @param objectMapper the object mapper that converts the actual config to a map
@@ -80,7 +88,7 @@ public interface ProtocolAdapterFactory<E extends ProtocolSpecificAdapterConfig>
      * @return a map containing the configuration of the adapter
      */
     default @NotNull Map<String, Object> unconvertConfigObject(
-            final @NotNull ObjectMapper objectMapper, final @NotNull ProtocolSpecificAdapterConfig config){
+            final @NotNull ObjectMapper objectMapper, final @NotNull ProtocolSpecificAdapterConfig config) {
         return objectMapper.convertValue(config, Map.class);
     }
 }
