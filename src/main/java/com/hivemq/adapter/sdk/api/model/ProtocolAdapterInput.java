@@ -17,6 +17,8 @@ package com.hivemq.adapter.sdk.api.model;
 
 import com.hivemq.adapter.sdk.api.config.ProtocolSpecificAdapterConfig;
 import com.hivemq.adapter.sdk.api.factories.AdapterFactories;
+import com.hivemq.adapter.sdk.api.mappings.fromedge.FromEdgeMapping;
+import com.hivemq.adapter.sdk.api.mappings.toedge.ToEdgeMapping;
 import com.hivemq.adapter.sdk.api.services.ModuleServices;
 import com.hivemq.adapter.sdk.api.services.ProtocolAdapterMetricsService;
 import com.hivemq.adapter.sdk.api.state.ProtocolAdapterState;
@@ -72,4 +74,14 @@ public interface ProtocolAdapterInput<E extends ProtocolSpecificAdapterConfig> {
      * @return the {@link ProtocolAdapterMetricsService} to increment and decrement metrics for the adapter.
      */
     @NotNull ProtocolAdapterMetricsService getProtocolAdapterMetricsHelper();
+
+    /**
+     * @return the List of configured mappings from edge to mqtt
+     */
+    @NotNull List<FromEdgeMapping> getFromEdgeMappings();
+
+    /**
+     * @return the List of configured mappings from mqtt to edge
+     */
+    @NotNull List<ToEdgeMapping> getToEdgeMappings();
 }

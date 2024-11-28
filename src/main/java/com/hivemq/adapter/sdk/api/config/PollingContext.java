@@ -69,5 +69,13 @@ public interface PollingContext {
         return null;
     }
 
+    /**
+     * @return optional custom implementation of the {@link JsonPayloadCreator} to overwrite the default creation of the
+     *         mqtt payloads
+     */
+    default @Nullable Long getMessageExpiryInterval() {
+        return Long.MAX_VALUE; //Default taken from com.hivemq.mqtt.message.publish.PUBLISH.MESSAGE_EXPIRY_INTERVAL_NOT_SET
+    }
+
 
 }
