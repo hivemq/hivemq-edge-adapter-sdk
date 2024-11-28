@@ -16,6 +16,7 @@
 package com.hivemq.adapter.sdk.api.config;
 
 import com.hivemq.adapter.sdk.api.data.JsonPayloadCreator;
+import com.hivemq.adapter.sdk.api.mappings.fields.FieldMapping;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -77,5 +78,11 @@ public interface PollingContext {
         return Long.MAX_VALUE; //Default taken from com.hivemq.mqtt.message.publish.PUBLISH.MESSAGE_EXPIRY_INTERVAL_NOT_SET
     }
 
+    /**
+     * @return optional field mapping
+     */
+    default @Nullable FieldMapping getFieldMapping() {
+        return null; //TODO: fix after implementation
+    }
 
 }

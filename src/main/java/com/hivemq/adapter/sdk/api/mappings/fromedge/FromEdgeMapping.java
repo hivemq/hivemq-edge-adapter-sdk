@@ -18,6 +18,7 @@ package com.hivemq.adapter.sdk.api.mappings.fromedge;
 import com.hivemq.adapter.sdk.api.config.MessageHandlingOptions;
 import com.hivemq.adapter.sdk.api.config.MqttUserProperty;
 import com.hivemq.adapter.sdk.api.config.PollingContext;
+import com.hivemq.adapter.sdk.api.mappings.fields.FieldMapping;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,6 +35,7 @@ public class FromEdgeMapping implements PollingContext {
     private final @NotNull List<MqttUserProperty> userProperties;
     private final int maxQoS;
     private final long messageExpiryInterval;
+    private final @Nullable FieldMapping fieldMapping;
 
     public FromEdgeMapping(
             final @NotNull String tagName,
@@ -43,7 +45,8 @@ public class FromEdgeMapping implements PollingContext {
             final @NotNull MessageHandlingOptions messageHandlingOptions,
             final boolean includeTagNames,
             final boolean includeTimestamp,
-            final @NotNull List<MqttUserProperty> userProperties) {
+            final @NotNull List<MqttUserProperty> userProperties,
+            final @Nullable FieldMapping fieldMapping) {
         this.tagName = tagName;
         this.topic = topic;
         this.messageHandlingOptions = messageHandlingOptions;
@@ -52,6 +55,7 @@ public class FromEdgeMapping implements PollingContext {
         this.includeTimestamp = includeTimestamp;
         this.userProperties = userProperties;
         this.maxQoS = maxQoS;
+        this.fieldMapping = fieldMapping;
     }
 
     @Override
@@ -59,6 +63,7 @@ public class FromEdgeMapping implements PollingContext {
         return topic;
     }
 
+    @Override
     public @NotNull String getTagName() {
         return tagName;
     }
@@ -68,18 +73,22 @@ public class FromEdgeMapping implements PollingContext {
         return maxQoS;
     }
 
+    @Override
     public @NotNull MessageHandlingOptions getMessageHandlingOptions() {
         return messageHandlingOptions;
     }
 
+    @Override
     public @NotNull Boolean getIncludeTimestamp() {
         return includeTimestamp;
     }
 
+    @Override
     public @NotNull Boolean getIncludeTagNames() {
         return includeTagNames;
     }
 
+    @Override
     public @NotNull List<MqttUserProperty> getUserProperties() {
         return userProperties;
     }
@@ -87,6 +96,11 @@ public class FromEdgeMapping implements PollingContext {
     @Override
     public @Nullable Long getMessageExpiryInterval() {
         return this.messageExpiryInterval;
+    }
+
+    @Override
+    public @Nullable FieldMapping getFieldMapping() {
+        return fieldMapping;
     }
 
     public static @NotNull FromEdgeMapping from(final @NotNull PollingContext fromEdgeMapping) {
@@ -104,7 +118,8 @@ public class FromEdgeMapping implements PollingContext {
                 fromEdgeMapping.getMessageHandlingOptions(),
                 fromEdgeMapping.getIncludeTagNames(),
                 fromEdgeMapping.getIncludeTimestamp(),
-                mqttUserPropertyEntities);
+                mqttUserPropertyEntities,
+                fromEdgeMapping.getFieldMapping());
     }
 
 }
