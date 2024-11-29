@@ -15,14 +15,14 @@
  */
 package com.hivemq.adapter.sdk.api.model;
 
+import com.hivemq.adapter.sdk.api.config.PollingContext;
 import com.hivemq.adapter.sdk.api.config.ProtocolSpecificAdapterConfig;
 import com.hivemq.adapter.sdk.api.factories.AdapterFactories;
-import com.hivemq.adapter.sdk.api.mappings.fromedge.FromEdgeMapping;
-import com.hivemq.adapter.sdk.api.mappings.toedge.ToEdgeMapping;
 import com.hivemq.adapter.sdk.api.services.ModuleServices;
 import com.hivemq.adapter.sdk.api.services.ProtocolAdapterMetricsService;
 import com.hivemq.adapter.sdk.api.state.ProtocolAdapterState;
 import com.hivemq.adapter.sdk.api.tag.Tag;
+import com.hivemq.adapter.sdk.api.writing.WritingContext;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -78,10 +78,5 @@ public interface ProtocolAdapterInput<E extends ProtocolSpecificAdapterConfig> {
     /**
      * @return the List of configured mappings from edge to mqtt
      */
-    @NotNull List<FromEdgeMapping> getFromEdgeMappings();
-
-    /**
-     * @return the List of configured mappings from mqtt to edge
-     */
-    @NotNull List<ToEdgeMapping> getToEdgeMappings();
+    @NotNull List<PollingContext> getPollingContexts();
 }

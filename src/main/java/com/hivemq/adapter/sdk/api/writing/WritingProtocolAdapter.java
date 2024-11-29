@@ -24,13 +24,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public interface WritingProtocolAdapter<C extends WritingContext> extends ProtocolAdapter {
+public interface WritingProtocolAdapter extends ProtocolAdapter {
 
     void write(@NotNull WritingInput writingInput, @NotNull WritingOutput writingOutput);
 
     @NotNull
-    List<C> getWritingContexts();
-
-    @NotNull
-    Class<? extends WritingPayload> getMqttPayloadClass();
+    Class<? extends WritingPayload> getMqttPayloadClass(); //TODO ProtocolAdapterInformation??
 }
