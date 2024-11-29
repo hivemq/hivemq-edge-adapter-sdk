@@ -22,7 +22,6 @@ import com.hivemq.adapter.sdk.api.services.ModuleServices;
 import com.hivemq.adapter.sdk.api.services.ProtocolAdapterMetricsService;
 import com.hivemq.adapter.sdk.api.state.ProtocolAdapterState;
 import com.hivemq.adapter.sdk.api.tag.Tag;
-import com.hivemq.adapter.sdk.api.writing.WritingContext;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
