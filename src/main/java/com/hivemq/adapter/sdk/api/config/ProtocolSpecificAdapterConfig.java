@@ -15,30 +15,14 @@
  */
 package com.hivemq.adapter.sdk.api.config;
 
-import com.hivemq.adapter.sdk.api.tag.Tag;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.Set;
 
 /**
  * Interface for the configuration of Protocol Adapters.
  */
 
-public interface ProtocolAdapterConfig {
-
-    /**
-     * Unique identifier for this protocol adapter instance.
-     * <p>
-     * Can only contain a-z, A-Z, 0-9, hyphen and underscore.
-     *
-     * @return the identifier
-     */
-    @NotNull
-    String getId();
-
-
-    @NotNull
-    Set<String> calculateAllUsedTags();
+public interface ProtocolSpecificAdapterConfig {
 
 }

@@ -15,9 +15,7 @@
  */
 package com.hivemq.adapter.sdk.api.config;
 
-import org.jetbrains.annotations.NotNull;
-
-public interface BidirectionalProtocolAdapterConfig extends ProtocolAdapterConfig {
+public interface BidirectionalProtocolSpecificAdapterConfig extends ProtocolSpecificAdapterConfig {
 
 
 }

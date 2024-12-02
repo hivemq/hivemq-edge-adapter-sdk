@@ -15,7 +15,6 @@
  */
 package com.hivemq.adapter.sdk.api.writing;
 
-import com.hivemq.adapter.sdk.api.tag.Tag;
 import org.jetbrains.annotations.NotNull;
 
 public interface WritingContext {
@@ -28,11 +27,11 @@ public interface WritingContext {
      * @return the mqtt topic filter from which the data will be read
      */
     @NotNull
-    String getMqttTopicFilter();
+    String getTopicFilter();
 
     /**
      * @return the maximum Quality-of-Service for the MQTT subscription.
      */
-    int getMqttMaxQos();
+    int getMaxQoS();
 
 }

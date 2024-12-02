@@ -15,7 +15,8 @@
  */
 package com.hivemq.adapter.sdk.api.config.legacy;
 
-import com.hivemq.adapter.sdk.api.config.ProtocolAdapterConfig;
+import com.hivemq.adapter.sdk.api.config.PollingContext;
+import com.hivemq.adapter.sdk.api.config.ProtocolSpecificAdapterConfig;
 import com.hivemq.adapter.sdk.api.tag.Tag;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,19 +29,37 @@ import java.util.List;
  */
 @Deprecated()
 public class ConfigTagsTuple {
-    private final @NotNull ProtocolAdapterConfig config;
-    private final @NotNull List<? extends Tag> tags;
 
-    public ConfigTagsTuple(@NotNull final ProtocolAdapterConfig config, @NotNull final List<? extends Tag> tags) {
+    private final @NotNull String id;
+    private final @NotNull ProtocolSpecificAdapterConfig config;
+    private final @NotNull List<? extends Tag> tags;
+    private final @NotNull List<? extends PollingContext> pollingContexts;
+
+
+    public ConfigTagsTuple(
+            final @NotNull String id,
+            final @NotNull ProtocolSpecificAdapterConfig config,
+            final @NotNull List<? extends Tag> tags,
+            final @NotNull List<? extends PollingContext> pollingContexts) {
+        this.id = id;
         this.config = config;
         this.tags = tags;
+        this.pollingContexts = pollingContexts;
     }
 
-    public @NotNull ProtocolAdapterConfig getConfig() {
+    public @NotNull String getAdapterId() {
+        return id;
+    }
+
+    public @NotNull ProtocolSpecificAdapterConfig getConfig() {
         return config;
     }
 
     public @NotNull List<? extends Tag> getTags() {
         return tags;
+    }
+
+    public @NotNull List<? extends PollingContext> getPollingContexts() {
+        return pollingContexts;
     }
 }
