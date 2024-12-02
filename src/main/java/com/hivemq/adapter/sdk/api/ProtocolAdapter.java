@@ -100,7 +100,7 @@ public interface ProtocolAdapter {
      * @param input the input object holding information necessary for the operation.
      * @param output the output object on which the result of the operation can be set.
      */
-    default void createTagSchema(@NotNull final TagSchemaCreationInput input, @NotNull final TagSchemaCreationOutput output){
+    default void createTagSchema(final @NotNull TagSchemaCreationInput input, final @NotNull TagSchemaCreationOutput output){
         output.notSupported();
     }
 
