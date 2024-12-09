@@ -28,10 +28,4 @@ public interface WritingContext {
      */
     @NotNull
     String getTopicFilter();
-
-    /**
-     * @return the maximum Quality-of-Service for the MQTT subscription.
-     */
-    int getMaxQoS();
-
 }
