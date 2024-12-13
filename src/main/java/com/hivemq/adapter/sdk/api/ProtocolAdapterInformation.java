@@ -95,7 +95,7 @@ public interface ProtocolAdapterInformation {
      * @return The class that represents (and will encapsulate) the configuration requirements of the adapter
      * \\@ModuleConfigField annotations.
      */
-    @NotNull Class<? extends ProtocolSpecificAdapterConfig> configurationClassReading();
+    @NotNull Class<? extends ProtocolSpecificAdapterConfig> configurationClassNorthbound();
 
     /**
      * A bean class that will be reflected upon by the framework to determine the structural requirements of the
@@ -106,7 +106,7 @@ public interface ProtocolAdapterInformation {
      * @return The class that represents (and will encapsulate) the configuration requirements of the adapter
      * \\@ModuleConfigField annotations.
      */
-    @NotNull Class<? extends ProtocolSpecificAdapterConfig> configurationClassWritingAndReading();
+    @NotNull Class<? extends ProtocolSpecificAdapterConfig> configurationClassNorthAndSouthbound();
 
 
     /**
