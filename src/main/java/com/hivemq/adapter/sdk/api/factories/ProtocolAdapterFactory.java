@@ -64,9 +64,9 @@ public interface ProtocolAdapterFactory<E extends ProtocolSpecificAdapterConfig>
             final @NotNull Map<String, Object> config,
             final boolean writingEnabled) {
         if (writingEnabled) {
-            return objectMapper.convertValue(config, getInformation().configurationClassWritingAndReading());
+            return objectMapper.convertValue(config, getInformation().configurationClassNorthAndSouthbound());
         } else {
-            return objectMapper.convertValue(config, getInformation().configurationClassReading());
+            return objectMapper.convertValue(config, getInformation().configurationClassNorthbound());
         }
     }
 
