@@ -43,6 +43,13 @@ public interface ProtocolAdapterInformation {
     @NotNull String getProtocolId();
 
     /**
+     * @return the legacy Protocol Ids for older versions of this adapter
+     */
+    default @NotNull List<String> getLegacyProtocolIds(){
+        return List.of();
+    }
+
+    /**
      * @return The visual name to display in the protocol adapter catalog for example "HTTP(s) to MQTT Protocol Adapter"
      */
     @NotNull String getDisplayName();
