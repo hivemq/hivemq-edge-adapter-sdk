@@ -132,4 +132,9 @@ public interface ProtocolAdapterInformation {
     default @Nullable String getUiSchema() {
         return null;
     }
+
+    /**
+     * @return the current version of the configuration
+     */
+    int getCurrentConfigVersion();
 }
