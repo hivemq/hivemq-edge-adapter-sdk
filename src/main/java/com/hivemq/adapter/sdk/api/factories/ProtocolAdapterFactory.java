@@ -83,6 +83,16 @@ public interface ProtocolAdapterFactory<E extends ProtocolSpecificAdapterConfig>
     }
 
     /**
+     * @param objectMapper the object mapper that converts the map to the actual tag
+     * @param tag      a map that is a tag
+     * @return a parsed tag object for this adapter
+     */
+    default @NotNull Tag convertTagDefinitionObject(
+            final @NotNull ObjectMapper objectMapper, final @NotNull Map<String, Object> tag) {
+        return objectMapper.convertValue(tag, getInformation().tagConfigurationClass());
+    }
+
+    /**
      * @param objectMapper the object mapper that converts the actual config to a map
      * @param config       the config for this adapter
      * @return a map containing the configuration of the adapter

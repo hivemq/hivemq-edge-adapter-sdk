@@ -32,6 +32,12 @@ public interface EventService {
     @NotNull
     EventBuilder createAdapterEvent(final @NotNull String adapterId, final @NotNull String protocolId);
 
+    /**
+     * @return a {@link EventBuilder} to add further information and build an {@link Event}
+     */
+    @NotNull
+    EventBuilder configurationEvent();
+
 
     @NotNull
     EventBuilder bridgeEvent();
