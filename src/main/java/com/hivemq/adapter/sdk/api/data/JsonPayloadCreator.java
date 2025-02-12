@@ -28,14 +28,17 @@ import java.util.List;
 public interface JsonPayloadCreator {
 
     /**
-     * @param sample the sample containing the data points and the polling context
-     * @param objectMapper object mapper instance that can be used to create the payloads
-     *
+     * @param dataPoints     the sample containing the data points and the polling context
+     * @param pollingContext the polling context for the data
+     * @param objectMapper   object mapper instance that can be used to create the payloads
      * @return a list containing the payload for the mqtt publishes that will be created.
      *         The implementation can decide to put all data points into a single payload or split them.
      *         This is indicated via {@link PollingContext#getMessageHandlingOptions()}.
      *         The resulting bytes MUST be utf-8 encoded jsons.
      */
     @NotNull
-    List<byte[]> convertToJson(@NotNull ProtocolAdapterDataSample sample, @NotNull ObjectMapper objectMapper);
+    List<byte[]> convertToJson(
+            @NotNull List<DataPoint> dataPoints,
+            @NotNull PollingContext pollingContext,
+            @NotNull ObjectMapper objectMapper);
 }

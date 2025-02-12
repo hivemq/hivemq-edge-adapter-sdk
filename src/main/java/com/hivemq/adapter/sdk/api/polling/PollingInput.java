@@ -29,5 +29,5 @@ public interface PollingInput{
     /**
      * @return the polling context that contains information on the mqtt processing for this poll.
      */
-    @NotNull List<PollingContext> getPollingContexts();
+    @NotNull List<? extends PollingContext> getPollingContexts();
 }
