@@ -20,7 +20,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.hivemq.adapter.sdk.api.config.PollingContext;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Interface for data collected by a protocol adapter.
@@ -29,13 +31,6 @@ import java.util.List;
  * The actual data points can be added via the {@link #addDataPoint(DataPoint)} method.
  */
 public interface ProtocolAdapterDataSample {
-    /**
-     * @return the {@link PollingContext} containing information how the data gets published by the broker.
-     */
-    @JsonIgnore
-    @NotNull
-    PollingContext getPollingContext();
-
     /**
      * @return the timestamp when this data sample was taken.
      */
@@ -59,16 +54,9 @@ public interface ProtocolAdapterDataSample {
     void addDataPoint(@NotNull DataPoint dataPoint);
 
     /**
-     * Sets/Overwrites all data points of the sample with the given argument.
-     *
-     * @param list the new list of data points for this sample.
-     */
-    void setDataPoints(@NotNull List<DataPoint> list);
-
-    /**
-     * @return the list of data points in this sample.
+     * @return a map which maps tagName to the list of data points for this tagName
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @NotNull
-    List<DataPoint> getDataPoints();
+    Map<String, List<DataPoint>> getDataPoints();
 }
