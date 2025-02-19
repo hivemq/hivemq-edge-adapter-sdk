@@ -13,20 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.adapter.sdk.api.polling;
+package com.hivemq.adapter.sdk.api.polling.batch;
 
 import com.hivemq.adapter.sdk.api.config.PollingContext;
+import com.hivemq.adapter.sdk.api.polling.PollingProtocolAdapter;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /**
  * Input Object for the poll() method of an {@link PollingProtocolAdapter} containing information tu use during the poll.
  */
 
-public interface PollingInput{
+public interface BatchPollingInput {
 
     /**
      * @return the polling context that contains information on the mqtt processing for this poll.
      */
-    @NotNull
-    PollingContext getPollingContext();
+    @NotNull List<? extends PollingContext> getPollingContexts();
 }
