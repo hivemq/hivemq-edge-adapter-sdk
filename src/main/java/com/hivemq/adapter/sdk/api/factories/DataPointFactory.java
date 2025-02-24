@@ -26,4 +26,12 @@ public interface DataPointFactory {
      * @return a {@link DataPoint} containing the name and value.
      */
    @NotNull DataPoint create(final @NotNull String tagName, final @NotNull Object tagValue);
+
+    /**
+     * Creates a DataPoint where the tagValue is treated as a JSON object.
+     * @param tagName the name for this data point
+     * @param tagValue the value for this data point
+     * @return a {@link DataPoint} containing the name and value.
+     */
+   @NotNull DataPoint createJsonDataPoint(final @NotNull String tagName, final @NotNull Object tagValue);
 }
