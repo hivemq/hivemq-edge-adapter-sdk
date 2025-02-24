@@ -16,6 +16,7 @@
 package com.hivemq.adapter.sdk.api.services;
 
 import com.hivemq.adapter.sdk.api.events.EventService;
+import com.hivemq.adapter.sdk.api.streaming.ProtocolAdapterTagStreamingService;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -29,11 +30,15 @@ public interface ModuleServices {
     @NotNull ProtocolAdapterPublishService adapterPublishService();
 
     /**
+     * @return the {@link ProtocolAdapterTagStreamingService} that enables adapters to share new values received for a tag to HiveMQ Edge.
+     */
+    @NotNull ProtocolAdapterTagStreamingService protocolAdapterTagStreamingService();
+
+    /**
      * @return the {@link EventService} to send events from this adapter to HiveMQ Edge in case something happens the user should be alerted of.
      */
     @NotNull EventService eventService();
 
-    @NotNull
-    ProtocolAdapterWritingService protocolAdapterWritingService();
+    @NotNull ProtocolAdapterWritingService protocolAdapterWritingService();
 
 }
