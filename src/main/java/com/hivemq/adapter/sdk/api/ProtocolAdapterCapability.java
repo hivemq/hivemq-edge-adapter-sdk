@@ -30,5 +30,11 @@ public enum ProtocolAdapterCapability {
     /**
      * can the adapter-type write values derived from MQTT topic filters to an external destination.
      **/
-    WRITE
+    WRITE,
+
+
+    /**
+     * can the adapter-type be the source of a data combining
+     **/
+    COMBINE
 }
