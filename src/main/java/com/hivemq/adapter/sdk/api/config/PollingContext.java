@@ -77,4 +77,5 @@ public interface PollingContext {
         return Long.MAX_VALUE; //Default taken from com.hivemq.mqtt.message.publish.PUBLISH.MESSAGE_EXPIRY_INTERVAL_NOT_SET
     }
 
+    boolean publishChangedDataOnly();
 }
