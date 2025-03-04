@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface EventService {
 
@@ -31,6 +32,9 @@ public interface EventService {
      */
     @NotNull
     EventBuilder createAdapterEvent(final @NotNull String adapterId, final @NotNull String protocolId);
+
+    @NotNull
+    EventBuilder createDataCombiningEvent(@NotNull UUID id);
 
     /**
      * @return a {@link EventBuilder} to add further information and build an {@link Event}
@@ -53,6 +57,7 @@ public interface EventService {
      */
     @NotNull
     List<Event> readEvents(final @Nullable Long sinceTimestamp, final @Nullable Integer limit);
+
 
 
 }

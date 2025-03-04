@@ -13,28 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.adapter.sdk.api;
+package com.hivemq.adapter.sdk.api.polling.batch;
 
-public enum ProtocolAdapterCapability {
+import com.hivemq.adapter.sdk.api.polling.PollingProtocolAdapter;
 
-    /**
-     * can the adapter-type read values from the external source and publish them into the system
-     **/
-    READ,
+/**
+ * Input Object for the poll() method of an {@link PollingProtocolAdapter} containing information tu use during the poll.
+ */
 
-    /**
-     * can the adapter-type discover tags/names from the external source
-     **/
-    DISCOVER,
-
-    /**
-     * can the adapter-type write values derived from MQTT topic filters to an external destination.
-     **/
-    WRITE,
-
-
-    /**
-     * can the adapter-type be the source of a data combining
-     **/
-    COMBINE
+public interface BatchPollingInput {
 }

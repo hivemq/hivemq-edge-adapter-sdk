@@ -33,56 +33,65 @@ public interface ProtocolAdapterInformation {
     /**
      * @return the technically correct protocol name as defined by the standard, for example "Http" or "Mqtt".
      */
-    @NotNull String getProtocolName();
+    @NotNull
+    String getProtocolName();
 
     /**
      * @return Protocol ID that will be used by the platform to group types, search and categories.
-     * NOTE: The format of this ID is important, it must be alpha-numeric without spaces and unique
-     * within the system.
+     *         NOTE: The format of this ID is important, it must be alpha-numeric without spaces and unique
+     *         within the system.
      */
-    @NotNull String getProtocolId();
+    @NotNull
+    String getProtocolId();
 
     /**
      * @return the legacy Protocol Ids for older versions of this adapter
      */
-    default @NotNull List<String> getLegacyProtocolIds(){
+    default @NotNull List<String> getLegacyProtocolIds() {
         return List.of();
     }
 
     /**
      * @return The visual name to display in the protocol adapter catalog for example "HTTP(s) to MQTT Protocol Adapter"
      */
-    @NotNull String getDisplayName();
+    @NotNull
+    String getDisplayName();
 
-    @NotNull String getDescription();
+    @NotNull
+    String getDescription();
 
-    @NotNull String getUrl();
+    @NotNull
+    String getUrl();
 
-    @NotNull String getVersion();
+    @NotNull
+    String getVersion();
 
-    @NotNull String getLogoUrl();
+    @NotNull
+    String getLogoUrl();
 
     /**
      * The entity (person or company) who is responsible for producing the adapter
      *
      * @return the name of the authoring entity
      */
-    @NotNull String getAuthor();
+    @NotNull
+    String getAuthor();
 
     /**
      * An adapter can be in a single category. This helps discovery purposes
      *
      * @return the category in which the adapter resides
      */
-    @Nullable ProtocolAdapterCategory getCategory();
+    @Nullable
+    ProtocolAdapterCategory getCategory();
 
     /**
      * Tag represents the keywords that can be associated with this type of adapter
      *
      * @return a list of associated tags that can be used for search purposes
      */
-    @Nullable List<ProtocolAdapterTag> getTags();
-
+    @Nullable
+    List<ProtocolAdapterTag> getTags();
 
 
     /**
@@ -92,7 +101,8 @@ public interface ProtocolAdapterInformation {
      *
      * @return The class that represents (and will encapsulate) the configuration requirements of the adapter's tags
      */
-    @NotNull Class<? extends Tag> tagConfigurationClass();
+    @NotNull
+    Class<? extends Tag> tagConfigurationClass();
 
     /**
      * A bean class that will be reflected upon by the framework to determine the structural requirements of the
@@ -100,9 +110,10 @@ public interface ProtocolAdapterInformation {
      * It is expected that the bean class supplied, be marked up with Jackson annotation.
      *
      * @return The class that represents (and will encapsulate) the configuration requirements of the adapter
-     * \\@ModuleConfigField annotations.
+     *         \\@ModuleConfigField annotations.
      */
-    @NotNull Class<? extends ProtocolSpecificAdapterConfig> configurationClassNorthbound();
+    @NotNull
+    Class<? extends ProtocolSpecificAdapterConfig> configurationClassNorthbound();
 
     /**
      * A bean class that will be reflected upon by the framework to determine the structural requirements of the
@@ -111,9 +122,10 @@ public interface ProtocolAdapterInformation {
      * with Jackson annotation.
      *
      * @return The class that represents (and will encapsulate) the configuration requirements of the adapter
-     * \\@ModuleConfigField annotations.
+     *         \\@ModuleConfigField annotations.
      */
-    @NotNull Class<? extends ProtocolSpecificAdapterConfig> configurationClassNorthAndSouthbound();
+    @NotNull
+    Class<? extends ProtocolSpecificAdapterConfig> configurationClassNorthAndSouthbound();
 
 
     /**

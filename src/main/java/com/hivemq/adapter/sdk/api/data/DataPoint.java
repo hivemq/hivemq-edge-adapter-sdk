@@ -31,6 +31,13 @@ public interface DataPoint {
     @NotNull Object getTagValue();
 
     /**
+     * @return if the tag value is encoded as JSON.
+     */
+    @NotNull default boolean treatTagValueAsJson() {
+        return false;
+    }
+
+    /**
      * @return the tag name of the data point.
      */
     @NotNull String getTagName();

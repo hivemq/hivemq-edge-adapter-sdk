@@ -13,28 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.adapter.sdk.api;
+package com.hivemq.adapter.sdk.api.streaming;
 
-public enum ProtocolAdapterCapability {
+import com.hivemq.adapter.sdk.api.data.DataPoint;
+import org.jetbrains.annotations.NotNull;
 
-    /**
-     * can the adapter-type read values from the external source and publish them into the system
-     **/
-    READ,
+import java.util.List;
 
-    /**
-     * can the adapter-type discover tags/names from the external source
-     **/
-    DISCOVER,
-
-    /**
-     * can the adapter-type write values derived from MQTT topic filters to an external destination.
-     **/
-    WRITE,
-
-
-    /**
-     * can the adapter-type be the source of a data combining
-     **/
-    COMBINE
+public interface ProtocolAdapterTagStreamingService {
+    void feed(@NotNull String tag, @NotNull List<DataPoint> dataPoints);
 }
