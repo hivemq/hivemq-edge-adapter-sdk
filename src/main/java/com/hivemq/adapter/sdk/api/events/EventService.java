@@ -36,6 +36,9 @@ public interface EventService {
     @NotNull
     EventBuilder createDataCombiningEvent(@NotNull UUID id);
 
+    @NotNull
+    EventBuilder createCombinerEvent(@NotNull final UUID uuid);
+
     /**
      * @return a {@link EventBuilder} to add further information and build an {@link Event}
      */
