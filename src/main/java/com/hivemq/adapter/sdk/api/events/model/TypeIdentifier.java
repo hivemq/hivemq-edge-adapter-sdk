@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 public interface TypeIdentifier {
 
     enum Type {
-        BRIDGE, ADAPTER, ADAPTER_TYPE, EVENT, USER, DATA_COMBINING
+        BRIDGE, ADAPTER, ADAPTER_TYPE, EVENT, USER, DATA_COMBINING, COMBINER, EDGE
     }
 
     /**
