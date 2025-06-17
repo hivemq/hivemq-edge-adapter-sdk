@@ -19,6 +19,8 @@ import com.hivemq.adapter.sdk.api.events.EventService;
 import com.hivemq.adapter.sdk.api.streaming.ProtocolAdapterTagStreamingService;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.CompletableFuture;
+
 /**
  * This class offers access to various services for adapters.
  */
@@ -40,5 +42,7 @@ public interface ModuleServices {
     @NotNull EventService eventService();
 
     @NotNull ProtocolAdapterWritingService protocolAdapterWritingService();
+
+    @NotNull CompletableFuture<ProtocolAdapterTemporaryDataService> protocolAdapterTemporaryDataService(String protocolId, String adapterId);
 
 }
