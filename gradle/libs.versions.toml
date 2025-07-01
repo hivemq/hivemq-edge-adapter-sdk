@@ -20,8 +20,8 @@ swagger-annotations = { module = "io.swagger.core.v3:swagger-annotations", versi
 
 
 [plugins]
-mavenCentralPublishing = { id = "io.github.sgtsilvio.gradle.maven-central-publishing", version.ref = "plugin-maven-central-publishing" }
+mavencentralpublishing = { id = "io.github.sgtsilvio.gradle.maven-central-publishing", version.ref = "plugin-maven-central-publishing" }
 defaults = { id = "io.github.sgtsilvio.gradle.defaults", version.ref = "plugin-defaults" }
 metadata = { id = "io.github.sgtsilvio.gradle.metadata", version.ref = "plugin-metadata" }
-javadocLinks = { id = "io.github.sgtsilvio.gradle.javadoc-links", version.ref = "plugin-javadoc-links" }
+javadoclinks = { id = "io.github.sgtsilvio.gradle.javadoc-links", version.ref = "plugin-javadoc-links" }
 license = { id = "com.github.hierynomus.license", version.ref = "plugin-license" }
