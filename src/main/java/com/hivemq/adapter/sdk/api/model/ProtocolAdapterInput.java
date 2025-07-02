@@ -19,12 +19,14 @@ import com.hivemq.adapter.sdk.api.config.PollingContext;
 import com.hivemq.adapter.sdk.api.config.ProtocolSpecificAdapterConfig;
 import com.hivemq.adapter.sdk.api.factories.AdapterFactories;
 import com.hivemq.adapter.sdk.api.services.ModuleServices;
+import com.hivemq.adapter.sdk.api.services.ProtocolAdapterInstanceDataService;
 import com.hivemq.adapter.sdk.api.services.ProtocolAdapterMetricsService;
 import com.hivemq.adapter.sdk.api.state.ProtocolAdapterState;
 import com.hivemq.adapter.sdk.api.tag.Tag;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Object containing information and services for the construction of adapter instances
@@ -78,4 +80,9 @@ public interface ProtocolAdapterInput<E extends ProtocolSpecificAdapterConfig> {
      * @return the List of configured mappings from edge to mqtt
      */
     @NotNull List<PollingContext> getPollingContexts();
+
+    /**
+     * @return storage for values a specific protocol adapter instance needs to store persistently across restarts.
+     */
+    @NotNull CompletableFuture<ProtocolAdapterInstanceDataService> protocolAdapterInstanceDataService();
 }

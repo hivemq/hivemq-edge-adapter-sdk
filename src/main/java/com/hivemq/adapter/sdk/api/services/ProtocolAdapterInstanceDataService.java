@@ -24,7 +24,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Service class to allow adapters to persist temporary data (e.g. sessionids, subscription ids ...).
  */
-public interface ProtocolAdapterTemporaryDataService {
+public interface ProtocolAdapterInstanceDataService {
 
     /**
      * Store a temporary value for the given key.
@@ -33,7 +33,7 @@ public interface ProtocolAdapterTemporaryDataService {
      * @param key   the key to store the value under
      * @param value the value to store, null indicating a deletion
      */
-    @NotNull CompletableFuture<Void> putTemporaryValue(@NotNull String key, @Nullable String value);
+    @NotNull CompletableFuture<Void> putValue(@NotNull String key, @Nullable String value);
 
     /**
      * Retrieve a temporary value for the given key.
@@ -41,6 +41,6 @@ public interface ProtocolAdapterTemporaryDataService {
      * @param key the key to retrieve the value for
      * @return the stored value or an empty optional if no value is stored for the given key
      */
-    @NotNull CompletableFuture<Optional<String>> getTemporaryValue(@NotNull String key);
+    @NotNull CompletableFuture<Optional<String>> getValue(@NotNull String key);
 
 }
