@@ -33,7 +33,7 @@ public interface ProtocolAdapterState {
          */
         STARTED,
         /**
-         * Adapter is trying to start upon initial failure
+         * Adapter is trying to start (used also after initial failure)
          */
         STARTING,
         /**
