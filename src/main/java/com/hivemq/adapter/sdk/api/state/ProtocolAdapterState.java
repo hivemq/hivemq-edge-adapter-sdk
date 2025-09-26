@@ -61,7 +61,11 @@ public interface ProtocolAdapterState {
         /**
          * There is currently an error when trying to connect to the PLC.
          */
-        ERROR
+        ERROR,
+        /**
+         * The adapter is currently connecting to the PLC.
+         */
+        CONNECTING,
     }
 
 
