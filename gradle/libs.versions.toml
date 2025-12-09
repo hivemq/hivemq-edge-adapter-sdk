@@ -1,7 +1,7 @@
 [versions]
 jackson= "2.14.2"
 jetbrains-annotations = "24.1.0"
-swagger-annotations = "2.2.21"
+swagger-annotations = "2.2.41"
 victools="4.38.0"
 
 #Plugin Versions
