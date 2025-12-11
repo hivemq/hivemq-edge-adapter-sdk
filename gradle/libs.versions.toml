@@ -1,19 +1,19 @@
 [versions]
 jackson= "2.14.2"
 jetbrains-annotations = "24.1.0"
-swagger-annotations = "2.2.21"
+swagger-annotations = "2.2.41"
 victools="4.38.0"
 
 #Plugin Versions
 plugin-defaults = "0.2.0"
-plugin-javadoc-links = "0.8.0"
+plugin-javadoc-links = "0.9.0"
 plugin-license = "0.16.1"
 plugin-maven-central-publishing = "0.4.1"
-plugin-metadata = "0.5.0"
+plugin-metadata = "0.6.0"
 
 
 [libraries]
-jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "jackson" }
+jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations" }
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
 jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrains-annotations" }
 swagger-annotations = { module = "io.swagger.core.v3:swagger-annotations", version.ref = "swagger-annotations" }
