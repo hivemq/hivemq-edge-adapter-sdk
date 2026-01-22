@@ -41,3 +41,7 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+### Test project
+/testing/ui/frontend/dist/
+/testing/ui/frontend/cypress/results/

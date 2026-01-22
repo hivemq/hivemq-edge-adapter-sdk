@@ -1,0 +1,274 @@
+{
+  "generated": "2026-01-22T09:16:31.652Z",
+  "summary": {
+    "total": 38,
+    "passed": 38,
+    "failed": 0,
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0
+  },
+  "failed": [],
+  "passed": [
+    {
+      "testId": "1.1.1",
+      "title": "Section 1: JSON Schema Validation 1.1 Field Metadata [1.1.1] Every field should have a title attribute",
+      "status": "passed",
+      "severity": "high",
+      "rationale": "Field titles are displayed as labels in the UI. Missing titles show raw field names which confuses users.",
+      "suggestedFix": "Add `title = \"Human Readable Name\"` to the @ModuleConfigField annotation."
+    },
+    {
+      "testId": "1.1.2",
+      "title": "Section 1: JSON Schema Validation 1.1 Field Metadata [1.1.2] Every field should have a description attribute",
+      "status": "passed",
+      "severity": "high",
+      "rationale": "Descriptions provide help text below form fields. Missing descriptions leave users guessing.",
+      "suggestedFix": "Add `description = \"Explain what this field does\"` to @ModuleConfigField."
+    },
+    {
+      "testId": "1.1.3",
+      "title": "Section 1: JSON Schema Validation 1.1 Field Metadata [1.1.3] Titles should use Title Case (not camelCase)",
+      "status": "passed",
+      "severity": "medium",
+      "rationale": "camelCase titles look like programmer variable names. Title Case is more professional.",
+      "suggestedFix": "Change title from \"connectionTimeout\" to \"Connection Timeout\"."
+    },
+    {
+      "testId": "1.1.5",
+      "title": "Section 1: JSON Schema Validation 1.1 Field Metadata [1.1.5] Descriptions should not end with question marks",
+      "status": "passed",
+      "severity": "low",
+      "rationale": "Descriptions should be statements, not questions.",
+      "suggestedFix": "Change \"Enable TLS?\" to \"Enable TLS encryption for secure connections\"."
+    },
+    {
+      "testId": "1.2.1",
+      "title": "Section 1: JSON Schema Validation 1.2 Type Constraints [1.2.1] Integer fields should use numberMin/numberMax (not string constraints)",
+      "status": "passed",
+      "severity": "critical",
+      "rationale": "Using string constraints on integer fields causes validation to fail silently.",
+      "suggestedFix": "Use `numberMin` and `numberMax` instead of string constraints for integers."
+    },
+    {
+      "testId": "1.2.2",
+      "title": "Section 1: JSON Schema Validation 1.2 Type Constraints [1.2.2] String fields should use stringMinLength/stringMaxLength (not number constraints)",
+      "status": "passed",
+      "severity": "critical",
+      "rationale": "Using number constraints on string fields is semantically incorrect.",
+      "suggestedFix": "Use `stringMinLength` and `stringMaxLength` for string fields."
+    },
+    {
+      "testId": "1.2.3",
+      "title": "Section 1: JSON Schema Validation 1.2 Type Constraints [1.2.3] Port fields should have valid port range (1-65535)",
+      "status": "passed",
+      "severity": "high",
+      "rationale": "Ports must be between 1 and 65535. Missing bounds allow invalid configurations.",
+      "suggestedFix": "Add `numberMin = 1` and `numberMax = 65535` to port field annotations."
+    },
+    {
+      "testId": "1.2.5",
+      "title": "Section 1: JSON Schema Validation 1.2 Type Constraints [1.2.5] String pattern (regex) should be valid",
+      "status": "passed",
+      "severity": "critical",
+      "rationale": "Invalid regex patterns cause runtime errors and prevent form validation.",
+      "suggestedFix": "Test your regex pattern before adding to annotation."
+    },
+    {
+      "testId": "1.3.1",
+      "title": "Section 1: JSON Schema Validation 1.3 Required Fields [1.3.1] Required array should only contain existing properties",
+      "status": "passed",
+      "severity": "critical",
+      "rationale": "Referencing non-existent fields in required array causes schema validation errors.",
+      "suggestedFix": "Ensure all field names in required match actual field names."
+    },
+    {
+      "testId": "1.3.3",
+      "title": "Section 1: JSON Schema Validation 1.3 Required Fields [1.3.3] Optional fields should have default values",
+      "status": "passed"
+    },
+    {
+      "testId": "1.4.1",
+      "title": "Section 1: JSON Schema Validation 1.4 Enum Fields [1.4.1] enumDisplayValues count should match enum values count",
+      "status": "passed",
+      "severity": "high",
+      "rationale": "Mismatched counts cause rendering issues with some options showing raw enum values.",
+      "suggestedFix": "Ensure enumDisplayValues array has exactly the same count as the enum."
+    },
+    {
+      "testId": "1.5.3",
+      "title": "Section 1: JSON Schema Validation 1.5 Format Types [1.5.3] ID fields should use identifier format",
+      "status": "passed",
+      "severity": "medium",
+      "rationale": "The identifier format validates IDs only contain allowed characters.",
+      "suggestedFix": "Add `format = FieldType.IDENTIFIER` to the id field annotation."
+    },
+    {
+      "testId": "1.5.4",
+      "title": "Section 1: JSON Schema Validation 1.5 Format Types [1.5.4] MQTT topic fields should use mqtt-topic format",
+      "status": "passed"
+    },
+    {
+      "testId": "2.1.1",
+      "title": "Section 2: UI Schema Validation 2.1 Structure [2.1.1] UI Schema should exist",
+      "status": "passed",
+      "severity": "medium",
+      "rationale": "Without UI Schema, forms use default layout which may not be logical.",
+      "suggestedFix": "Create a UI Schema JSON file and implement getUiSchema()."
+    },
+    {
+      "testId": "2.1.2",
+      "title": "Section 2: UI Schema Validation 2.1 Structure [2.1.2] ui:tabs should group related fields",
+      "status": "passed",
+      "severity": "medium",
+      "rationale": "Tabs organize complex forms into logical sections, improving UX.",
+      "suggestedFix": "Add ui:tabs array to group related fields."
+    },
+    {
+      "testId": "2.1.3",
+      "title": "Section 2: UI Schema Validation 2.1 Structure [2.1.3] ui:order should define logical field sequence",
+      "status": "passed",
+      "severity": "medium",
+      "rationale": "Without ui:order, fields appear in schema order which may not be logical.",
+      "suggestedFix": "Add ui:order array with fields in logical sequence."
+    },
+    {
+      "testId": "2.1.4",
+      "title": "Section 2: UI Schema Validation 2.1 Structure [2.1.4] Tab names should be clear and descriptive",
+      "status": "passed",
+      "severity": "low",
+      "rationale": "Generic tab names like \"Tab 1\" do not help users understand the form structure.",
+      "suggestedFix": "Use descriptive names like \"Connection Settings\", \"Authentication\"."
+    },
+    {
+      "testId": "N/A",
+      "title": "Section 2: UI Schema Validation 2.1 Structure Tab properties should reference existing schema fields",
+      "status": "passed"
+    },
+    {
+      "testId": "2.2.1",
+      "title": "Section 2: UI Schema Validation 2.2 Widgets [2.2.1] Port fields should use updown widget",
+      "status": "passed",
+      "severity": "low",
+      "rationale": "The updown widget provides increment/decrement buttons for numeric input.",
+      "suggestedFix": "Add `\"port\": { \"ui:widget\": \"updown\" }` to your UI Schema."
+    },
+    {
+      "testId": "2.2.2",
+      "title": "Section 2: UI Schema Validation 2.2 Widgets [2.2.2] Password fields should use password widget",
+      "status": "passed",
+      "severity": "critical",
+      "rationale": "Password fields must mask input to prevent shoulder surfing.",
+      "suggestedFix": "Add `\"password\": { \"ui:widget\": \"password\" }` to your UI Schema."
+    },
+    {
+      "testId": "2.3.1",
+      "title": "Section 2: UI Schema Validation 2.3 Field Behavior [2.3.1] id field should NOT have hardcoded ui:disabled",
+      "status": "passed",
+      "severity": "high",
+      "rationale": "The id field should be editable in create mode but disabled in edit mode.",
+      "suggestedFix": "Remove `\"ui:disabled\": true` from id field."
+    },
+    {
+      "testId": "2.4.3",
+      "title": "Section 2: UI Schema Validation 2.4 Arrays and Objects [2.4.3] Collapsible array items should have titleKey",
+      "status": "passed"
+    },
+    {
+      "testId": "N/A",
+      "title": "UI Schema - Form Rendering Tabs should render when ui:tabs is configured",
+      "status": "passed"
+    },
+    {
+      "testId": "N/A",
+      "title": "UI Schema - Form Rendering Tab titles should match ui:tabs configuration",
+      "status": "passed"
+    },
+    {
+      "testId": "N/A",
+      "title": "UI Schema - Form Rendering Clicking tabs should switch content",
+      "status": "passed"
+    },
+    {
+      "testId": "6.1.1",
+      "title": "Section 6: Visual Testing 6.1 Form Rendering [6.1.1] Form should render without JavaScript errors",
+      "status": "passed",
+      "severity": "critical",
+      "rationale": "JavaScript errors prevent the form from rendering correctly.",
+      "suggestedFix": "Check browser console for errors. Common causes: invalid JSON Schema."
+    },
+    {
+      "testId": "6.1.2",
+      "title": "Section 6: Visual Testing 6.1 Form Rendering [6.1.2] All fields from JSON Schema should appear in form",
+      "status": "passed",
+      "severity": "critical",
+      "rationale": "Missing fields prevent users from configuring required options.",
+      "suggestedFix": "Verify all @ModuleConfigField annotations have @JsonProperty."
+    },
+    {
+      "testId": "6.1.3",
+      "title": "Section 6: Visual Testing 6.1 Form Rendering [6.1.3] Fields should render with correct labels",
+      "status": "passed"
+    },
+    {
+      "testId": "N/A",
+      "title": "Section 6: Visual Testing 6.1 Form Rendering Form should display correctly in viewport",
+      "status": "passed"
+    },
+    {
+      "testId": "6.2.1",
+      "title": "Section 6: Visual Testing 6.2 Validation [6.2.1] Required fields should show validation error when empty",
+      "status": "passed",
+      "severity": "high",
+      "rationale": "Users need feedback when required fields are empty.",
+      "suggestedFix": "Ensure fields have `required = true` in @ModuleConfigField."
+    },
+    {
+      "testId": "6.2.3",
+      "title": "Section 6: Visual Testing 6.2 Validation [6.2.3] Number bounds should be validated",
+      "status": "passed"
+    },
+    {
+      "testId": "N/A",
+      "title": "Section 6: Visual Testing 6.2 Validation Pattern validation should work for fields with regex",
+      "status": "passed"
+    },
+    {
+      "testId": "6.3.2",
+      "title": "Section 6: Visual Testing 6.3 Accessibility [6.3.2] All inputs should have associated labels",
+      "status": "passed",
+      "severity": "high",
+      "rationale": "Screen readers need labels to announce form fields.",
+      "suggestedFix": "Ensure all fields have title attribute in @ModuleConfigField."
+    },
+    {
+      "testId": "6.3.3",
+      "title": "Section 6: Visual Testing 6.3 Accessibility [6.3.3] Form should be navigable by keyboard",
+      "status": "passed",
+      "severity": "medium",
+      "rationale": "Users who cannot use a mouse need to navigate forms with keyboard.",
+      "suggestedFix": "Check for custom widgets that may break tab order."
+    },
+    {
+      "testId": "N/A",
+      "title": "Section 6: Visual Testing 6.3 Accessibility Submit button should be focusable and activatable",
+      "status": "passed"
+    },
+    {
+      "testId": "N/A",
+      "title": "Form Interaction Form values should update on input",
+      "status": "passed"
+    },
+    {
+      "testId": "N/A",
+      "title": "Form Interaction Form should handle rapid input changes",
+      "status": "passed"
+    },
+    {
+      "testId": "N/A",
+      "title": "Form Interaction Form submission with valid data should succeed",
+      "status": "passed"
+    }
+  ]
+}
