@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+
+# Build output (we DO want to commit dist/ for Java devs)
+# dist/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test artifacts
+cypress/videos/
+cypress/screenshots/
+coverage/

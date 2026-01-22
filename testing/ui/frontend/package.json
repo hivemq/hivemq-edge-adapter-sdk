@@ -1,0 +1,42 @@
+{
+  "name": "hivemq-adapter-testing-ui",
+  "version": "1.0.0",
+  "description": "Visual testing app for HiveMQ Edge protocol adapter configuration forms",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "cypress:ci": "rm -rf cypress/results && cypress run",
+    "qa:merge": "npx mochawesome-merge cypress/results/*.json > cypress/results/combined.json",
+    "qa:report": "node scripts/generate-report.mjs cypress/results/combined.json",
+    "qa:check": "npm run cypress:ci && npm run qa:merge && npm run qa:report"
+  },
+  "dependencies": {
+    "@chakra-ui/react": "2.8.2",
+    "@emotion/react": "11.11.4",
+    "@emotion/styled": "11.11.0",
+    "@rjsf/chakra-ui": "5.24.13",
+    "@rjsf/core": "5.24.13",
+    "@rjsf/utils": "5.24.13",
+    "@rjsf/validator-ajv8": "5.24.13",
+    "framer-motion": "10.12.21",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-router-dom": "^7.12.0"
+  },
+  "devDependencies": {
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.3.0",
+    "@vitejs/plugin-react": "4.3.1",
+    "cypress": "13.6.3",
+    "cypress-real-events": "^1.15.0",
+    "mochawesome": "^7.1.4",
+    "mochawesome-merge": "^5.1.0",
+    "mochawesome-report-generator": "^6.3.2",
+    "typescript": "5.5.3",
+    "vite": "5.3.4"
+  }
+}
