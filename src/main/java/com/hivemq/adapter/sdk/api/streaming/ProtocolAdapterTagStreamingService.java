@@ -21,5 +21,5 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public interface ProtocolAdapterTagStreamingService {
-    void feed(@NotNull String tag, @NotNull List<DataPoint> dataPoints);
+    void feed(@NotNull String adapterId, @NotNull String tag, @NotNull List<DataPoint> dataPoints);
 }
