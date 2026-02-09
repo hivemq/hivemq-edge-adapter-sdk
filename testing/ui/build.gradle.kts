@@ -18,7 +18,7 @@ repositories {
 
 dependencies {
     // HiveMQ Edge Adapter SDK for annotations
-    implementation("com.hivemq:hivemq-edge-adapter-sdk:2026.1")
+    implementation("com.hivemq:hivemq-edge-adapter-sdk:2026.2")
 
     // JSON Schema generation (same as hivemq-edge core)
     implementation("com.github.victools:jsonschema-generator:${libs.versions.victools.get()}")
