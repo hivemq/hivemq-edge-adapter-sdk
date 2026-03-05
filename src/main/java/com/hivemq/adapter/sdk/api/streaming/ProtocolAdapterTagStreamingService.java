@@ -21,5 +21,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public interface ProtocolAdapterTagStreamingService {
+    void feed(@NotNull List<DataPoint> dataPoints);
+
+    @Deprecated
     void feed(@NotNull String tag, @NotNull List<DataPoint> dataPoints);
 }
