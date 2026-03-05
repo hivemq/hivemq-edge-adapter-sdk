@@ -58,5 +58,13 @@ public interface ProtocolAdapterDataSample {
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @NotNull
+    @Deprecated() //TODO add removal date
     Map<String, List<DataPoint>> getDataPoints();
+
+    /**
+     * @return list of data points for the read tags
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @NotNull
+    List<DataPoint> getDataPointsList();
 }
