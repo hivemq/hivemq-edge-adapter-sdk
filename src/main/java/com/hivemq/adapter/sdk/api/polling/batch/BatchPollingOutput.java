@@ -16,6 +16,7 @@
 package com.hivemq.adapter.sdk.api.polling.batch;
 
 import com.hivemq.adapter.sdk.api.data.DataPoint;
+import com.hivemq.adapter.sdk.api.datapoint.DataPointListBuilder;
 import com.hivemq.adapter.sdk.api.polling.PollingProtocolAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -38,6 +39,7 @@ public interface BatchPollingOutput {
      * @param tagName  the name for the tag of this data point
      * @param tagValue the value of this data point
      */
+    @Deprecated
     void addDataPoint(final @NotNull String tagName, final @NotNull Object tagValue);
 
     /**
@@ -45,12 +47,19 @@ public interface BatchPollingOutput {
      *
      * @param dataPoint the data point to add.
      */
+    @Deprecated
     void addDataPoint(final @NotNull DataPoint dataPoint);
+
+    /**
+     * Get the sender to produce datapoints
+     */
+    @NotNull DataPointListBuilder dataPointSender();
 
     /**
      * Signals Edge that all data points are added and the further processing is done.
      * If no data points were added until this point, no publish will be created.
      */
+    @Deprecated
     void finish();
 
     /**
