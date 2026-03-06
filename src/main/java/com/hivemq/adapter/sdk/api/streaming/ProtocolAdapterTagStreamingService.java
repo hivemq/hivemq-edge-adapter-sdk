@@ -16,6 +16,7 @@
 package com.hivemq.adapter.sdk.api.streaming;
 
 import com.hivemq.adapter.sdk.api.data.DataPoint;
+import com.hivemq.adapter.sdk.api.datapoint.DataPointListBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
