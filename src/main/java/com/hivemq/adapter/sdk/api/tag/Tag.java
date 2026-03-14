@@ -28,4 +28,15 @@ public interface Tag {
     @NotNull
     String getDescription();
 
+    /** Returns the ID of the adapter instance that owns this tag. Returns empty string for old-style tag implementations. */
+    @NotNull
+    default String getScope() {
+        return "";
+    }
+
+    /** Sets the adapter instance scope. No-op for old-style tag implementations. */
+    default void setScope(final @NotNull String scope) {
+        // no-op for old-style implementations
+    }
+
 }
