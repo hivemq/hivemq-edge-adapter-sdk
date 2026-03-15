@@ -20,15 +20,10 @@ import com.hivemq.adapter.sdk.api.ProtocolAdapter;
 import com.hivemq.adapter.sdk.api.ProtocolAdapterInformation;
 import com.hivemq.adapter.sdk.api.config.ProtocolSpecificAdapterConfig;
 import com.hivemq.adapter.sdk.api.model.ProtocolAdapterInput;
-import com.hivemq.adapter.sdk.api.tag.GenericTag;
-import com.hivemq.adapter.sdk.api.tag.Tag;
 import com.hivemq.adapter.sdk.api.tag.TagDefinition;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * The factory is responsible for constructing and managing the lifecycle of the various aspects of the adapter
@@ -74,36 +69,13 @@ public interface ProtocolAdapterFactory<E extends ProtocolSpecificAdapterConfig>
     }
 
     /**
-     * @param objectMapper the object mapper that converts the map to the actual tag
-     * @param tagList      a list of maps where each entry is a tag
-     * @return a parsed tag object for this adapter
+     * @param objectMapper  the object mapper that deserialises the definition map
+     * @param definitionMap a map containing only the tag definition fields
+     * @return a deserialised TagDefinition for this adapter
      */
-    default @NotNull List<? extends Tag> convertTagDefinitionObjects(
-            final @NotNull ObjectMapper objectMapper, final @NotNull List<Map<String, Object>> tagList) {
-        return tagList.stream()
-                .map(tagMap -> convertTagDefinitionObject(objectMapper, tagMap))
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * @param objectMapper the object mapper that converts the map to the actual tag
-     * @param tagMap       a map that is a tag
-     * @return a parsed tag object for this adapter
-     */
-    default @NotNull Tag convertTagDefinitionObject(
-            final @NotNull ObjectMapper objectMapper, final @NotNull Map<String, Object> tagMap) {
-        if (getInformation().tagDefinitionClass() != null) {
-            // new-style: deserialise only the definition sub-map, wrap in GenericTag
-            final TagDefinition definition = objectMapper.convertValue(
-                    tagMap.get("definition"), getInformation().tagDefinitionClass());
-            return new GenericTag(
-                    (String) tagMap.get("name"),
-                    Objects.requireNonNullElse((String) tagMap.get("description"), ""),
-                    definition);
-        } else {
-            // old-style: deserialise full tag map into XxxTag class
-            return objectMapper.convertValue(tagMap, getInformation().tagConfigurationClass());
-        }
+    default @NotNull TagDefinition convertTagDefinitionObject(
+            final @NotNull ObjectMapper objectMapper, final @NotNull Map<String, Object> definitionMap) {
+        return objectMapper.convertValue(definitionMap, getInformation().tagDefinitionClass());
     }
 
     /**
