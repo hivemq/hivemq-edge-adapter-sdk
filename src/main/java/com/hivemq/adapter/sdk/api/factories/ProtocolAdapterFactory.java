@@ -20,10 +20,8 @@ import com.hivemq.adapter.sdk.api.ProtocolAdapter;
 import com.hivemq.adapter.sdk.api.ProtocolAdapterInformation;
 import com.hivemq.adapter.sdk.api.config.ProtocolSpecificAdapterConfig;
 import com.hivemq.adapter.sdk.api.model.ProtocolAdapterInput;
-import com.hivemq.adapter.sdk.api.tag.TagDefinition;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Map;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The factory is responsible for constructing and managing the lifecycle of the various aspects of the adapter
@@ -66,16 +64,6 @@ public interface ProtocolAdapterFactory<E extends ProtocolSpecificAdapterConfig>
         } else {
             return objectMapper.convertValue(config, getInformation().configurationClassNorthbound());
         }
-    }
-
-    /**
-     * @param objectMapper  the object mapper that deserialises the definition map
-     * @param definitionMap a map containing only the tag definition fields
-     * @return a deserialised TagDefinition for this adapter
-     */
-    default @NotNull TagDefinition convertTagDefinitionObject(
-            final @NotNull ObjectMapper objectMapper, final @NotNull Map<String, Object> definitionMap) {
-        return objectMapper.convertValue(definitionMap, getInformation().tagDefinitionClass());
     }
 
     /**
