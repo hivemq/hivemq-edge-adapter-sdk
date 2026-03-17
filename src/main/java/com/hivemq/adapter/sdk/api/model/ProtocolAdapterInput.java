@@ -21,7 +21,7 @@ import com.hivemq.adapter.sdk.api.factories.AdapterFactories;
 import com.hivemq.adapter.sdk.api.services.ModuleServices;
 import com.hivemq.adapter.sdk.api.services.ProtocolAdapterMetricsService;
 import com.hivemq.adapter.sdk.api.state.ProtocolAdapterState;
-import com.hivemq.adapter.sdk.api.tag.Tag;
+import com.hivemq.adapter.sdk.api.tag.GenericTag;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -47,7 +47,7 @@ public interface ProtocolAdapterInput<E extends ProtocolSpecificAdapterConfig> {
      * @return the concrete list of tags for this protocol adapter
      */
     @NotNull
-    List<Tag> getTags();
+    List<GenericTag> getTags();
 
     /**
      * @return the current HiveMQ Edge version

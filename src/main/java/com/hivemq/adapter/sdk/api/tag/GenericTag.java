@@ -26,20 +26,29 @@ import java.util.Objects;
  * The {@code scope} field holds the adapter instance ID and is set by Edge infrastructure after construction.
  * It is excluded from {@code equals} and {@code hashCode} as it is infrastructure metadata, not tag identity.
  */
-public class GenericTag implements Tag {
+public final class GenericTag implements Tag {
 
     private final @NotNull String name;
     private final @NotNull String description;
     private final @NotNull TagDefinition definition;
-    private @NotNull String scope = "";
+    private final @NotNull String scope;
 
     public GenericTag(
             final @NotNull String name,
             final @NotNull String description,
             final @NotNull TagDefinition definition) {
+        this(name, description, definition, "");
+    }
+
+    public GenericTag(
+            final @NotNull String name,
+            final @NotNull String description,
+            final @NotNull TagDefinition definition,
+            final @NotNull String scope) {
         this.name = name;
         this.description = description;
         this.definition = definition;
+        this.scope = scope;
     }
 
     @Override
@@ -60,11 +69,6 @@ public class GenericTag implements Tag {
     @Override
     public @NotNull String getScope() {
         return scope;
-    }
-
-    @Override
-    public void setScope(final @NotNull String scope) {
-        this.scope = scope;
     }
 
     @Override
