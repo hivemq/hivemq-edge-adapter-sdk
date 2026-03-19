@@ -56,6 +56,16 @@ public class ProtocolAdapter2Bridge implements ProtocolAdapter2 {
         this.moduleServices = moduleServices;
     }
 
+    /**
+     * Returns the underlying {@link ProtocolAdapter} delegate.
+     * This is used by the wrapper to provide backward-compatible access to the old adapter interface.
+     *
+     * @return the wrapped ProtocolAdapter
+     */
+    public @NotNull ProtocolAdapter getDelegate() {
+        return delegate;
+    }
+
     @Override
     public @NotNull String getId() {
         return delegate.getId();
