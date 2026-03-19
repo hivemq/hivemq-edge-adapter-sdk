@@ -23,7 +23,7 @@ import java.util.List;
 
 public interface ProtocolAdapterTagStreamingService {
 
-    @NotNull DataPointListBuilder dataPointSender();
+    @NotNull DataPointListBuilder dataPointsPublisher();
 
     @Deprecated
     void feed(@NotNull String tag, @NotNull List<DataPoint> dataPoints);

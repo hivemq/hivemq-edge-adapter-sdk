@@ -1,10 +1,11 @@
 package com.hivemq.adapter.sdk.api.datapoint;
 
+import com.hivemq.adapter.sdk.api.tag.Tag;
 import org.jetbrains.annotations.NotNull;
 
 public interface DataPointListBuilder {
 
-    DataPointBuilder<DataPointListBuilder> dataPoint(final @NotNull String tagName);
+    @NotNull DataPointBuilder<DataPointListBuilder> addDataPoint(@NotNull Tag tag);
 
-    void send();
+    void publish();
 }

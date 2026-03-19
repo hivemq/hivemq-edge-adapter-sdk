@@ -50,9 +50,9 @@ public interface PollingOutput {
     void addDataPoint(final @NotNull DataPoint dataPoint);
 
     /**
-     * Get the sender to produce datapoints
+     * Get the publisher to construct and publish datapoints.
      */
-    @NotNull DataPointListBuilder dataPointSender();
+    @NotNull DataPointListBuilder dataPointsPublisher();
 
     /**
      * Signals Edge that all data points are added and the further processing is done.

@@ -1,127 +1,121 @@
 package com.hivemq.adapter.sdk.api.datapoint;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Optional;
-import java.util.function.Function;
+import java.time.Instant;
 
 public interface DataPointBuilder<R> {
-    
-    @NotNull DataPointBuilder<R> setValue(final @NotNull String value);
 
-    @NotNull DataPointBuilder<R> setValue(final int value);
+    @NotNull DataPointBuilder<R> value(boolean value);
 
-    @NotNull DataPointBuilder<R> setValue(final long value);
+    @NotNull DataPointBuilder<R> value(byte value);
 
-    @NotNull DataPointBuilder<R> setValue(final double value);
+    @NotNull DataPointBuilder<R> value(short value);
 
-    @NotNull DataPointBuilder<R> setValue(final float value);
+    @NotNull DataPointBuilder<R> value(int value);
 
-    @NotNull DataPointBuilder<R> setValue(final boolean value);
+    @NotNull DataPointBuilder<R> value(long value);
 
-    @NotNull DataPointBuilder<R> setValue(final short value);
+    @NotNull DataPointBuilder<R> value(float value);
 
-    @NotNull DataPointBuilder<R> setValue(final @NotNull BigDecimal value);
+    @NotNull DataPointBuilder<R> value(double value);
 
-    @NotNull DataPointBuilder<R> setValue(final @NotNull BigInteger value);
+    @NotNull DataPointBuilder<R> value(@NotNull String value);
 
-    @NotNull DataPointBuilder<R> setValue(final byte @NotNull [] value);
+    @NotNull DataPointBuilder<R> value(byte @NotNull [] value);
 
-    @NotNull DataPointBuilder<R> setNullValue();
+    @NotNull DataPointBuilder<R> value(@NotNull BigDecimal value);
 
-    @NotNull ObjectBuilder<DataPointBuilder<R>> valueStart();
+    @NotNull DataPointBuilder<R> value(@NotNull BigInteger value);
 
-    @NotNull ObjectBuilder<DataPointBuilder<R>> metadataStart();
+    @NotNull DataPointBuilder<R> value(@NotNull JsonNode value);
 
-    @NotNull ObjectBuilder<DataPointBuilder<R>> protocolTagMetadataStart();
+    @NotNull DataPointBuilder<R> valueNull();
 
-    @NotNull ObjectBuilder<DataPointBuilder<R>> protocolDeviceMetadataStart();
+    @NotNull ObjectBuilder<DataPointBuilder<R>> startObjectValue();
 
-    @NotNull ObjectBuilder<DataPointBuilder<R>> adapterDatapointMetadataStart();
+    @NotNull ArrayBuilder<DataPointBuilder<R>> startArrayValue();
 
-    @NotNull ObjectBuilder<DataPointBuilder<R>> adapterTagMetadataStart();
+    @NotNull ObjectBuilder<DataPointBuilder<R>> startObjectMetadata();
 
-    @NotNull ObjectBuilder<DataPointBuilder<R>> adapterDeviceMetadataStart();
+    @NotNull ObjectBuilder<DataPointBuilder<R>> startObjectContext();
 
-    R finish();
+    @NotNull DataPointBuilder<R> timestamp(long epochMillis);
+
+    @NotNull DataPointBuilder<R> timestamp(@NotNull Instant instant);
+
+    R endDataPoint();
 
     interface ObjectBuilder<P> {
 
-        @NotNull ObjectBuilder<P> add(final @NotNull String key, final @NotNull String value);
+        @NotNull ObjectBuilder<P> put(@NotNull String key, boolean value);
 
-        @NotNull ObjectBuilder<P> add(final @NotNull String key, final int value);
+        @NotNull ObjectBuilder<P> put(@NotNull String key, byte value);
 
-        @NotNull ObjectBuilder<P> add(final @NotNull String key, final long value);
+        @NotNull ObjectBuilder<P> put(@NotNull String key, short value);
 
-        @NotNull ObjectBuilder<P> add(final @NotNull String key, final double value);
+        @NotNull ObjectBuilder<P> put(@NotNull String key, int value);
 
-        @NotNull ObjectBuilder<P> add(final @NotNull String key, final float value);
+        @NotNull ObjectBuilder<P> put(@NotNull String key, long value);
 
-        @NotNull ObjectBuilder<P> add(final @NotNull String key, final boolean value);
+        @NotNull ObjectBuilder<P> put(@NotNull String key, float value);
 
-        @NotNull ObjectBuilder<P> add(final @NotNull String key, final @NotNull BigDecimal value);
+        @NotNull ObjectBuilder<P> put(@NotNull String key, double value);
 
-        @NotNull ObjectBuilder<P> add(final @NotNull String key, final @NotNull BigInteger value);
+        @NotNull ObjectBuilder<P> put(@NotNull String key, @NotNull String value);
 
-        @NotNull ObjectBuilder<P> add(final @NotNull String key, final byte @NotNull [] value);
+        @NotNull ObjectBuilder<P> put(@NotNull String key, byte @NotNull [] value);
 
-        @NotNull ObjectBuilder<P> add(final @NotNull String key, final short value);
+        @NotNull ObjectBuilder<P> put(@NotNull String key, @NotNull BigDecimal value);
 
-        @NotNull ObjectBuilder<P> addNull(final @NotNull String key);
+        @NotNull ObjectBuilder<P> put(@NotNull String key, @NotNull BigInteger value);
 
-        @NotNull ObjectBuilder<ObjectBuilder<P>> objectStart(final @NotNull String key);
+        @NotNull ObjectBuilder<P> put(@NotNull String key, @NotNull JsonNode value);
 
-        @NotNull ArrayBuilder<ObjectBuilder<P>> arrayStart(final @NotNull String key);
+        @NotNull ObjectBuilder<P> putNull(@NotNull String key);
 
-        @NotNull P valueStop();
+        @NotNull ObjectBuilder<ObjectBuilder<P>> startObject(@NotNull String key);
 
-        @NotNull P metadataStop();
+        @NotNull ArrayBuilder<ObjectBuilder<P>> startArray(@NotNull String key);
 
-        @NotNull P protocolTagMetadataStop();
-
-        @NotNull P protocolDeviceMetadataStop();
-
-        @NotNull P adapterDatapointMetadataStop();
-
-        @NotNull P adapterTagMetadataStop();
-
-        @NotNull P adapterDeviceMetadataStop();
-
-        @NotNull P objectEnd();
+        @NotNull P endObject();
     }
 
     interface ArrayBuilder<P> {
 
-        @NotNull ArrayBuilder<P> add(final @NotNull String value);
+        @NotNull ArrayBuilder<P> add(boolean value);
 
-        @NotNull ArrayBuilder<P> add(final int value);
+        @NotNull ArrayBuilder<P> add(byte value);
 
-        @NotNull ArrayBuilder<P> add(final long value);
+        @NotNull ArrayBuilder<P> add(short value);
 
-        @NotNull ArrayBuilder<P> add(final double value);
+        @NotNull ArrayBuilder<P> add(int value);
 
-        @NotNull ArrayBuilder<P> add(final float value);
+        @NotNull ArrayBuilder<P> add(long value);
 
-        @NotNull ArrayBuilder<P> add(final boolean value);
+        @NotNull ArrayBuilder<P> add(float value);
 
-        @NotNull ArrayBuilder<P> add(final @NotNull BigDecimal value);
+        @NotNull ArrayBuilder<P> add(double value);
 
-        @NotNull ArrayBuilder<P> add(final @NotNull BigInteger value);
+        @NotNull ArrayBuilder<P> add(@NotNull String value);
 
-        @NotNull ArrayBuilder<P> add(final byte @NotNull [] value);
+        @NotNull ArrayBuilder<P> add(byte @NotNull [] value);
 
-        @NotNull ArrayBuilder<P> add(final short value);
+        @NotNull ArrayBuilder<P> add(@NotNull BigDecimal value);
+
+        @NotNull ArrayBuilder<P> add(@NotNull BigInteger value);
+
+        @NotNull ArrayBuilder<P> add(@NotNull JsonNode value);
 
         @NotNull ArrayBuilder<P> addNull();
 
-        @NotNull ObjectBuilder<ArrayBuilder<P>> objectStart();
+        @NotNull ObjectBuilder<ArrayBuilder<P>> startObject();
 
-        @NotNull P arrayEnd();
+        @NotNull ArrayBuilder<ArrayBuilder<P>> startArray();
+
+        @NotNull P endArray();
     }
 }
