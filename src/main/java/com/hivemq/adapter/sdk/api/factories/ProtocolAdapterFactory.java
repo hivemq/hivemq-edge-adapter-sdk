@@ -17,9 +17,12 @@ package com.hivemq.adapter.sdk.api.factories;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hivemq.adapter.sdk.api.ProtocolAdapter;
+import com.hivemq.adapter.sdk.api.ProtocolAdapter2;
+import com.hivemq.adapter.sdk.api.ProtocolAdapter2Bridge;
 import com.hivemq.adapter.sdk.api.ProtocolAdapterInformation;
 import com.hivemq.adapter.sdk.api.config.ProtocolSpecificAdapterConfig;
 import com.hivemq.adapter.sdk.api.model.ProtocolAdapterInput;
+import com.hivemq.adapter.sdk.api.services.ModuleServices;
 import com.hivemq.adapter.sdk.api.tag.Tag;
 import org.jetbrains.annotations.NotNull;
 
@@ -100,5 +103,24 @@ public interface ProtocolAdapterFactory<E extends ProtocolSpecificAdapterConfig>
     default @NotNull Map<String, Object> unconvertConfigObject(
             final @NotNull ObjectMapper objectMapper, final @NotNull ProtocolSpecificAdapterConfig config) {
         return objectMapper.convertValue(config, Map.class);
+    }
+
+    /**
+     * Creates a {@link ProtocolAdapter2} instance wrapping the given old-SDK adapter.
+     * <p>
+     * Override this method to return a module-specific {@link ProtocolAdapter2} implementation
+     * that encodes adapter-type-specific behavior (e.g., whether southbound is supported).
+     * <p>
+     * The default implementation returns a generic {@link ProtocolAdapter2Bridge} that determines
+     * southbound support from the adapter's {@link com.hivemq.adapter.sdk.api.ProtocolAdapterCapability#WRITE}
+     * capability.
+     *
+     * @param protocolAdapter the old-SDK adapter instance created by {@link #createAdapter}
+     * @param moduleServices  the per-module services for the adapter
+     * @return the {@link ProtocolAdapter2} implementation for this adapter type
+     */
+    default @NotNull ProtocolAdapter2 createProtocolAdapter2(
+            final @NotNull ProtocolAdapter protocolAdapter, final @NotNull ModuleServices moduleServices) {
+        return new ProtocolAdapter2Bridge(protocolAdapter, moduleServices);
     }
 }
