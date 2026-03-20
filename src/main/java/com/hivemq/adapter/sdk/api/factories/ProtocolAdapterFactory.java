@@ -17,11 +17,9 @@ package com.hivemq.adapter.sdk.api.factories;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hivemq.adapter.sdk.api.ProtocolAdapter;
-import com.hivemq.adapter.sdk.api.ProtocolAdapter2;
 import com.hivemq.adapter.sdk.api.ProtocolAdapterInformation;
 import com.hivemq.adapter.sdk.api.config.ProtocolSpecificAdapterConfig;
 import com.hivemq.adapter.sdk.api.model.ProtocolAdapterInput;
-import com.hivemq.adapter.sdk.api.services.ModuleServices;
 import com.hivemq.adapter.sdk.api.tag.Tag;
 import java.util.List;
 import java.util.Map;
@@ -103,29 +101,4 @@ public interface ProtocolAdapterFactory<E extends ProtocolSpecificAdapterConfig>
         return objectMapper.convertValue(config, Map.class);
     }
 
-    /**
-     * Creates a {@link ProtocolAdapter2} instance wrapping the given legacy adapter.
-     * <p>
-     * Module factories can override this method to return module-specific implementations.
-     * The default implementation returns an inline adapter that delegates to the legacy adapter through
-     * {@link ProtocolAdapter2}'s default methods.
-     *
-     * @param protocolAdapter the legacy adapter instance created by {@link #createAdapter}
-     * @param moduleServices  the per-module services for the adapter
-     * @return the {@link ProtocolAdapter2} implementation for this adapter type
-     */
-    default @NotNull ProtocolAdapter2 createProtocolAdapter2(
-            final @NotNull ProtocolAdapter protocolAdapter, final @NotNull ModuleServices moduleServices) {
-        return new ProtocolAdapter2() {
-            @Override
-            public @NotNull ProtocolAdapter getLegacyAdapter() {
-                return protocolAdapter;
-            }
-
-            @Override
-            public @NotNull ModuleServices getModuleServices() {
-                return moduleServices;
-            }
-        };
-    }
 }
