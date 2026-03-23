@@ -72,6 +72,7 @@ public interface ProtocolAdapter {
      * @param input  the state associated with runtime. Allows the adapter to bind to required services.
      * @param output the output to signal back to HiveMQ Edge the status of the start attempt.
      */
+    @Deprecated
     default void start(
             @NotNull ProtocolAdapterStartInput input,
             @NotNull ProtocolAdapterStartOutput output) {
@@ -104,6 +105,7 @@ public interface ProtocolAdapter {
      * @param input  the input for the stop
      * @param output the output to signal back to HiveMQ Edge the status of the stop attempt.
      */
+    @Deprecated
     default void stop(
             @NotNull ProtocolAdapterStopInput input,
             @NotNull ProtocolAdapterStopOutput output) {
@@ -147,7 +149,6 @@ public interface ProtocolAdapter {
      * Called by the framework when the instance will be discarded
      */
     default void destroy() {
-
     }
 
 
@@ -161,5 +162,4 @@ public interface ProtocolAdapter {
     default void createTagSchema(final @NotNull TagSchemaCreationInput input, final @NotNull TagSchemaCreationOutput output){
         output.notSupported();
     }
-
 }

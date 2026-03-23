@@ -100,5 +100,4 @@ public interface ProtocolAdapterFactory<E extends ProtocolSpecificAdapterConfig>
             final @NotNull ObjectMapper objectMapper, final @NotNull ProtocolSpecificAdapterConfig config) {
         return objectMapper.convertValue(config, Map.class);
     }
-
 }
