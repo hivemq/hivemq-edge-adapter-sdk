@@ -55,7 +55,7 @@ public interface ProtocolAdapterDataSample {
     /**
      * @return a map which maps tagName to the list of data points for this tagName
      * @deprecated We dropped support for multiple values per tag name a long time ago. Adapters are not supposed to buffer data. Also, each datapoint carries the information of the tag it belongs to.
-     * Method will be removed in 2026.10. Switch to using @method getDataPointsList() instead.
+     * Method will be removed in 2026.10. Switch to using getDataPointsList() instead.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @NotNull
