@@ -38,7 +38,7 @@ public interface PollingOutput {
      *
      * @param tagName  the name for the tag of this data point
      * @param tagValue the value of this data point
-     * @deprecated replaced by {@link #dataPointsPublisher()} to support better performance and more complex data structures.
+     * @deprecated replaced by {@link #dataPointListPublisher()} to support better performance and more complex data structures.
      * Method will be removed in 2026.10. Switch to using @method dataPointsPublisher() instead.
      */
     @ApiStatus.ScheduledForRemoval(inVersion = "2026.10")
@@ -49,7 +49,7 @@ public interface PollingOutput {
      * Adds the given data point to this sample.
      *
      * @param dataPoint the data point to add.
-     * @deprecated replaced by {@link #dataPointsPublisher()} to support better performance and more complex data structures.
+     * @deprecated replaced by {@link #dataPointListPublisher()} to support better performance and more complex data structures.
      * Method will be removed in 2026.10. Switch to using @method dataPointsPublisher() instead.
      */
     @ApiStatus.ScheduledForRemoval(inVersion = "2026.10")
@@ -59,7 +59,7 @@ public interface PollingOutput {
     /**
      * Get the publisher to construct and publish datapoints.
      */
-    @NotNull DataPointListBuilder dataPointsPublisher();
+    @NotNull DataPointListBuilder dataPointListPublisher();
 
     /**
      * Signals Edge that all data points are added and the further processing is done.
