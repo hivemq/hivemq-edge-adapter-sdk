@@ -17,6 +17,7 @@ package com.hivemq.adapter.sdk.api.streaming;
 
 import com.hivemq.adapter.sdk.api.data.DataPoint;
 import com.hivemq.adapter.sdk.api.datapoint.DataPointListBuilder;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -25,6 +26,11 @@ public interface ProtocolAdapterTagStreamingService {
 
     @NotNull DataPointListBuilder dataPointsPublisher();
 
+    /**
+     * @deprecated replaced by {@link #dataPointsPublisher()} to support better performance and more complex data structures.
+     * Method will be removed in 2026.10. Switch to using @method dataPointsPublisher() instead.
+     */
+    @ApiStatus.ScheduledForRemoval(inVersion = "2026.10")
     @Deprecated
     void feed(@NotNull String tag, @NotNull List<DataPoint> dataPoints);
 }

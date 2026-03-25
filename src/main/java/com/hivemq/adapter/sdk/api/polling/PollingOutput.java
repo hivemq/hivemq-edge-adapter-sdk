@@ -17,6 +17,7 @@ package com.hivemq.adapter.sdk.api.polling;
 
 import com.hivemq.adapter.sdk.api.data.DataPoint;
 import com.hivemq.adapter.sdk.api.datapoint.DataPointListBuilder;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,7 +38,10 @@ public interface PollingOutput {
      *
      * @param tagName  the name for the tag of this data point
      * @param tagValue the value of this data point
+     * @deprecated replaced by {@link #dataPointsPublisher()} to support better performance and more complex data structures.
+     * Method will be removed in 2026.10. Switch to using @method dataPointsPublisher() instead.
      */
+    @ApiStatus.ScheduledForRemoval(inVersion = "2026.10")
     @Deprecated
     void addDataPoint(final @NotNull String tagName, final @NotNull Object tagValue);
 
@@ -45,7 +49,10 @@ public interface PollingOutput {
      * Adds the given data point to this sample.
      *
      * @param dataPoint the data point to add.
+     * @deprecated replaced by {@link #dataPointsPublisher()} to support better performance and more complex data structures.
+     * Method will be removed in 2026.10. Switch to using @method dataPointsPublisher() instead.
      */
+    @ApiStatus.ScheduledForRemoval(inVersion = "2026.10")
     @Deprecated
     void addDataPoint(final @NotNull DataPoint dataPoint);
 
@@ -57,7 +64,10 @@ public interface PollingOutput {
     /**
      * Signals Edge that all data points are added and the further processing is done.
      * If no data points were added until this point, no publish will be created.
+     * @deprecated
+     * the new builders in dataPointsPublisher() have a callback to signal that all data points are added and the publish can be created. So this method is not needed anymore.
      */
+    @ApiStatus.ScheduledForRemoval(inVersion = "2026.10")
     @Deprecated
     void finish();
 
