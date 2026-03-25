@@ -21,5 +21,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public interface ProtocolAdapterTagStreamingService {
+    default void feed(@NotNull List<DataPoint> dataPoints) {
+        feed("", dataPoints);
+    }
+
+    @Deprecated(since = "This API will be removed by 2026.10. Please migrate to the feed method without tagName.")
     void feed(@NotNull String tag, @NotNull List<DataPoint> dataPoints);
 }
