@@ -121,15 +121,6 @@ public interface ProtocolAdapter {
     }
 
     /**
-     * Check if this adapter supports southbound (MQTT to device) communication.
-     *
-     * @return true if southbound is supported
-     */
-    default boolean supportsSouthbound() {
-        return getProtocolAdapterInformation().getCapabilities().contains(ProtocolAdapterCapability.WRITE);
-    }
-
-    /**
      * This method needs to be implemented in case the adapter provides the possibility to discover values at the PLC.
      * @param input an input object containing information during the discovery process
      * @param output an output object to set the discovered nodes on and signal edge that the discovery process has finished.
