@@ -41,4 +41,11 @@ public interface DataPoint {
      * @return the tag name of the data point.
      */
     @NotNull String getTagName();
+
+    /**
+     * @return the tag name of the data point.
+     */
+    @NotNull default String getAdapterId() {
+        return "";
+    }
 }
