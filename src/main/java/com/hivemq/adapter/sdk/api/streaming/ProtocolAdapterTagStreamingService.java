@@ -28,7 +28,7 @@ public interface ProtocolAdapterTagStreamingService {
 
     /**
      * @deprecated replaced by {@link #dataPointsPublisher()} to support better performance and more complex data structures.
-     * Method will be removed in 2026.10. Switch to using @method dataPointsPublisher() instead.
+     * Method will be removed in 2026.10. Switch to using dataPointsPublisher() instead.
      */
     @ApiStatus.ScheduledForRemoval(inVersion = "2026.10")
     @Deprecated

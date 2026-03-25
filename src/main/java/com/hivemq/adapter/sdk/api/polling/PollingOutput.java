@@ -39,7 +39,7 @@ public interface PollingOutput {
      * @param tagName  the name for the tag of this data point
      * @param tagValue the value of this data point
      * @deprecated replaced by {@link #dataPointListPublisher()} to support better performance and more complex data structures.
-     * Method will be removed in 2026.10. Switch to using @method dataPointsPublisher() instead.
+     * Method will be removed in 2026.10. Switch to using dataPointsPublisher() instead.
      */
     @ApiStatus.ScheduledForRemoval(inVersion = "2026.10")
     @Deprecated
@@ -50,7 +50,7 @@ public interface PollingOutput {
      *
      * @param dataPoint the data point to add.
      * @deprecated replaced by {@link #dataPointListPublisher()} to support better performance and more complex data structures.
-     * Method will be removed in 2026.10. Switch to using @method dataPointsPublisher() instead.
+     * Method will be removed in 2026.10. Switch to using dataPointsPublisher() instead.
      */
     @ApiStatus.ScheduledForRemoval(inVersion = "2026.10")
     @Deprecated
