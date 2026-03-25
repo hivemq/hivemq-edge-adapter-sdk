@@ -17,11 +17,9 @@ package com.hivemq.adapter.sdk.api.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.hivemq.adapter.sdk.api.config.PollingContext;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -70,5 +68,5 @@ public interface ProtocolAdapterDataSample {
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @NotNull
-    List<DataPoint> getDataPointsList();
+    List<DataPoint> getDataPointList();
 }
