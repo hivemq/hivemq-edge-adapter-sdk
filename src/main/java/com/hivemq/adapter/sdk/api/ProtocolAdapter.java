@@ -58,9 +58,9 @@ public interface ProtocolAdapter {
      * @param output    the output to signal back to HiveMQ Edge the status of the start attempt.
      */
     default void start(
-            @NotNull ProtocolAdapterConnectionDirection direction,
-            @NotNull ProtocolAdapterStartInput input,
-            @NotNull ProtocolAdapterStartOutput output) {
+            final @NotNull ProtocolAdapterConnectionDirection direction,
+            final @NotNull ProtocolAdapterStartInput input,
+            final @NotNull ProtocolAdapterStartOutput output) {
         start(input, output);
     }
 
@@ -74,9 +74,10 @@ public interface ProtocolAdapter {
      */
     @Deprecated
     default void start(
-            @NotNull ProtocolAdapterStartInput input,
-            @NotNull ProtocolAdapterStartOutput output) {
-        output.startedSuccessfully();
+            final @NotNull ProtocolAdapterStartInput input,
+            final @NotNull ProtocolAdapterStartOutput output) {
+        final String errorMessage ="Start not implemented for this adapter";
+        output.failStart(new RuntimeException(errorMessage), errorMessage);
     }
 
     /**
@@ -91,9 +92,9 @@ public interface ProtocolAdapter {
      * @param output    the output to signal back to HiveMQ Edge the status of the stop attempt.
      */
     default void stop(
-            @NotNull ProtocolAdapterConnectionDirection direction,
-            @NotNull ProtocolAdapterStopInput input,
-            @NotNull ProtocolAdapterStopOutput output) {
+            final @NotNull ProtocolAdapterConnectionDirection direction,
+            final @NotNull ProtocolAdapterStopInput input,
+            final @NotNull ProtocolAdapterStopOutput output) {
         stop(input, output);
     }
 
@@ -107,9 +108,10 @@ public interface ProtocolAdapter {
      */
     @Deprecated
     default void stop(
-            @NotNull ProtocolAdapterStopInput input,
-            @NotNull ProtocolAdapterStopOutput output) {
-        output.stoppedSuccessfully();
+            final @NotNull ProtocolAdapterStopInput input,
+            final @NotNull ProtocolAdapterStopOutput output) {
+        final String errorMessage ="Stop not implemented for this adapter";
+        output.failStop(new RuntimeException(errorMessage), errorMessage);
     }
 
     /**
