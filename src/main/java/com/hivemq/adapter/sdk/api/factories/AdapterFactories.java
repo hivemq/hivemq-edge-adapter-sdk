@@ -15,11 +15,15 @@
  */
 package com.hivemq.adapter.sdk.api.factories;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * This class offers access to factory classes for implementations of SDK interfaces.
+ * @deprecated no longer needed. To be removed in 2026.10
  */
+@ApiStatus.ScheduledForRemoval(inVersion = "2026.10")
+@Deprecated
 public interface AdapterFactories {
 
     /**
