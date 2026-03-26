@@ -28,10 +28,12 @@ public interface BulkTagBrowser {
     /**
      * Browse the device address space starting from the given root node.
      *
-     * @param rootNodeId the device-specific node identifier to start browsing from, or null for the default root
+     * @param rootId the device-specific identifier to start browsing from, or null for the default root.
+     *               Interpretation is protocol-dependent (e.g. an OPC UA node ID, a register type filter,
+     *               a tag name prefix).
      * @param maxDepth   maximum depth to traverse (0 = unlimited)
      * @return a list of discovered variable nodes with informational fields and generated defaults
      * @throws BrowseException if the browse operation fails
      */
-    @NotNull List<BrowsedNode> browse(@Nullable String rootNodeId, int maxDepth) throws BrowseException;
+    @NotNull List<BrowsedNode> browse(@Nullable String rootId, int maxDepth) throws BrowseException;
 }
