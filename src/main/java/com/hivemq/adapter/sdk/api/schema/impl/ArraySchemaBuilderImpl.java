@@ -1,0 +1,67 @@
+/*
+ * Copyright 2019-present HiveMQ GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.hivemq.adapter.sdk.api.schema.impl;
+
+import com.hivemq.adapter.sdk.api.schema.ArraySchema;
+import com.hivemq.adapter.sdk.api.schema.ArraySchemaBuilder;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+final class ArraySchemaBuilderImpl<P> implements ArraySchemaBuilder<P> {
+
+    final P parent;
+    final ItemSchemaBuilderImpl<P> items;
+
+    @Nullable
+    Integer minContains;
+
+    @Nullable
+    Integer maxContains;
+
+    ArraySchemaBuilderImpl(final P parent) {
+        this.parent = parent;
+        this.items = new ItemSchemaBuilderImpl<>(this);
+    }
+
+    @Override
+    public @NotNull ArraySchemaBuilder<P> minContains(final int min) {
+        this.minContains = min;
+        return this;
+    }
+
+    @Override
+    public @NotNull ArraySchemaBuilder<P> maxContains(final int max) {
+        this.maxContains = max;
+        return this;
+    }
+
+    @Override
+    public @NotNull P endArray() {
+        return parent;
+    }
+
+    ArraySchema buildSchema(final SchemaAnnotations ann, final boolean nullable) {
+        return new ArraySchema(
+                items.buildSchema(),
+                minContains,
+                maxContains,
+                ann.title,
+                ann.description,
+                nullable,
+                ann.readable,
+                ann.writable);
+    }
+}
