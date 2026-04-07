@@ -21,9 +21,13 @@ import org.jetbrains.annotations.Nullable;
 
 public interface TagSchemaCreationOutput {
 
+    void finish(@NotNull DataPointSchema schema);
+
     /**
      * Finishes the creation of the schema successfully.
+     * @deprecated use {@link #finish(DataPointSchema)} instead to provide more information about the created impl.
      */
+    @Deprecated
     void finish(@NotNull JsonNode schema);
 
     /**
@@ -37,7 +41,7 @@ public interface TagSchemaCreationOutput {
     void adapterNotStarted();
 
     /**
-     * Signals that something went wrong during the creation of the json schema.
+     * Signals that something went wrong during the creation of the json impl.
      *
      * @param t Throwable indicating what went wrong.
      * @param errorMessage an optional error message delivering further insights.
@@ -45,7 +49,7 @@ public interface TagSchemaCreationOutput {
     void fail(@NotNull Throwable t, @Nullable String errorMessage);
 
     /**
-     * Signals that something went wrong during the creation of the json schema.
+     * Signals that something went wrong during the creation of the json impl.
      *
      * @param errorMessage an error message delivering further insights.
      */
@@ -57,4 +61,6 @@ public interface TagSchemaCreationOutput {
      * @param errorMessage an error message delivering further insights.
      */
     void tagNotFound(@NotNull String errorMessage);
+
+    record DataPointSchema(@NotNull Schema valueSchema, @Nullable Schema metaData, @Nullable Schema context){};
 }
