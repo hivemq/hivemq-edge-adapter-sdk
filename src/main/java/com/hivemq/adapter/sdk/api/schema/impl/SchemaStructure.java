@@ -15,7 +15,6 @@
  */
 package com.hivemq.adapter.sdk.api.schema.impl;
 
-import com.hivemq.adapter.sdk.api.schema.ScalarType;
 import com.hivemq.adapter.sdk.api.schema.Schema;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,13 +39,7 @@ class SchemaStructure {
     boolean nullable = false;
 
     @Nullable
-    ScalarType scalarType;
-
-    @Nullable
-    Number minimum;
-
-    @Nullable
-    Number maximum;
+    ScalarSchemaBuilder scalarBuilder;
 
     @Nullable
     ObjectSchemaBuilderImpl<?> objectBuilder;
