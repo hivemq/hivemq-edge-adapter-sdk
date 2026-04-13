@@ -13,19 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.adapter.sdk.api.schema.impl;
+package com.hivemq.adapter.sdk.api.schema;
 
-import com.hivemq.adapter.sdk.api.schema.AnySchema;
-import com.hivemq.adapter.sdk.api.schema.ScalarSchema;
-import com.hivemq.adapter.sdk.api.schema.ScalarType;
-import com.hivemq.adapter.sdk.api.schema.Schema;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Base class for {@link SchemaBuilderImpl}, {@link PropertySchemaBuilderImpl}, and
- * {@link ItemSchemaBuilderImpl}. Holds all structure-definition and annotation state.
+ * Base class for {@link SchemaBuilder}, {@link PropertySchemaBuilder}, and
+ * {@link ItemSchemaBuilder}. Holds all structure-definition and annotation state.
  * Subclasses add only navigation ({@code endObject}, {@code endArray}, etc.) and
- * {@link SchemaBuilderImpl} alone adds {@code build()}.
+ * {@link SchemaBuilder} alone adds {@code build()}.
  */
 abstract class AbstractSchemaBuilder<Self extends AbstractSchemaBuilder<Self>> {
 
@@ -72,32 +68,32 @@ abstract class AbstractSchemaBuilder<Self extends AbstractSchemaBuilder<Self>> {
     }
 
     /**
-     * Internal helper for {@code startObject()}. Creates an {@link ObjectSchemaBuilderImpl}
-     * parameterised on the SDK interface type {@code I} (not the schema type) so that
-     * {@code endObject()} returns the interface type the caller expects.
+     * Internal helper for {@code startObject()}. Creates an {@link ObjectSchemaBuilder}
+     * parameterised on the parent type {@code I} so that {@code endObject()} returns
+     * the parent type the caller expects.
      *
-     * @param parent the parent cast to its SDK interface type
-     * @param <I>    the SDK interface type of the parent builder
+     * @param parent the parent builder
+     * @param <I>    the parent builder type
      */
-    final <I> ObjectSchemaBuilderImpl<I> doStartObject(final I parent) {
+    final <I> ObjectSchemaBuilder<I> doStartObject(final I parent) {
         checkNoDoubleStructure();
         struct.kind = SchemaStructure.Kind.OBJECT;
-        final var ob = new ObjectSchemaBuilderImpl<>(parent);
+        final var ob = new ObjectSchemaBuilder<>(parent);
         struct.objectBuilder = ob;
         return ob;
     }
 
     /**
-     * Internal helper for {@code startArray()}. Returns the {@link ItemSchemaBuilderImpl}
-     * parameterised on the SDK interface type {@code I}.
+     * Internal helper for {@code startArray()}. Returns the {@link ItemSchemaBuilder}
+     * parameterised on the parent type {@code I}.
      *
-     * @param parent the parent cast to its SDK interface type
-     * @param <I>    the SDK interface type of the parent builder
+     * @param parent the parent builder
+     * @param <I>    the parent builder type
      */
-    final <I> ItemSchemaBuilderImpl<I> doStartArray(final I parent) {
+    final <I> ItemSchemaBuilder<I> doStartArray(final I parent) {
         checkNoDoubleStructure();
         struct.kind = SchemaStructure.Kind.ARRAY;
-        final var ab = new ArraySchemaBuilderImpl<>(parent);
+        final var ab = new ArraySchemaBuilder<>(parent);
         struct.arrayBuilder = ab;
         return ab.items;
     }

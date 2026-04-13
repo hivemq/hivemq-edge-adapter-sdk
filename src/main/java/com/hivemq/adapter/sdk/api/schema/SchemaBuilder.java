@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-present HiveMQ GmbH
+ * Copyright 2019-present HiveMQ GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,9 @@
  */
 package com.hivemq.adapter.sdk.api.schema;
 
+import java.util.function.Consumer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Root builder for constructing {@link Schema} objects.
@@ -43,108 +45,159 @@ import org.jetbrains.annotations.NotNull;
  *     .build();
  * }</pre>
  */
-public interface SchemaBuilder {
+public final class SchemaBuilder extends AbstractSchemaBuilder<SchemaBuilder> {
 
-    // ── Structure-defining calls ──────────────────────────────────────────────
+    private final @Nullable Consumer<Schema> onBuild;
+
+    public SchemaBuilder() {
+        this(null);
+    }
+
+    public SchemaBuilder(final @Nullable Consumer<Schema> onBuild) {
+        super("SchemaBuilder");
+        this.onBuild = onBuild;
+    }
+
+    // ── Structure-defining calls ─────────────────────────────────────────────
 
     /**
      * No type restriction; any value is valid.
      */
-    @NotNull SchemaBuilder any();
+    public @NotNull SchemaBuilder any() {
+        return doAny();
+    }
 
     /**
      * A single primitive type.
      */
-    @NotNull SchemaBuilder scalar(@NotNull ScalarType type);
+    public @NotNull SchemaBuilder scalar(final @NotNull ScalarType type) {
+        return doScalar(type);
+    }
 
     /**
      * Begin a structured object with named properties. Returns an {@link ObjectSchemaBuilder}
      * whose {@link ObjectSchemaBuilder#endObject()} returns back to this builder.
      */
-    @NotNull ObjectSchemaBuilder<SchemaBuilder> startObject();
+    public @NotNull ObjectSchemaBuilder<SchemaBuilder> startObject() {
+        return doStartObject(this);
+    }
 
     /**
      * Begin an ordered array. Returns an {@link ItemSchemaBuilder} so the element schema can be
      * defined immediately.
      */
-    @NotNull ItemSchemaBuilder<SchemaBuilder> startArray();
+    public @NotNull ItemSchemaBuilder<SchemaBuilder> startArray() {
+        return doStartArray(this);
+    }
 
     /**
      * Use an already-complete {@link Schema} as-is. Annotation methods must not be called after
      * this — the schema carries its own annotations.
      */
-    @NotNull SchemaBuilder schema(@NotNull Schema schema);
+    public @NotNull SchemaBuilder schema(final @NotNull Schema schema) {
+        return doSchema(schema);
+    }
 
-    // ── Structure-defining flag ──────────────────────────────────────────────
+    // ── Nullable flag ────────────────────────────────────────────────────────
 
     /**
      * Mark this schema as nullable. Equivalent to {@code nullable(true)}.
      */
-    @NotNull SchemaBuilder nullable();
+    public @NotNull SchemaBuilder nullable() {
+        return doNullable(true);
+    }
 
     /**
      * Set whether {@code null} is a valid value. Default is {@code false}.
      */
-    @NotNull SchemaBuilder nullable(boolean nullable);
+    public @NotNull SchemaBuilder nullable(final boolean nullable) {
+        return doNullable(nullable);
+    }
 
     // ── Range constraints ────────────────────────────────────────────────────
 
     /**
      * Set the inclusive lower bound for numeric scalar types.
      */
-    @NotNull SchemaBuilder minimum(long minimum);
+    public @NotNull SchemaBuilder minimum(final long minimum) {
+        return doMinimum(minimum);
+    }
 
     /**
      * Set the inclusive upper bound for numeric scalar types.
      */
-    @NotNull SchemaBuilder maximum(long maximum);
+    public @NotNull SchemaBuilder maximum(final long maximum) {
+        return doMaximum(maximum);
+    }
 
     /**
      * Set the inclusive lower bound for floating-point scalar types.
      */
-    @NotNull SchemaBuilder minimum(double minimum);
+    public @NotNull SchemaBuilder minimum(final double minimum) {
+        return doMinimum(minimum);
+    }
 
     /**
      * Set the inclusive upper bound for floating-point scalar types.
      */
-    @NotNull SchemaBuilder maximum(double maximum);
+    public @NotNull SchemaBuilder maximum(final double maximum) {
+        return doMaximum(maximum);
+    }
 
     // ── Annotations ──────────────────────────────────────────────────────────
 
     /**
      * Set a short human-readable label.
      */
-    @NotNull SchemaBuilder title(@NotNull String title);
+    public @NotNull SchemaBuilder title(final @NotNull String title) {
+        return doTitle(title);
+    }
 
     /**
      * Set a longer human-readable explanation.
      */
-    @NotNull SchemaBuilder description(@NotNull String description);
+    public @NotNull SchemaBuilder description(final @NotNull String description) {
+        return doDescription(description);
+    }
 
     /**
      * Mark this schema as readable. Equivalent to {@code readable(true)}.
      */
-    @NotNull SchemaBuilder readable();
+    public @NotNull SchemaBuilder readable() {
+        return doReadable(true);
+    }
 
     /**
      * Set whether clients may read the value. Default is {@code true}.
      */
-    @NotNull SchemaBuilder readable(boolean readable);
+    public @NotNull SchemaBuilder readable(final boolean readable) {
+        return doReadable(readable);
+    }
 
     /**
      * Mark this schema as writable. Equivalent to {@code writable(true)}.
      */
-    @NotNull SchemaBuilder writable();
+    public @NotNull SchemaBuilder writable() {
+        return doWritable(true);
+    }
 
     /**
      * Set whether clients may write the value. Default is {@code false}.
      */
-    @NotNull SchemaBuilder writable(boolean writable);
+    public @NotNull SchemaBuilder writable(final boolean writable) {
+        return doWritable(writable);
+    }
 
     // ── Terminal ─────────────────────────────────────────────────────────────
 
     /**
      * Build the final immutable {@link Schema}, recursively building any nested structures.
      */
-    @NotNull Schema build();
+    public @NotNull Schema build() {
+        final Schema schema = buildSchema();
+        if (onBuild != null) {
+            onBuild.accept(schema);
+        }
+        return schema;
+    }
 }
