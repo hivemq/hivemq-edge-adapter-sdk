@@ -51,6 +51,7 @@ abstract class AbstractSchemaBuilder<Self extends AbstractSchemaBuilder<Self>> {
         checkNoDoubleStructure();
         struct.kind = SchemaStructure.Kind.SCALAR;
         struct.scalarType = type;
+        struct.scalarBuilder = new ScalarSchemaBuilder(type);
         return self();
     }
 
@@ -108,12 +109,24 @@ abstract class AbstractSchemaBuilder<Self extends AbstractSchemaBuilder<Self>> {
     // ── Range constraints ────────────────────────────────────────────────────
 
     final Self doMinimum(final Number minimum) {
-        struct.minimum = minimum;
+        if (struct.kind != SchemaStructure.Kind.SCALAR) {
+            throw new IllegalStateException(name + ": minimum() requires scalar()");
+        }
+        if (struct.scalarBuilder == null || !struct.scalarBuilder.isNumeric()) {
+            throw new IllegalStateException(name + ": minimum() requires a numeric scalar type (LONG, ULONG, DOUBLE)");
+        }
+        struct.scalarBuilder.minimum = minimum;
         return self();
     }
 
     final Self doMaximum(final Number maximum) {
-        struct.maximum = maximum;
+        if (struct.kind != SchemaStructure.Kind.SCALAR) {
+            throw new IllegalStateException(name + ": maximum() requires scalar()");
+        }
+        if (struct.scalarBuilder == null || !struct.scalarBuilder.isNumeric()) {
+            throw new IllegalStateException(name + ": maximum() requires a numeric scalar type (LONG, ULONG, DOUBLE)");
+        }
+        struct.scalarBuilder.maximum = maximum;
         return self();
     }
 
@@ -151,12 +164,27 @@ abstract class AbstractSchemaBuilder<Self extends AbstractSchemaBuilder<Self>> {
         cached = switch (struct.kind) {
             case ANY, ANY_DEFAULT ->
                 new AnySchema(ann.title, ann.description, struct.nullable, ann.readable, ann.writable);
-            case SCALAR ->
-                new ScalarSchema(
-                        struct.scalarType, struct.minimum, struct.maximum,
-                        ann.title, ann.description, struct.nullable, ann.readable, ann.writable);
-            case OBJECT -> struct.objectBuilder.buildSchema(ann, struct.nullable);
-            case ARRAY -> struct.arrayBuilder.buildSchema(ann, struct.nullable);
+            case SCALAR -> {
+                if(struct.scalarBuilder != null) {
+                    yield struct.scalarBuilder.buildSchema(ann, struct.nullable);
+                } else {
+                    throw new IllegalStateException(name + ": scalar builder is null");
+                }
+            }
+            case OBJECT -> {
+                if(struct.objectBuilder != null) {
+                    yield struct.objectBuilder.buildSchema(ann, struct.nullable);
+                } else {
+                    throw new IllegalStateException(name + ": object builder is null");
+                }
+            }
+            case ARRAY -> {
+                if(struct.arrayBuilder != null) {
+                    yield struct.arrayBuilder.buildSchema(ann, struct.nullable);
+                } else {
+                    throw new IllegalStateException(name + ": array builder is null");
+                }
+            }
             case SCHEMA -> struct.prebuiltSchema;
             case null -> throw new IllegalStateException(name + ": no structure defined");
         };

@@ -38,13 +38,10 @@ class SchemaStructure {
     boolean nullable = false;
 
     @Nullable
+    ScalarSchemaBuilder scalarBuilder;
+
+    @Nullable
     ScalarType scalarType;
-
-    @Nullable
-    Number minimum;
-
-    @Nullable
-    Number maximum;
 
     @Nullable
     ObjectSchemaBuilder<?> objectBuilder;
