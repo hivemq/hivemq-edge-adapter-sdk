@@ -87,11 +87,20 @@ public final class SchemaJsonRepresentation {
                 if (s.type() == ScalarType.BINARY) {
                     node.put("contentEncoding", "base64");
                 }
-                if (s.minimum() != null) {
-                    node.put("minimum", s.minimum().doubleValue());
-                }
-                if (s.maximum() != null) {
-                    node.put("maximum", s.maximum().doubleValue());
+                if (s.type() == ScalarType.LONG || s.type() == ScalarType.ULONG) {
+                    if (s.minimum() != null) {
+                        node.put("minimum", s.minimum().longValue());
+                    }
+                    if (s.maximum() != null) {
+                        node.put("maximum", s.maximum().longValue());
+                    }
+                } else if (s.type() == ScalarType.DOUBLE) {
+                    if (s.minimum() != null) {
+                        node.put("minimum", s.minimum().doubleValue());
+                    }
+                    if (s.maximum() != null) {
+                        node.put("maximum", s.maximum().doubleValue());
+                    }
                 }
                 applyAnnotations(s, node);
                 yield node;
