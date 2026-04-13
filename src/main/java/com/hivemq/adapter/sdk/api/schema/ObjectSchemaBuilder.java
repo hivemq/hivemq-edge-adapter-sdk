@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-present HiveMQ GmbH
+ * Copyright 2019-present HiveMQ GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,12 @@
  */
 package com.hivemq.adapter.sdk.api.schema;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -25,20 +31,52 @@ import org.jetbrains.annotations.NotNull;
  *
  * @param <P> the parent builder type returned by {@link #endObject()}.
  */
-public interface ObjectSchemaBuilder<P> {
+public final class ObjectSchemaBuilder<P> {
+
+    final P parent;
+    final Map<String, PropertySchemaBuilder<P>> properties = new LinkedHashMap<>();
+    final Set<String> required = new LinkedHashSet<>();
+    boolean additionalProperties = true;
+
+    ObjectSchemaBuilder(final P parent) {
+        this.parent = parent;
+    }
 
     /**
      * Start a property builder for the given key.
      */
-    @NotNull PropertySchemaBuilder<P> property(@NotNull String key);
+    public @NotNull PropertySchemaBuilder<P> property(final @NotNull String key) {
+        final var prop = new PropertySchemaBuilder<>(this, key);
+        properties.put(key, prop);
+        return prop;
+    }
 
     /**
      * Set whether undeclared properties are permitted. Default is {@code true}.
      */
-    @NotNull ObjectSchemaBuilder<P> additionalProperties(boolean additionalProperties);
+    public @NotNull ObjectSchemaBuilder<P> additionalProperties(final boolean additionalProperties) {
+        this.additionalProperties = additionalProperties;
+        return this;
+    }
 
     /**
      * Return to the parent builder.
      */
-    @NotNull P endObject();
+    public @NotNull P endObject() {
+        return parent;
+    }
+
+    ObjectSchema buildSchema(final SchemaAnnotations ann, final boolean nullable) {
+        final var built = new LinkedHashMap<String, Schema>();
+        properties.forEach((key, prop) -> built.put(key, prop.buildSchema()));
+        return new ObjectSchema(
+                Collections.unmodifiableMap(built),
+                List.copyOf(required),
+                additionalProperties,
+                ann.title,
+                ann.description,
+                nullable,
+                ann.readable,
+                ann.writable);
+    }
 }

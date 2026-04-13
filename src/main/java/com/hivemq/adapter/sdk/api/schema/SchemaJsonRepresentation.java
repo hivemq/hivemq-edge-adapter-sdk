@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.adapter.sdk.api.schema.impl;
+package com.hivemq.adapter.sdk.api.schema;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -21,26 +21,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
-import com.hivemq.adapter.sdk.api.schema.AnySchema;
-import com.hivemq.adapter.sdk.api.schema.ArraySchema;
-import com.hivemq.adapter.sdk.api.schema.ObjectSchema;
-import com.hivemq.adapter.sdk.api.schema.ScalarSchema;
-import com.hivemq.adapter.sdk.api.schema.ScalarType;
-import com.hivemq.adapter.sdk.api.schema.Schema;
-import com.hivemq.adapter.sdk.api.schema.SchemaJsonRepString;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.hivemq.adapter.sdk.api.schema.TagSchemaCreationOutput;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Jackson-based implementation of {@link SchemaJsonRepString}.
- * Converts between {@link Schema} objects and JSON Schema documents.
+ * Jackson-based converter between {@link Schema} objects and JSON Schema documents.
  */
-public final class SchemaJsonRepresentation implements SchemaJsonRepString {
+public final class SchemaJsonRepresentation {
     static final @NotNull String SCHEMA_URI = "https://json-schema.org/draft/2019-09/schema";
     public static final @NotNull SchemaJsonRepresentation INSTANCE = new SchemaJsonRepresentation();
 
@@ -50,13 +40,15 @@ public final class SchemaJsonRepresentation implements SchemaJsonRepString {
 
     // ── Schema → JSON Schema ─────────────────────────────────────────────────
 
-    @Override
+    /**
+     * Returns a JSON Schema representation of the given schema as a JSON string.
+     */
     public @NotNull String toJsonSchemaString(final @NotNull Schema schema) {
         return toJsonSchema(schema).toString();
     }
 
     public ObjectNode toCompositeSchema(final @NotNull TagSchemaCreationOutput.DataPointSchema dps) {
-        final var builder = new SchemaBuilderImpl().startObject();
+        final var builder = new SchemaBuilder().startObject();
 
         builder.property("tagName").scalar(ScalarType.STRING).readable().writable(false);
         builder.property("timestamp").scalar(ScalarType.LONG).readable().writable(false);
@@ -185,7 +177,9 @@ public final class SchemaJsonRepresentation implements SchemaJsonRepString {
 
     // ── JSON Schema → Schema ─────────────────────────────────────────────────
 
-    @Override
+    /**
+     * Parses a JSON Schema string and reconstructs the corresponding {@link Schema}.
+     */
     public @NotNull Schema fromJsonSchemaString(final @NotNull String json) {
         try {
             return fromJsonSchema((ObjectNode) MAPPER.readTree(json));

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-present HiveMQ GmbH
+ * Copyright 2019-present HiveMQ GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,123 +29,173 @@ import org.jetbrains.annotations.NotNull;
  *
  * @param <P> the parent builder type of the enclosing builder.
  */
-public interface ItemSchemaBuilder<P> {
+public final class ItemSchemaBuilder<P> extends AbstractSchemaBuilder<ItemSchemaBuilder<P>> {
+
+    private final ArraySchemaBuilder<P> parentArray;
+
+    ItemSchemaBuilder(final ArraySchemaBuilder<P> parentArray) {
+        super("array element");
+        this.parentArray = parentArray;
+        this.struct.kind = SchemaStructure.Kind.ANY_DEFAULT;
+    }
 
     // ── Structure-defining calls ─────────────────────────────────────────────
 
     /**
      * No type restriction; any value is valid for array elements.
      */
-    @NotNull ItemSchemaBuilder<P> any();
+    public @NotNull ItemSchemaBuilder<P> any() {
+        return doAny();
+    }
 
     /**
      * A single primitive type for array elements.
      */
-    @NotNull ItemSchemaBuilder<P> scalar(@NotNull ScalarType type);
+    public @NotNull ItemSchemaBuilder<P> scalar(final @NotNull ScalarType type) {
+        return doScalar(type);
+    }
 
     /**
-     * Begin a nested object as the element impl.
+     * Begin a nested object as the element schema.
      */
-    @NotNull ObjectSchemaBuilder<ItemSchemaBuilder<P>> startObject();
+    public @NotNull ObjectSchemaBuilder<ItemSchemaBuilder<P>> startObject() {
+        return doStartObject(this);
+    }
 
     /**
-     * Begin a nested array as the element impl.
+     * Begin a nested array as the element schema.
      */
-    @NotNull ItemSchemaBuilder<ItemSchemaBuilder<P>> startArray();
+    public @NotNull ItemSchemaBuilder<ItemSchemaBuilder<P>> startArray() {
+        return doStartArray(this);
+    }
 
     /**
-     * Use an already-complete {@link Schema} as the element impl.
+     * Use an already-complete {@link Schema} as the element schema.
      * Annotation methods must not be called after this.
      */
-    @NotNull ItemSchemaBuilder<P> schema(@NotNull Schema schema);
+    public @NotNull ItemSchemaBuilder<P> schema(final @NotNull Schema schema) {
+        return doSchema(schema);
+    }
 
-    // ── Structure-defining flag ──────────────────────────────────────────────
+    // ── Nullable flag ────────────────────────────────────────────────────────
 
     /**
      * Mark array elements as nullable. Equivalent to {@code nullable(true)}.
      */
-    @NotNull ItemSchemaBuilder<P> nullable();
+    public @NotNull ItemSchemaBuilder<P> nullable() {
+        return doNullable(true);
+    }
 
     /**
      * Set whether {@code null} is a valid element value. Default is {@code false}.
      */
-    @NotNull ItemSchemaBuilder<P> nullable(boolean nullable);
+    public @NotNull ItemSchemaBuilder<P> nullable(final boolean nullable) {
+        return doNullable(nullable);
+    }
 
     // ── Range constraints ────────────────────────────────────────────────────
 
     /**
      * Set the inclusive lower bound for numeric scalar element types.
      */
-    @NotNull ItemSchemaBuilder<P> minimum(long minimum);
+    public @NotNull ItemSchemaBuilder<P> minimum(final long minimum) {
+        return doMinimum(minimum);
+    }
 
     /**
      * Set the inclusive upper bound for numeric scalar element types.
      */
-    @NotNull ItemSchemaBuilder<P> maximum(long maximum);
+    public @NotNull ItemSchemaBuilder<P> maximum(final long maximum) {
+        return doMaximum(maximum);
+    }
 
     /**
      * Set the inclusive lower bound for floating-point scalar element types.
      */
-    @NotNull ItemSchemaBuilder<P> minimum(double minimum);
+    public @NotNull ItemSchemaBuilder<P> minimum(final double minimum) {
+        return doMinimum(minimum);
+    }
 
     /**
      * Set the inclusive upper bound for floating-point scalar element types.
      */
-    @NotNull ItemSchemaBuilder<P> maximum(double maximum);
+    public @NotNull ItemSchemaBuilder<P> maximum(final double maximum) {
+        return doMaximum(maximum);
+    }
 
     // ── Annotations ──────────────────────────────────────────────────────────
 
     /**
-     * Set a short human-readable label for the element impl.
+     * Set a short human-readable label for the element schema.
      */
-    @NotNull ItemSchemaBuilder<P> title(@NotNull String title);
+    public @NotNull ItemSchemaBuilder<P> title(final @NotNull String title) {
+        return doTitle(title);
+    }
 
     /**
-     * Set a longer human-readable explanation for the element impl.
+     * Set a longer human-readable explanation for the element schema.
      */
-    @NotNull ItemSchemaBuilder<P> description(@NotNull String description);
+    public @NotNull ItemSchemaBuilder<P> description(final @NotNull String description) {
+        return doDescription(description);
+    }
 
     /**
      * Mark the element schema as readable. Equivalent to {@code readable(true)}.
      */
-    @NotNull ItemSchemaBuilder<P> readable();
+    public @NotNull ItemSchemaBuilder<P> readable() {
+        return doReadable(true);
+    }
 
     /**
      * Set whether clients may read element values. Default is {@code true}.
      */
-    @NotNull ItemSchemaBuilder<P> readable(boolean readable);
+    public @NotNull ItemSchemaBuilder<P> readable(final boolean readable) {
+        return doReadable(readable);
+    }
 
     /**
      * Mark the element schema as writable. Equivalent to {@code writable(true)}.
      */
-    @NotNull ItemSchemaBuilder<P> writable();
+    public @NotNull ItemSchemaBuilder<P> writable() {
+        return doWritable(true);
+    }
 
     /**
      * Set whether clients may write element values. Default is {@code false}.
      */
-    @NotNull ItemSchemaBuilder<P> writable(boolean writable);
+    public @NotNull ItemSchemaBuilder<P> writable(final boolean writable) {
+        return doWritable(writable);
+    }
 
     // ── Navigation ───────────────────────────────────────────────────────────
 
     /**
      * Return to the containing {@link ArraySchemaBuilder}.
      */
-    @NotNull ArraySchemaBuilder<P> endItem();
+    public @NotNull ArraySchemaBuilder<P> endItem() {
+        return parentArray;
+    }
 
     // ── Shorthands (delegate through endItem()) ──────────────────────────────
 
     /**
      * Shorthand for {@code endItem().minContains(min)}.
      */
-    @NotNull ArraySchemaBuilder<P> minContains(int min);
+    public @NotNull ArraySchemaBuilder<P> minContains(final int min) {
+        return endItem().minContains(min);
+    }
 
     /**
      * Shorthand for {@code endItem().maxContains(max)}.
      */
-    @NotNull ArraySchemaBuilder<P> maxContains(int max);
+    public @NotNull ArraySchemaBuilder<P> maxContains(final int max) {
+        return endItem().maxContains(max);
+    }
 
     /**
      * Shorthand for {@code endItem().endArray()}.
      */
-    @NotNull P endArray();
+    public @NotNull P endArray() {
+        return endItem().endArray();
+    }
 }

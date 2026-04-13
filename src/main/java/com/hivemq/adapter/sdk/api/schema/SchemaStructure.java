@@ -13,10 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.adapter.sdk.api.schema.impl;
+package com.hivemq.adapter.sdk.api.schema;
 
-import com.hivemq.adapter.sdk.api.schema.ScalarType;
-import com.hivemq.adapter.sdk.api.schema.Schema;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -49,10 +47,10 @@ class SchemaStructure {
     Number maximum;
 
     @Nullable
-    ObjectSchemaBuilderImpl<?> objectBuilder;
+    ObjectSchemaBuilder<?> objectBuilder;
 
     @Nullable
-    ArraySchemaBuilderImpl<?> arrayBuilder;
+    ArraySchemaBuilder<?> arrayBuilder;
 
     @Nullable
     Schema prebuiltSchema;
