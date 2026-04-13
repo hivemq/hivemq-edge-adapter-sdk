@@ -15,10 +15,7 @@ package com.hivemq.adapter.sdk.api.schema;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.adapter.sdk.api.schema.impl;
 
-import com.hivemq.adapter.sdk.api.schema.ScalarSchema;
-import com.hivemq.adapter.sdk.api.schema.ScalarType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,13 +25,13 @@ import org.jetbrains.annotations.Nullable;
  * {@link ObjectSchemaBuilder} and {@link ArraySchemaBuilder} for their
  * respective kinds.
  */
-class ScalarSchemaBuilder {
+public class ScalarSchemaBuilder {
 
     final @NotNull ScalarType scalarType;
     @Nullable Number minimum;
     @Nullable Number maximum;
 
-    ScalarSchemaBuilder(final @NotNull ScalarType scalarType) {
+    public ScalarSchemaBuilder(final @NotNull ScalarType scalarType) {
         this.scalarType = scalarType;
     }
 

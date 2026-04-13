@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
  * A single primitive type. The scalar type is expressed as one {@link ScalarType} enum constant.
  * Null-ability is a separate {@link #nullable()} field.
  * <p>
- * {@link #minimum()} and {@link #maximum()} are optional inclusive range constraints. They are
+ * The inclusive {@link #minimum()} and excluisve {@link #maximum()} are optional range constraints. They are
  * only meaningful on numeric types ({@code LONG}, {@code ULONG}, {@code DOUBLE}) and are
  * {@code null} when unconstrained.
  */
