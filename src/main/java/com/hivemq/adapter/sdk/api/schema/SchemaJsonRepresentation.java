@@ -26,6 +26,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Jackson-based converter between {@link Schema} objects and JSON Schema documents.
@@ -83,6 +84,10 @@ public final class SchemaJsonRepresentation {
                     arr.add("null");
                 } else {
                     node.put("type", typeStr);
+                }
+                final var formatStr = toJsonFormatString(s.type());
+                if (formatStr != null) {
+                    node.put("format", formatStr);
                 }
                 if (s.type() == ScalarType.BINARY) {
                     node.put("contentEncoding", "base64");
@@ -165,7 +170,18 @@ public final class SchemaJsonRepresentation {
             case BOOLEAN -> "boolean";
             case LONG, ULONG -> "integer";
             case DOUBLE -> "number";
-            case STRING, BINARY -> "string";
+            case STRING, BINARY, INSTANT, LOCAL_DATE, LOCAL_TIME, LOCAL_DATE_TIME, DURATION -> "string";
+        };
+    }
+
+    private static @Nullable String toJsonFormatString(final @NotNull ScalarType type) {
+        return switch (type) {
+            case INSTANT -> "date-time";
+            case LOCAL_DATE -> "date";
+            case LOCAL_TIME -> "local-time";
+            case LOCAL_DATE_TIME -> "local-date-time";
+            case DURATION -> "duration";
+            default -> null;
         };
     }
 
@@ -253,6 +269,12 @@ public final class SchemaJsonRepresentation {
             if (primaryType == null) {
                 throw new IllegalArgumentException("JSON Schema type array contains no non-null type");
             }
+            if (primaryType == ScalarType.STRING && node.has("format")) {
+                final var refined = fromJsonFormatString(node.get("format").asText());
+                if (refined != null) {
+                    primaryType = refined;
+                }
+            }
             final Number minimum = node.has("minimum") ? node.get("minimum").numberValue() : null;
             final Number maximum = node.has("maximum") ? node.get("maximum").numberValue() : null;
             return new ScalarSchema(
@@ -284,6 +306,17 @@ public final class SchemaJsonRepresentation {
             case "number" -> ScalarType.DOUBLE;
             case "string" -> ScalarType.STRING;
             default -> throw new IllegalArgumentException("Unknown JSON Schema type: " + type);
+        };
+    }
+
+    private static @Nullable ScalarType fromJsonFormatString(final @NotNull String format) {
+        return switch (format) {
+            case "date-time" -> ScalarType.INSTANT;
+            case "date" -> ScalarType.LOCAL_DATE;
+            case "local-time" -> ScalarType.LOCAL_TIME;
+            case "local-date-time" -> ScalarType.LOCAL_DATE_TIME;
+            case "duration" -> ScalarType.DURATION;
+            default -> null;
         };
     }
 }
