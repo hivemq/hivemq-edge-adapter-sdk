@@ -15,6 +15,8 @@
  */
 package com.hivemq.adapter.sdk.api.schema;
 
+import static java.util.Objects.requireNonNull;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -61,6 +63,7 @@ abstract class AbstractSchemaBuilder<Self extends AbstractSchemaBuilder<Self>> {
      * A single primitive type.
      */
     public final @NotNull Self scalar(final @NotNull ScalarType type) {
+        requireNonNull(type, "type");
         checkNoDoubleStructure();
         struct.kind = SchemaStructure.Kind.SCALAR;
         struct.scalarType = type;
@@ -73,6 +76,7 @@ abstract class AbstractSchemaBuilder<Self extends AbstractSchemaBuilder<Self>> {
      * this — the schema carries its own annotations.
      */
     public final @NotNull Self schema(final @NotNull Schema schema) {
+        requireNonNull(schema, "schema");
         checkNoDoubleStructure();
         struct.kind = SchemaStructure.Kind.SCHEMA;
         struct.prebuiltSchema = schema;
@@ -178,6 +182,7 @@ abstract class AbstractSchemaBuilder<Self extends AbstractSchemaBuilder<Self>> {
      * Set a short human-readable label.
      */
     public final @NotNull Self title(final @NotNull String title) {
+        requireNonNull(title, "title");
         ann.title = title;
         return self();
     }
@@ -186,6 +191,7 @@ abstract class AbstractSchemaBuilder<Self extends AbstractSchemaBuilder<Self>> {
      * Set a longer human-readable explanation.
      */
     public final @NotNull Self description(final @NotNull String description) {
+        requireNonNull(description, "description");
         ann.description = description;
         return self();
     }

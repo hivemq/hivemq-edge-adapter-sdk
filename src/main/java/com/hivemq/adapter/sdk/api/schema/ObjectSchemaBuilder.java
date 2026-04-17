@@ -15,6 +15,8 @@
  */
 package com.hivemq.adapter.sdk.api.schema;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -46,6 +48,7 @@ public final class ObjectSchemaBuilder<P> {
      * Start a property builder for the given key.
      */
     public @NotNull PropertySchemaBuilder<P> property(final @NotNull String key) {
+        requireNonNull(key, "key");
         final var prop = new PropertySchemaBuilder<>(this, key);
         properties.put(key, prop);
         return prop;

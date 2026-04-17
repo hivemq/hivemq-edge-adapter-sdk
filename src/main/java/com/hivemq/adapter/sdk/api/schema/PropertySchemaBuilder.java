@@ -15,6 +15,8 @@
  */
 package com.hivemq.adapter.sdk.api.schema;
 
+import static java.util.Objects.requireNonNull;
+
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -72,6 +74,7 @@ public final class PropertySchemaBuilder<P> extends AbstractSchemaBuilder<Proper
      * Shorthand for {@code endProperty().property(key)}.
      */
     public @NotNull PropertySchemaBuilder<P> property(final @NotNull String key) {
+        requireNonNull(key, "key");
         return endProperty().property(key);
     }
 
