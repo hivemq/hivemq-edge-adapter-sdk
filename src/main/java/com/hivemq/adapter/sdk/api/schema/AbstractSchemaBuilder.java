@@ -15,6 +15,7 @@
  */
 package com.hivemq.adapter.sdk.api.schema;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -47,7 +48,19 @@ abstract class AbstractSchemaBuilder<Self extends AbstractSchemaBuilder<Self>> {
 
     // ── Structure-defining calls ─────────────────────────────────────────────
 
-    final Self doScalar(final ScalarType type) {
+    /**
+     * No type restriction; any value is valid.
+     */
+    public final @NotNull Self any() {
+        checkNoDoubleStructure();
+        struct.kind = SchemaStructure.Kind.ANY;
+        return self();
+    }
+
+    /**
+     * A single primitive type.
+     */
+    public final @NotNull Self scalar(final @NotNull ScalarType type) {
         checkNoDoubleStructure();
         struct.kind = SchemaStructure.Kind.SCALAR;
         struct.scalarType = type;
@@ -55,13 +68,11 @@ abstract class AbstractSchemaBuilder<Self extends AbstractSchemaBuilder<Self>> {
         return self();
     }
 
-    final Self doAny() {
-        checkNoDoubleStructure();
-        struct.kind = SchemaStructure.Kind.ANY;
-        return self();
-    }
-
-    final Self doSchema(final Schema schema) {
+    /**
+     * Use an already-complete {@link Schema} as-is. Annotation methods must not be called after
+     * this — the schema carries its own annotations.
+     */
+    public final @NotNull Self schema(final @NotNull Schema schema) {
         checkNoDoubleStructure();
         struct.kind = SchemaStructure.Kind.SCHEMA;
         struct.prebuiltSchema = schema;
@@ -69,46 +80,63 @@ abstract class AbstractSchemaBuilder<Self extends AbstractSchemaBuilder<Self>> {
     }
 
     /**
-     * Internal helper for {@code startObject()}. Creates an {@link ObjectSchemaBuilder}
-     * parameterised on the parent type {@code I} so that {@code endObject()} returns
-     * the parent type the caller expects.
-     *
-     * @param parent the parent builder
-     * @param <I>    the parent builder type
+     * Begin a structured object with named properties. Returns an {@link ObjectSchemaBuilder}
+     * whose {@link ObjectSchemaBuilder#endObject()} returns back to this builder.
      */
-    final <I> ObjectSchemaBuilder<I> doStartObject(final I parent) {
+    public final @NotNull ObjectSchemaBuilder<Self> startObject() {
         checkNoDoubleStructure();
         struct.kind = SchemaStructure.Kind.OBJECT;
-        final var ob = new ObjectSchemaBuilder<>(parent);
+        final var ob = new ObjectSchemaBuilder<>(self());
         struct.objectBuilder = ob;
         return ob;
     }
 
     /**
-     * Internal helper for {@code startArray()}. Returns the {@link ItemSchemaBuilder}
-     * parameterised on the parent type {@code I}.
-     *
-     * @param parent the parent builder
-     * @param <I>    the parent builder type
+     * Begin an ordered array. Returns an {@link ItemSchemaBuilder} so the element schema can be
+     * defined immediately.
      */
-    final <I> ItemSchemaBuilder<I> doStartArray(final I parent) {
+    public final @NotNull ItemSchemaBuilder<Self> startArray() {
         checkNoDoubleStructure();
         struct.kind = SchemaStructure.Kind.ARRAY;
-        final var ab = new ArraySchemaBuilder<>(parent);
+        final var ab = new ArraySchemaBuilder<>(self());
         struct.arrayBuilder = ab;
         return ab.items;
     }
 
     // ── Nullable flag ────────────────────────────────────────────────────────
 
-    final Self doNullable(final boolean nullable) {
+    /**
+     * Mark this schema as nullable. Equivalent to {@code nullable(true)}.
+     */
+    public final @NotNull Self nullable() {
+        return nullable(true);
+    }
+
+    /**
+     * Set whether {@code null} is a valid value. Default is {@code false}.
+     */
+    public final @NotNull Self nullable(final boolean nullable) {
         struct.nullable = nullable;
         return self();
     }
 
     // ── Range constraints ────────────────────────────────────────────────────
 
-    final Self doMinimum(final Number minimum) {
+    /**
+     * Set the inclusive lower bound for numeric scalar types.
+     */
+    public final @NotNull Self minimum(final long minimum) {
+        return minimum((Number) minimum);
+    }
+
+    /**
+     * Set the inclusive lower bound for floating-point scalar types.
+     */
+    public final @NotNull Self minimum(final double minimum) {
+        return minimum((Number) minimum);
+    }
+
+    final Self minimum(final Number minimum) {
         if (struct.kind != SchemaStructure.Kind.SCALAR) {
             throw new IllegalStateException(name + ": minimum() requires scalar()");
         }
@@ -119,7 +147,21 @@ abstract class AbstractSchemaBuilder<Self extends AbstractSchemaBuilder<Self>> {
         return self();
     }
 
-    final Self doMaximum(final Number maximum) {
+    /**
+     * Set the inclusive upper bound for numeric scalar types.
+     */
+    public final @NotNull Self maximum(final long maximum) {
+        return maximum((Number) maximum);
+    }
+
+    /**
+     * Set the inclusive upper bound for floating-point scalar types.
+     */
+    public final @NotNull Self maximum(final double maximum) {
+        return maximum((Number) maximum);
+    }
+
+    final Self maximum(final Number maximum) {
         if (struct.kind != SchemaStructure.Kind.SCALAR) {
             throw new IllegalStateException(name + ": maximum() requires scalar()");
         }
@@ -132,22 +174,48 @@ abstract class AbstractSchemaBuilder<Self extends AbstractSchemaBuilder<Self>> {
 
     // ── Annotations ──────────────────────────────────────────────────────────
 
-    final Self doTitle(final String title) {
+    /**
+     * Set a short human-readable label.
+     */
+    public final @NotNull Self title(final @NotNull String title) {
         ann.title = title;
         return self();
     }
 
-    final Self doDescription(final String description) {
+    /**
+     * Set a longer human-readable explanation.
+     */
+    public final @NotNull Self description(final @NotNull String description) {
         ann.description = description;
         return self();
     }
 
-    final Self doReadable(final boolean readable) {
+    /**
+     * Mark this schema as readable. Equivalent to {@code readable(true)}.
+     */
+    public final @NotNull Self readable() {
+        return readable(true);
+    }
+
+    /**
+     * Set whether clients may read the value. Default is {@code true}.
+     */
+    public final @NotNull Self readable(final boolean readable) {
         ann.readable = readable;
         return self();
     }
 
-    final Self doWritable(final boolean writable) {
+    /**
+     * Mark this schema as writable. Equivalent to {@code writable(true)}.
+     */
+    public final @NotNull Self writable() {
+        return writable(true);
+    }
+
+    /**
+     * Set whether clients may write the value. Default is {@code false}.
+     */
+    public final @NotNull Self writable(final boolean writable) {
         ann.writable = writable;
         return self();
     }
@@ -160,7 +228,7 @@ abstract class AbstractSchemaBuilder<Self extends AbstractSchemaBuilder<Self>> {
             return cached;
         }
         // The fields accessed in each case arm are guaranteed to be set by the corresponding
-        // structure-defining method (doScalar, doStartObject, doStartArray, doSchema).
+        // structure-defining method (scalar, startObject, startArray, schema).
         cached = switch (struct.kind) {
             case ANY, ANY_DEFAULT ->
                 new AnySchema(ann.title, ann.description, struct.nullable, ann.readable, ann.writable);
