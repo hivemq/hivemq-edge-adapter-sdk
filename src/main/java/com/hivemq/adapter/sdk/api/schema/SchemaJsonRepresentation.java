@@ -57,8 +57,8 @@ public final class SchemaJsonRepresentation {
 
 
 
-        if (dps.metaData() != null) {
-            builder.property("metadata").schema(dps.metaData()).readable().writable(false);
+        if (dps.metadataSchema() != null) {
+            builder.property("metadata").schema(dps.metadataSchema()).readable().writable(false);
         }
         if (dps.context() != null) {
             builder.property("context").schema(dps.context()).readable().writable(false);
