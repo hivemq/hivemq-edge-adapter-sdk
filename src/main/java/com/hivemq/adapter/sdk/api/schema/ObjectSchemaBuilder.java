@@ -67,10 +67,10 @@ public final class ObjectSchemaBuilder<P> {
     }
 
     ObjectSchema buildSchema(final SchemaAnnotations ann, final boolean nullable) {
-        final var built = new LinkedHashMap<String, Schema>();
-        properties.forEach((key, prop) -> built.put(key, prop.buildSchema()));
+        final var objectSchemaMap = new LinkedHashMap<String, Schema>();
+        properties.forEach((key, prop) -> objectSchemaMap.put(key, prop.buildSchema()));
         return new ObjectSchema(
-                Collections.unmodifiableMap(built),
+                Collections.unmodifiableMap(objectSchemaMap),
                 List.copyOf(required),
                 additionalProperties,
                 ann.title,
