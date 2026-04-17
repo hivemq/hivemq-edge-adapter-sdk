@@ -62,5 +62,5 @@ public interface TagSchemaCreationOutput {
      */
     void tagNotFound(@NotNull String errorMessage);
 
-    record DataPointSchema(@NotNull Schema valueSchema, @Nullable Schema metaData, @Nullable Schema context){};
+    record DataPointSchema(@NotNull Schema valueSchema, @Nullable Schema metadataSchema, @Nullable Schema context){};
 }
