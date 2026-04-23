@@ -18,6 +18,7 @@ package com.hivemq.adapter.sdk.api;
 
 import com.hivemq.adapter.sdk.api.config.ProtocolSpecificAdapterConfig;
 import com.hivemq.adapter.sdk.api.tag.Tag;
+import com.hivemq.adapter.sdk.api.tag.TagDefinition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -95,14 +96,27 @@ public interface ProtocolAdapterInformation {
 
 
     /**
-     * A bean class that will be reflected upon by the framework to determine the structural requirements of the
-     * tag configuration associated with an adapter instance. It is expected that the bean class supplied, be marked up
-     * with Jackson annotation.
+     * Old-style adapters override this to return their XxxTag class.
+     * New-style adapters leave this as null and override {@link #tagDefinitionClass()} instead.
      *
-     * @return The class that represents (and will encapsulate) the configuration requirements of the adapter's tags
+     * @return The Tag class for old-style adapters, or null for new-style adapters
      */
-    @NotNull
-    Class<? extends Tag> tagConfigurationClass();
+    @Nullable
+    default Class<? extends Tag> tagConfigurationClass() {
+        return null;
+    }
+
+    /**
+     * New-style adapters override this to return their TagDefinition class.
+     * Edge uses this to construct a GenericTag rather than deserialising an adapter-specific Tag class.
+     * Old-style adapters leave this as null and continue to use {@link #tagConfigurationClass()}.
+     *
+     * @return the TagDefinition class for new-style adapters, or null for old-style adapters
+     */
+    @Nullable
+    default Class<? extends TagDefinition> tagDefinitionClass() {
+        return null;
+    }
 
     /**
      * A bean class that will be reflected upon by the framework to determine the structural requirements of the
