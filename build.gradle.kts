@@ -75,6 +75,10 @@ java {
     withSourcesJar()
 }
 
+tasks.withType<JavaCompile>().configureEach {
+    options.release.set(21)
+}
+
 tasks.withType<Jar>().configureEach {
     manifest.attributes(
         "Implementation-Title" to project.name,
