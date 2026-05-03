@@ -1,5 +1,5 @@
 [versions]
-jackson= "2.14.2"
+jackson= "2.21.3"
 jetbrains-annotations = "24.1.0"
 swagger-annotations = "2.2.48"
 victools="4.38.0"
