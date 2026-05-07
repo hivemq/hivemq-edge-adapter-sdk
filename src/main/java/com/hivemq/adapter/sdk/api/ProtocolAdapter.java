@@ -15,9 +15,9 @@
  */
 package com.hivemq.adapter.sdk.api;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.hivemq.adapter.sdk.api.discovery.ProtocolAdapterDiscoveryInput;
 import com.hivemq.adapter.sdk.api.discovery.ProtocolAdapterDiscoveryOutput;
+import com.hivemq.adapter.sdk.api.exceptions.ProtocolAdapterException;
 import com.hivemq.adapter.sdk.api.model.ProtocolAdapterStartInput;
 import com.hivemq.adapter.sdk.api.model.ProtocolAdapterStartOutput;
 import com.hivemq.adapter.sdk.api.model.ProtocolAdapterStopInput;
@@ -25,8 +25,6 @@ import com.hivemq.adapter.sdk.api.model.ProtocolAdapterStopOutput;
 import com.hivemq.adapter.sdk.api.schema.TagSchemaCreationInput;
 import com.hivemq.adapter.sdk.api.schema.TagSchemaCreationOutput;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.concurrent.CompletableFuture;
 
 
 /**
@@ -49,25 +47,80 @@ public interface ProtocolAdapter {
     @NotNull String getId();
 
     /**
-     * Start the adapter, establishing a connection to any internal or external device using the configuration supplied
-     * during instantiation.
+     * Start the adapter for the given direction. Called by the wrapper for each direction
+     * (northbound, and southbound if supported). The default delegates to the 2-arg
+     * {@link #start(ProtocolAdapterStartInput, ProtocolAdapterStartOutput)} overload, which is
+     * sufficient for northbound-only adapters. Adapters that need direction-specific behavior
+     * (e.g. OPC UA) should override this method.
      *
-     * @param input  - the state associated with runtime. Allows the adapter to bind to required services in a decoupled
-     *               manner
-     * @param output - the output to signal back to HiveMQ Edge the status of the start attempt.
+     * @param direction the connection direction (northbound or southbound)
+     * @param input     the state associated with runtime. Allows the adapter to bind to required services.
+     * @param output    the output to signal back to HiveMQ Edge the status of the start attempt.
      */
-    void start(
-            @NotNull ProtocolAdapterStartInput input, @NotNull ProtocolAdapterStartOutput output);
+    default void start(
+            final @NotNull ProtocolAdapterConnectionDirection direction,
+            final @NotNull ProtocolAdapterStartInput input,
+            final @NotNull ProtocolAdapterStartOutput output) {
+        start(input, output);
+    }
 
     /**
-     * Stop the adapter. Stopping the adapter must release any network interface connections or local resources
-     * associated with the connection to the device. State relating to the connection however will be retained allowing
-     * the start method to restart the adapter.
+     * Start the adapter, establishing a connection to any internal or external device using the
+     * configuration supplied during instantiation. Most adapters (northbound-only) override this
+     * method. The default signals success.
      *
-     * @param input  the input for the stop (currently empty)
+     * @param input  the state associated with runtime. Allows the adapter to bind to required services.
+     * @param output the output to signal back to HiveMQ Edge the status of the start attempt.
+     */
+    @Deprecated
+    default void start(
+            final @NotNull ProtocolAdapterStartInput input,
+            final @NotNull ProtocolAdapterStartOutput output) {
+        final String errorMessage ="Start not implemented for this adapter";
+        output.failStart(new RuntimeException(errorMessage), errorMessage);
+    }
+
+    /**
+     * Stop the adapter for the given direction. Called by the wrapper for each direction
+     * (northbound, and southbound if supported). The default delegates to the 2-arg
+     * {@link #stop(ProtocolAdapterStopInput, ProtocolAdapterStopOutput)} overload, which is
+     * sufficient for northbound-only adapters. Adapters that need direction-specific behavior
+     * (e.g. OPC UA) should override this method.
+     *
+     * @param direction the connection direction (northbound or southbound)
+     * @param input     the input for the stop
+     * @param output    the output to signal back to HiveMQ Edge the status of the stop attempt.
+     */
+    default void stop(
+            final @NotNull ProtocolAdapterConnectionDirection direction,
+            final @NotNull ProtocolAdapterStopInput input,
+            final @NotNull ProtocolAdapterStopOutput output) {
+        stop(input, output);
+    }
+
+    /**
+     * Stop the adapter. Stopping must release any network interface connections or local resources
+     * associated with the connection to the device. Most adapters (northbound-only) override this
+     * method. The default signals success.
+     *
+     * @param input  the input for the stop
      * @param output the output to signal back to HiveMQ Edge the status of the stop attempt.
      */
-     void stop(@NotNull ProtocolAdapterStopInput input, @NotNull ProtocolAdapterStopOutput output);
+    @Deprecated
+    default void stop(
+            final @NotNull ProtocolAdapterStopInput input,
+            final @NotNull ProtocolAdapterStopOutput output) {
+        final String errorMessage ="Stop not implemented for this adapter";
+        output.failStop(new RuntimeException(errorMessage), errorMessage);
+    }
+
+    /**
+     * Validate configuration before connecting. Called during the Precheck phase.
+     *
+     * @throws ProtocolAdapterException if configuration is invalid
+     */
+    default void precheck() throws ProtocolAdapterException {
+    }
 
     /**
      * This method needs to be implemented in case the adapter provides the possibility to discover values at the PLC.
@@ -89,7 +142,6 @@ public interface ProtocolAdapter {
      * Called by the framework when the instance will be discarded
      */
     default void destroy() {
-
     }
 
 
@@ -103,5 +155,4 @@ public interface ProtocolAdapter {
     default void createTagSchema(final @NotNull TagSchemaCreationInput input, final @NotNull TagSchemaCreationOutput output){
         output.notSupported();
     }
-
 }

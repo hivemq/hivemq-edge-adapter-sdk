@@ -21,22 +21,21 @@ import com.hivemq.adapter.sdk.api.ProtocolAdapterInformation;
 import com.hivemq.adapter.sdk.api.config.ProtocolSpecificAdapterConfig;
 import com.hivemq.adapter.sdk.api.model.ProtocolAdapterInput;
 import com.hivemq.adapter.sdk.api.tag.Tag;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The factory is responsible for constructing and managing the lifecycle of the various aspects of the adapter
- * sub-systems. We bind this to the configuration types to we can provide tightly coupled implementation instances
+ * sub-systems. We bind this to the configuration types so we can provide tightly coupled implementation instances
  * responsible for adapter management.
  */
 public interface ProtocolAdapterFactory<E extends ProtocolSpecificAdapterConfig> {
 
     /**
-     * Returns Metadata related to the protocol adapter instance, including descriptions, iconography, categorisation et
-     * al
+     * Returns metadata related to the protocol adapter instance, including descriptions, iconography, categorisation,
+     * etc.
      *
      * @return the instance that provides the adapter information
      */
@@ -44,10 +43,10 @@ public interface ProtocolAdapterFactory<E extends ProtocolSpecificAdapterConfig>
     ProtocolAdapterInformation getInformation();
 
     /**
-     * This method is called by HiveMQ Edge to create an instance of the adapter
+     * This method is called by HiveMQ Edge to create an instance of the adapter.
      *
      * @param adapterInformation the information on the adapter
-     * @param input              wrapper object for various information for the adapter.
+     * @param input              wrapper object for various information for the adapter
      * @return the protocol adapter instance
      */
     @NotNull
@@ -84,7 +83,7 @@ public interface ProtocolAdapterFactory<E extends ProtocolSpecificAdapterConfig>
 
     /**
      * @param objectMapper the object mapper that converts the map to the actual tag
-     * @param tag      a map that is a tag
+     * @param tag          a map that is a tag
      * @return a parsed tag object for this adapter
      */
     default @NotNull Tag convertTagDefinitionObject(
