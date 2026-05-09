@@ -31,11 +31,11 @@ dependencies {
     implementation(libs.jetbrains.annotations)
 
     // Commons IO (needed by adapters that use IOUtils to load UI schemas)
-    implementation("commons-io:commons-io:2.18.0")
+    implementation("commons-io:commons-io:2.22.0")
 
     // Logging
     implementation("org.slf4j:slf4j-api:2.0.17")
-    runtimeOnly("ch.qos.logback:logback-classic:1.4.14")
+    runtimeOnly("ch.qos.logback:logback-classic:1.5.32")
 }
 
 java {
