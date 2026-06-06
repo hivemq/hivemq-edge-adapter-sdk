@@ -15,7 +15,7 @@
     "qa:check": "npm run cypress:ci && npm run qa:merge && npm run qa:report"
   },
   "dependencies": {
-    "@chakra-ui/react": "2.10.9",
+    "@chakra-ui/react": "2.10.10",
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.1",
     "@rjsf/chakra-ui": "5.24.13",
@@ -28,7 +28,7 @@
     "react-router-dom": "^7.12.0"
   },
   "devDependencies": {
-    "@types/react": "18.3.29",
+    "@types/react": "18.3.31",
     "@types/react-dom": "18.3.7",
     "@vitejs/plugin-react": "4.7.0",
     "cypress": "13.17.0",
