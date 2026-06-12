@@ -63,6 +63,13 @@ dependencies {
     compileOnly(libs.jackson.annotations)
     compileOnly(libs.jackson.databind)
     compileOnly(libs.swagger.annotations)
+
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.assertj)
+    testImplementation(libs.awaitility)
+    testImplementation(libs.jackson.databind)
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 /* ******************** java ******************** */
@@ -77,6 +84,10 @@ java {
 
 tasks.withType<JavaCompile>().configureEach {
     options.release.set(21)
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 tasks.withType<Jar>().configureEach {
