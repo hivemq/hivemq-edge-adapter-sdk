@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.adapter.sdk.api2.actor;
+package com.hivemq.adapter.sdk.api2.messaging;
 
 import org.junit.jupiter.api.Test;
 
@@ -27,8 +27,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * The mailbox is a QUEUE, not a consumer-invoker: it exposes only {@code tell} / {@code poll} /
  * {@code awaitNextMessage} / {@code isEmpty} / {@code size} and no method that accepts a consumer, handler, or
- * actor. The {@link Dispatcher} drains, never the mailbox. (Reflection assertion, guarding against the
- * consumer-invoker anti-pattern sneaking back in.)
+ * message handler. The {@link MessageDispatcher} drains, never the mailbox. (Reflection assertion, guarding
+ * against the consumer-invoker anti-pattern sneaking back in.)
  */
 class MailboxContractTest {
 
@@ -51,9 +51,9 @@ class MailboxContractTest {
                         .as("method %s must not accept a functional callback", method.getName())
                         .isNotEqualTo("java.util.function");
                 assertThat(parameterType)
-                        .as("method %s must not accept an Actor — the Dispatcher drains, never the mailbox",
-                                method.getName())
-                        .isNotEqualTo(Actor.class);
+                        .as("method %s must not accept a MessageHandler — the MessageDispatcher drains, never " +
+                                "the mailbox", method.getName())
+                        .isNotEqualTo(MessageHandler.class);
             }
         }
     }

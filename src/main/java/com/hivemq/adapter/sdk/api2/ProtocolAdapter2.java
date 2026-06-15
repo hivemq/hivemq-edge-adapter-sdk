@@ -17,13 +17,14 @@ package com.hivemq.adapter.sdk.api2;
 
 import com.hivemq.adapter.sdk.api2.command.BrowseFilter;
 import com.hivemq.adapter.sdk.api2.command.WriteEntry;
+import com.hivemq.adapter.sdk.api2.model.ProtocolAdapterOutput2;
 import com.hivemq.adapter.sdk.api2.node.Node;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * The protocol adapter command interface — <b>pure mechanism</b>. The adapter only executes commands and
- * reports events through {@link ProtocolAdapterCallbacks}; it has ZERO retry, backoff, reconnect, or
+ * reports events through {@link ProtocolAdapterOutput2}; it has ZERO retry, backoff, reconnect, or
  * scheduling logic — the controlling framework owns all policy.
  * <p>
  * Every command is asynchronous and acknowledged by a callback event. Batch variants are always what the
@@ -34,7 +35,7 @@ import org.jetbrains.annotations.NotNull;
  * watchdogs bound the damage. A long {@code browse} walk, however, starves polls for its whole duration on a
  * single-threaded implementation — adapters with large address spaces should implement browse asynchronously
  * inside the adapter (issue the walk on library threads, report
- * {@link ProtocolAdapterCallbacks#browseResult(List)} via the thread-safe callbacks).
+ * {@link ProtocolAdapterOutput2#browseResult(List)} via the thread-safe callbacks).
  */
 public interface ProtocolAdapter2 {
 
@@ -45,34 +46,34 @@ public interface ProtocolAdapter2 {
 
     /**
      * Start the adapter (allocate resources; no connection yet). Acknowledged by
-     * {@link ProtocolAdapterCallbacks#started()} or
-     * {@link ProtocolAdapterCallbacks#error(com.hivemq.adapter.sdk.api2.command.ErrorScope, String)} with
+     * {@link ProtocolAdapterOutput2#started()} or
+     * {@link ProtocolAdapterOutput2#error(com.hivemq.adapter.sdk.api2.command.ErrorScope, String)} with
      * scope {@code ADAPTER}.
      */
     void start();
 
     /**
-     * Stop the adapter (release resources). Acknowledged by {@link ProtocolAdapterCallbacks#stopped()} or
-     * {@link ProtocolAdapterCallbacks#error(com.hivemq.adapter.sdk.api2.command.ErrorScope, String)} with
+     * Stop the adapter (release resources). Acknowledged by {@link ProtocolAdapterOutput2#stopped()} or
+     * {@link ProtocolAdapterOutput2#error(com.hivemq.adapter.sdk.api2.command.ErrorScope, String)} with
      * scope {@code ADAPTER}.
      */
     void stop();
 
     /**
-     * Connect to the device. Acknowledged by {@link ProtocolAdapterCallbacks#connected()},
-     * {@link ProtocolAdapterCallbacks#error(com.hivemq.adapter.sdk.api2.command.ErrorScope, String)} with
-     * scope {@code CONNECTION}, or {@link ProtocolAdapterCallbacks#disconnected()}.
+     * Connect to the device. Acknowledged by {@link ProtocolAdapterOutput2#connected()},
+     * {@link ProtocolAdapterOutput2#error(com.hivemq.adapter.sdk.api2.command.ErrorScope, String)} with
+     * scope {@code CONNECTION}, or {@link ProtocolAdapterOutput2#disconnected()}.
      */
     void connect();
 
     /**
-     * Disconnect from the device. Acknowledged by {@link ProtocolAdapterCallbacks#disconnected()}.
+     * Disconnect from the device. Acknowledged by {@link ProtocolAdapterOutput2#disconnected()}.
      */
     void disconnect();
 
     /**
      * Verify the given nodes against the connected device. Each node is acknowledged by one
-     * {@link ProtocolAdapterCallbacks#verifyResult(Node, com.hivemq.adapter.sdk.api2.command.VerifyOutcome)}.
+     * {@link ProtocolAdapterOutput2#verifyResult(Node, com.hivemq.adapter.sdk.api2.command.VerifyOutcome)}.
      *
      * @param nodes the nodes to verify.
      */
@@ -80,8 +81,8 @@ public interface ProtocolAdapter2 {
 
     /**
      * Poll the current values of the given nodes. Each node is answered by one
-     * {@link ProtocolAdapterCallbacks#dataPoint(Node, com.hivemq.adapter.sdk.api.data.DataPoint)} or one
-     * {@link ProtocolAdapterCallbacks#nodeError(Node, String, boolean)}.
+     * {@link ProtocolAdapterOutput2#dataPoint(Node, com.hivemq.adapter.sdk.api.data.DataPoint)} or one
+     * {@link ProtocolAdapterOutput2#nodeError(Node, String, boolean)}.
      *
      * @param nodes the nodes to poll.
      */
@@ -89,8 +90,8 @@ public interface ProtocolAdapter2 {
 
     /**
      * Subscribe to value changes of the given nodes. Pushed values arrive as
-     * {@link ProtocolAdapterCallbacks#dataPoint(Node, com.hivemq.adapter.sdk.api.data.DataPoint)}; a failed or
-     * lost subscription is reported as {@link ProtocolAdapterCallbacks#nodeError(Node, String, boolean)}.
+     * {@link ProtocolAdapterOutput2#dataPoint(Node, com.hivemq.adapter.sdk.api.data.DataPoint)}; a failed or
+     * lost subscription is reported as {@link ProtocolAdapterOutput2#nodeError(Node, String, boolean)}.
      *
      * @param nodes the nodes to subscribe to.
      */
@@ -105,7 +106,7 @@ public interface ProtocolAdapter2 {
 
     /**
      * Write the given values southbound. Each entry is acknowledged by one
-     * {@link ProtocolAdapterCallbacks#writeResult(Node, boolean, String)}.
+     * {@link ProtocolAdapterOutput2#writeResult(Node, boolean, String)}.
      *
      * @param entries the node/value pairs to write.
      */
@@ -113,7 +114,7 @@ public interface ProtocolAdapter2 {
 
     /**
      * Enumerate the device's address space below the filter node. Answered by one
-     * {@link ProtocolAdapterCallbacks#browseResult(List)}.
+     * {@link ProtocolAdapterOutput2#browseResult(List)}.
      *
      * @param filter the filter selecting where to browse.
      */

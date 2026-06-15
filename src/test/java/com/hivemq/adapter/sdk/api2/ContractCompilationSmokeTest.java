@@ -15,11 +15,11 @@
  */
 package com.hivemq.adapter.sdk.api2;
 
-import com.hivemq.adapter.sdk.api2.actor.Actor;
-import com.hivemq.adapter.sdk.api2.actor.Message;
-import com.hivemq.adapter.sdk.api2.actor.MessagePriority;
 import com.hivemq.adapter.sdk.api2.command.BrowseFilter;
 import com.hivemq.adapter.sdk.api2.command.WriteEntry;
+import com.hivemq.adapter.sdk.api2.messaging.MailboxMessage;
+import com.hivemq.adapter.sdk.api2.messaging.MailboxMessagePriority;
+import com.hivemq.adapter.sdk.api2.messaging.MessageHandler;
 import com.hivemq.adapter.sdk.api2.node.Node;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
@@ -30,8 +30,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
 /**
- * Compile-only contract smoke: a no-op {@link ProtocolAdapter2} and a no-op {@link Actor} compile against the
- * SDK alone — the executable proof that the author-facing contracts are self-contained.
+ * Compile-only contract smoke: a no-op {@link ProtocolAdapter2} and a no-op {@link MessageHandler} compile
+ * against the SDK alone — the executable proof that the author-facing contracts are self-contained.
  */
 class ContractCompilationSmokeTest {
 
@@ -82,10 +82,10 @@ class ContractCompilationSmokeTest {
         }
     }
 
-    private record TestMessage() implements Message {
+    private record TestMessage() implements MailboxMessage {
     }
 
-    private static final class NoOperationActor implements Actor<TestMessage> {
+    private static final class NoOperationMessageHandler implements MessageHandler<TestMessage> {
         @Override
         public void receive(final @NotNull TestMessage message) {
         }
@@ -105,10 +105,10 @@ class ContractCompilationSmokeTest {
     }
 
     @Test
-    void noOperationActor_compilesAndReceivesTheDefaultBandMessage() {
-        final NoOperationActor actor = new NoOperationActor();
+    void noOperationMessageHandler_compilesAndReceivesTheDefaultBandMessage() {
+        final NoOperationMessageHandler handler = new NoOperationMessageHandler();
         final TestMessage message = new TestMessage();
-        assertThat(message.priority()).isEqualTo(MessagePriority.EVENT);
-        assertThatCode(() -> actor.receive(message)).doesNotThrowAnyException();
+        assertThat(message.priority()).isEqualTo(MailboxMessagePriority.EVENT);
+        assertThatCode(() -> handler.receive(message)).doesNotThrowAnyException();
     }
 }

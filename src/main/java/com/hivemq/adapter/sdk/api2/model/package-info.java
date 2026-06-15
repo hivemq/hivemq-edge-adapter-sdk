@@ -13,14 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.adapter.sdk.api2.actor;
-
 /**
- * The handle returned by {@link Dispatcher#attach(Mailbox, Actor)}. Closing it stops the message pumping for
- * the attached actor; an in-flight {@link Actor#receive(Message)} completes first.
+ * SDK v2 model types passed into adapter construction.
+ * {@link com.hivemq.adapter.sdk.api2.model.ProtocolAdapterInput2} carries everything one adapter instance is
+ * built from: its identifier, typed configuration, Node/Tag pairs, and framework services. (Mirrors v1's
+ * {@code com.hivemq.adapter.sdk.api.model}.)
  */
-public interface ActorHandle extends AutoCloseable {
-
-    @Override
-    void close();
-}
+package com.hivemq.adapter.sdk.api2.model;

@@ -17,14 +17,18 @@ package com.hivemq.adapter.sdk.api2;
 
 import com.hivemq.adapter.sdk.api.ProtocolAdapterCategory;
 import com.hivemq.adapter.sdk.api.ProtocolAdapterTag;
+import com.hivemq.adapter.sdk.api.config.ProtocolSpecificAdapterConfig;
 import com.hivemq.adapter.sdk.api.data.DataPoint;
 import com.hivemq.adapter.sdk.api.discovery.NodeType;
 import com.hivemq.adapter.sdk.api.factories.DataPointFactory;
 import com.hivemq.adapter.sdk.api.schema.Schema;
 import com.hivemq.adapter.sdk.api2.command.BrowseResultEntry;
 import com.hivemq.adapter.sdk.api2.command.WriteEntry;
-import com.hivemq.adapter.sdk.api2.factory.ProtocolAdapterServices2;
+import com.hivemq.adapter.sdk.api2.factories.ProtocolAdapterFactory2;
+import com.hivemq.adapter.sdk.api2.model.ProtocolAdapterInput2;
 import com.hivemq.adapter.sdk.api2.node.Tag2;
+import com.hivemq.adapter.sdk.api2.schema.AdapterConfigSchema;
+import com.hivemq.adapter.sdk.api2.services.ProtocolAdapterService;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -59,7 +63,8 @@ class ReuseBoundaryTest {
             "ScalarType",
             "NodeType",
             "ProtocolAdapterCategory",
-            "ProtocolAdapterTag");
+            "ProtocolAdapterTag",
+            "ProtocolSpecificAdapterConfig");
 
     /**
      * Architectural shorthands that must never appear in code identifiers (naming rule N2).
@@ -72,8 +77,12 @@ class ReuseBoundaryTest {
         assertThat(Tag2.class.getMethod("schema").getReturnType()).isEqualTo(Schema.class);
         assertThat(WriteEntry.class.getMethod("value").getReturnType()).isEqualTo(DataPoint.class);
         assertThat(BrowseResultEntry.class.getMethod("type").getReturnType()).isEqualTo(NodeType.class);
-        assertThat(ProtocolAdapterServices2.class.getMethod("dataPointFactory").getReturnType())
+        assertThat(ProtocolAdapterService.class.getMethod("dataPointFactory").getReturnType())
                 .isEqualTo(DataPointFactory.class);
+        assertThat(ProtocolAdapterFactory2.class.getMethod("nodeDefinitionSchema").getReturnType())
+                .isEqualTo(Schema.class);
+        assertThat(ProtocolAdapterInput2.class.getMethod("adapterConfig").getReturnType())
+                .isEqualTo(ProtocolSpecificAdapterConfig.class);
         assertThat(ProtocolAdapterInformation2.class.getMethod("category").getReturnType())
                 .isEqualTo(ProtocolAdapterCategory.class);
 
@@ -83,6 +92,14 @@ class ReuseBoundaryTest {
         assertThat(parameterizedTagsReturnType.getRawType()).isEqualTo(List.class);
         assertThat(parameterizedTagsReturnType.getActualTypeArguments())
                 .containsExactly(ProtocolAdapterTag.class);
+    }
+
+    @Test
+    void adapterConfigSchema_isANewTypeNotTheReusedDataPointSchema() throws Exception {
+        // The reused v1 Schema is a data-point / node-value schema; adapter configuration has its own new type.
+        assertThat(ProtocolAdapterFactory2.class.getMethod("adapterConfigSchema").getReturnType())
+                .isEqualTo(AdapterConfigSchema.class)
+                .isNotEqualTo(Schema.class);
     }
 
     @Test

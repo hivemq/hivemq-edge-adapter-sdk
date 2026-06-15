@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.adapter.sdk.api2.actor;
+package com.hivemq.adapter.sdk.api2.messaging;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -26,22 +26,22 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Default multi-producer / single-consumer priority mailbox. It lives in the SDK so an adapter template needs
- * no framework dependency; the framework runtime reuses it for its own actors.
+ * no framework dependency; the framework runtime reuses it for its own message handlers.
  * <p>
- * Implementation: one unbounded FIFO queue per {@link MessagePriority} band behind one lock plus condition —
- * the lock gives a correct blocking take across bands and cross-thread memory visibility; the lock cost is
- * acceptable at the expected message rates. A lock-free per-band variant behind the same {@link Mailbox}
- * interface is a documented performance extension point.
+ * Implementation: one unbounded FIFO queue per {@link MailboxMessagePriority} band behind one lock plus
+ * condition — the lock gives a correct blocking take across bands and cross-thread memory visibility; the lock
+ * cost is acceptable at the expected message rates. A lock-free per-band variant behind the same
+ * {@link Mailbox} interface is a documented performance extension point.
  * <p>
- * Thread-safety follows the {@link Mailbox} contract: {@link #tell(Message)} from any thread; {@link #poll()},
- * {@link #awaitNextMessage(long)}, {@link #isEmpty()}, and {@link #size()} only from the owning dispatch
- * thread.
+ * Thread-safety follows the {@link Mailbox} contract: {@link #tell(MailboxMessage)} from any thread;
+ * {@link #poll()}, {@link #awaitNextMessage(long)}, {@link #isEmpty()}, and {@link #size()} only from the
+ * owning dispatch thread.
  *
  * @param <MessageType> the message type carried by this mailbox.
  */
-public final class DefaultMailbox<MessageType extends Message> implements Mailbox<MessageType> {
+public final class DefaultMailbox<MessageType extends MailboxMessage> implements Mailbox<MessageType> {
 
-    private static final @NotNull MessagePriority @NotNull [] PRIORITIES = MessagePriority.values();
+    private static final @NotNull MailboxMessagePriority @NotNull [] PRIORITIES = MailboxMessagePriority.values();
 
     private final @NotNull ReentrantLock lock = new ReentrantLock();
     private final @NotNull Condition notEmpty = lock.newCondition();

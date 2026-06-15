@@ -13,25 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.adapter.sdk.api2.factory;
+package com.hivemq.adapter.sdk.api2.messaging;
 
-import com.hivemq.adapter.sdk.api.factories.DataPointFactory;
-import com.hivemq.adapter.sdk.api2.actor.Dispatcher;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The services the framework provides to an adapter instance.
+ * Send-only, thread-safe handle — the "tell" capability. This is the ONLY capability producers hold: a
+ * producer cannot poll, cannot read handler state, and cannot reach the {@link MessageHandler}.
+ *
+ * @param <MessageType> the message type accepted by the underlying mailbox.
  */
-public interface ProtocolAdapterServices2 {
+public interface MailboxSender<MessageType extends MailboxMessage> {
 
     /**
-     * @return the reused v1 factory adapter code builds its values with.
+     * Enqueue one message. Thread-safe, non-blocking, fire-and-forget: callable from ANY thread.
+     *
+     * @param message the immutable message to enqueue; ownership transfers with the call.
      */
-    @NotNull DataPointFactory dataPointFactory();
-
-    /**
-     * @return the dispatcher an actor-based adapter attaches its mailbox to (single-threaded behavior). An
-     *         author who needs a different threading model supplies a different {@link Dispatcher}.
-     */
-    @NotNull Dispatcher dispatcher();
+    void tell(@NotNull MessageType message);
 }

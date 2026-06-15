@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.adapter.sdk.api2.factory;
+package com.hivemq.adapter.sdk.api2.factories;
 
 import com.hivemq.adapter.sdk.api.schema.Schema;
 import com.hivemq.adapter.sdk.api2.ProtocolAdapter2;
-import com.hivemq.adapter.sdk.api2.ProtocolAdapterCallbacks;
 import com.hivemq.adapter.sdk.api2.ProtocolAdapterInformation2;
+import com.hivemq.adapter.sdk.api2.model.ProtocolAdapterInput2;
+import com.hivemq.adapter.sdk.api2.model.ProtocolAdapterOutput2;
+import com.hivemq.adapter.sdk.api2.schema.AdapterConfigSchema;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -36,18 +38,20 @@ public interface ProtocolAdapterFactory2 {
      * Construct one adapter instance. Synchronous and cheap: no I/O, no connection — connecting is a separate,
      * framework-commanded step.
      *
-     * @param input     the instance configuration, nodes, and services.
-     * @param callbacks the tell-façade the new adapter reports its events through.
+     * @param input  the instance configuration, nodes, and services.
+     * @param output the tell-façade the new adapter reports its state and events through.
      * @return the new, not-yet-started adapter instance.
      */
     @NotNull ProtocolAdapter2 createAdapter(
             @NotNull ProtocolAdapterInput2 input,
-            @NotNull ProtocolAdapterCallbacks callbacks);
+            @NotNull ProtocolAdapterOutput2 output);
 
     /**
-     * @return the reused v1 {@link Schema} describing this adapter type's instance configuration.
+     * @return the {@link AdapterConfigSchema} describing this adapter type's instance configuration — a new v2
+     *         schema type, distinct from the reused v1 {@link Schema} (which describes data points and node
+     *         values, not adapter configuration).
      */
-    @NotNull Schema adapterConfigSchema();
+    @NotNull AdapterConfigSchema adapterConfigSchema();
 
     /**
      * @return the reused v1 {@link Schema} describing this adapter type's node definitions.

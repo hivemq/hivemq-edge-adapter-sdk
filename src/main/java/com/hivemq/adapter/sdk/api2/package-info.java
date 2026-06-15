@@ -17,22 +17,23 @@
  * SDK v2 — the contracts a protocol adapter author implements, with no dependency on Edge internals.
  * <p>
  * <b>Mechanism vs. policy.</b> A {@link com.hivemq.adapter.sdk.api2.ProtocolAdapter2} is <b>pure
- * mechanism</b>: it executes commands and reports events through
- * {@link com.hivemq.adapter.sdk.api2.ProtocolAdapterCallbacks}. It has ZERO retry, backoff, reconnect, or
+ * mechanism</b>: it executes commands and reports state and events through its
+ * {@link com.hivemq.adapter.sdk.api2.model.ProtocolAdapterOutput2}. It has ZERO retry, backoff, reconnect, or
  * scheduling logic — the controlling framework owns all policy. Every command is asynchronous and acknowledged
- * by a callback event.
+ * by a reported event.
  * <p>
- * <b>The actor-model contract.</b> The callbacks interface is a tell-façade: each call is one thread-safe
- * <i>tell</i> onto the controlling actor's mailbox — a multi-producer / single-consumer priority queue
- * (see {@link com.hivemq.adapter.sdk.api2.actor}). Delivery is by message-type priority
+ * <b>The messaging contract.</b> The output is a tell-façade: each call is one thread-safe
+ * <i>tell</i> onto the controlling message handler's mailbox — a multi-producer / single-consumer priority
+ * queue (see {@link com.hivemq.adapter.sdk.api2.messaging}). Delivery is by message-type priority
  * ({@code CONTROL} &gt; {@code EVENT} &gt; {@code TICK} &gt; {@code DATA}), FIFO within a band. Adapter code
- * may call any callback from any thread with no locking.
+ * may call any output method from any thread with no locking.
  * <p>
  * <b>The reuse boundary (decision D2).</b> The protocol-agnostic v1 SDK subset is reused as-is and never
  * duplicated here: values are {@link com.hivemq.adapter.sdk.api.data.DataPoint} (built with
- * {@link com.hivemq.adapter.sdk.api.factories.DataPointFactory}), value and configuration shapes are
- * {@link com.hivemq.adapter.sdk.api.schema.Schema}, browse node kinds are
- * {@link com.hivemq.adapter.sdk.api.discovery.NodeType}, and adapter metadata uses
+ * {@link com.hivemq.adapter.sdk.api.factories.DataPointFactory}), value and node-definition shapes are
+ * {@link com.hivemq.adapter.sdk.api.schema.Schema} (the new-in-v2 adapter-configuration schema is
+ * {@link com.hivemq.adapter.sdk.api2.schema.AdapterConfigSchema}, deliberately not the reused {@code Schema}),
+ * browse node kinds are {@link com.hivemq.adapter.sdk.api.discovery.NodeType}, and adapter metadata uses
  * {@link com.hivemq.adapter.sdk.api.ProtocolAdapterCategory} and
  * {@link com.hivemq.adapter.sdk.api.ProtocolAdapterTag}. SDK v1 is not modified.
  * <p>

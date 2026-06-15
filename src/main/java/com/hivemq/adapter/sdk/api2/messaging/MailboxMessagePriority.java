@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.adapter.sdk.api2.actor;
+package com.hivemq.adapter.sdk.api2.messaging;
 
 /**
  * The mailbox delivery bands, highest priority first.
@@ -37,7 +37,7 @@ package com.hivemq.adapter.sdk.api2.actor;
  * machines absorb late data points and browse results in non-collecting states.</li>
  * </ul>
  */
-public enum MessagePriority {
+public enum MailboxMessagePriority {
     /**
      * Goal and lifecycle commands — operator/supervisor intent. Always safe to deliver first: goal commands are
      * valid in every state and bypass the receiving state machine's transition table.

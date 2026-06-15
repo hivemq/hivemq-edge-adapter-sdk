@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.adapter.sdk.api2;
+package com.hivemq.adapter.sdk.api2.model;
 
 import com.hivemq.adapter.sdk.api.data.DataPoint;
+import com.hivemq.adapter.sdk.api2.ProtocolAdapter2;
 import com.hivemq.adapter.sdk.api2.command.BrowseResultEntry;
 import com.hivemq.adapter.sdk.api2.command.ErrorScope;
 import com.hivemq.adapter.sdk.api2.command.VerifyOutcome;
@@ -25,16 +26,18 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The adapter-to-framework event interface — a tell-façade. Each call is one thread-safe <i>tell</i>: the
- * framework implements every method by building an immutable event message and enqueueing it on the
- * controlling actor's mailbox. An adapter may therefore call any callback from any thread (protocol library
- * callbacks, receive threads, …) with no locking.
+ * The adapter's output to the framework — the state-and-event side of the adapter, a tell-façade. It is the
+ * symmetric counterpart of {@link ProtocolAdapterInput2}: input is what the framework hands the adapter at
+ * construction, output is how the adapter reports back. Each call is one thread-safe <i>tell</i>: the framework
+ * implements every method by building an immutable event message and enqueueing it on the controlling handler's
+ * mailbox. An adapter may therefore call any method from any thread (protocol library callbacks, receive
+ * threads, …) with no locking.
  * <p>
  * Values are reported keyed by {@link Node} reference — the adapter is not required to set
  * {@link DataPoint#getTagName()} or {@link DataPoint#getAdapterId()}; the framework stamps them from the
  * owning node's tag before handing the value to northbound consumers.
  */
-public interface ProtocolAdapterCallbacks {
+public interface ProtocolAdapterOutput2 {
 
     /**
      * Acknowledges {@link ProtocolAdapter2#start()}.

@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.adapter.sdk.api2.factory;
+package com.hivemq.adapter.sdk.api2.model;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.hivemq.adapter.sdk.api.config.ProtocolSpecificAdapterConfig;
 import com.hivemq.adapter.sdk.api2.node.NodeTagPair;
+import com.hivemq.adapter.sdk.api2.services.ProtocolAdapterService;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,10 +32,11 @@ public interface ProtocolAdapterInput2 {
     @NotNull String adapterId();
 
     /**
-     * @return the instance configuration, validated against
-     *         {@link ProtocolAdapterFactory2#adapterConfigSchema()}.
+     * @return the typed instance configuration — a reused v1 {@link ProtocolSpecificAdapterConfig}. Its schema is
+     *         the factory's {@code adapterConfigSchema()}, an
+     *         {@link com.hivemq.adapter.sdk.api2.schema.AdapterConfigSchema}.
      */
-    @NotNull JsonNode adapterConfig();
+    @NotNull ProtocolSpecificAdapterConfig adapterConfig();
 
     /**
      * @return the Node/Tag pairs this instance serves.
@@ -44,5 +46,5 @@ public interface ProtocolAdapterInput2 {
     /**
      * @return the services the framework provides to the instance.
      */
-    @NotNull ProtocolAdapterServices2 services();
+    @NotNull ProtocolAdapterService services();
 }

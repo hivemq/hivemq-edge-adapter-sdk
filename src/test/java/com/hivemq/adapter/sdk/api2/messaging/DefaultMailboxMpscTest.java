@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.adapter.sdk.api2.actor;
+package com.hivemq.adapter.sdk.api2.messaging;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
@@ -42,10 +42,10 @@ class DefaultMailboxMpscTest {
     private static final int PRODUCER_COUNT = 8;
     private static final int MESSAGES_PER_PRODUCER = 250;
 
-    private record TestMessage(int producerIndex, int sequence, @NotNull MessagePriority band)
-            implements Message {
+    private record TestMessage(int producerIndex, int sequence, @NotNull MailboxMessagePriority band)
+            implements MailboxMessage {
         @Override
-        public @NotNull MessagePriority priority() {
+        public @NotNull MailboxMessagePriority priority() {
             return band;
         }
     }
@@ -54,7 +54,7 @@ class DefaultMailboxMpscTest {
     void concurrentProducers_allMessagesReceivedExactlyOnce_perProducerFifoWithinEachBand() throws Exception {
         final DefaultMailbox<TestMessage> mailbox = new DefaultMailbox<>();
         final int expectedTotal = PRODUCER_COUNT * MESSAGES_PER_PRODUCER;
-        final MessagePriority[] priorities = MessagePriority.values();
+        final MailboxMessagePriority[] priorities = MailboxMessagePriority.values();
 
         final List<TestMessage> received = new ArrayList<>(expectedTotal);
         final AtomicBoolean consumerDone = new AtomicBoolean(false);
@@ -85,7 +85,7 @@ class DefaultMailboxMpscTest {
                     return;
                 }
                 for (int sequence = 0; sequence < MESSAGES_PER_PRODUCER; sequence++) {
-                    final MessagePriority band = priorities[(fixedProducerIndex + sequence) % priorities.length];
+                    final MailboxMessagePriority band = priorities[(fixedProducerIndex + sequence) % priorities.length];
                     mailbox.tell(new TestMessage(fixedProducerIndex, sequence, band));
                 }
             }, "mailbox-producer-" + producerIndex);
@@ -109,14 +109,15 @@ class DefaultMailboxMpscTest {
         assertThat(distinctMessageKeys).hasSize(expectedTotal);
 
         // per-producer FIFO WITHIN each priority band: a producer's emit order is its delivery order
-        final Map<Integer, EnumMap<MessagePriority, List<Integer>>> sequencesByProducerAndBand = new HashMap<>();
+        final Map<Integer, EnumMap<MailboxMessagePriority, List<Integer>>> sequencesByProducerAndBand = new HashMap<>();
         for (final TestMessage message : received) {
             sequencesByProducerAndBand
-                    .computeIfAbsent(message.producerIndex(), key -> new EnumMap<>(MessagePriority.class))
+                    .computeIfAbsent(message.producerIndex(), key -> new EnumMap<>(MailboxMessagePriority.class))
                     .computeIfAbsent(message.band(), key -> new ArrayList<>())
                     .add(message.sequence());
         }
-        for (final EnumMap<MessagePriority, List<Integer>> sequencesByBand : sequencesByProducerAndBand.values()) {
+        for (final EnumMap<MailboxMessagePriority, List<Integer>> sequencesByBand :
+                sequencesByProducerAndBand.values()) {
             for (final List<Integer> sequences : sequencesByBand.values()) {
                 assertThat(sequences).isSorted().doesNotHaveDuplicates();
             }
@@ -146,7 +147,7 @@ class DefaultMailboxMpscTest {
         await().atMost(10, TimeUnit.SECONDS)
                 .until(() -> consumer.getState() == Thread.State.TIMED_WAITING ||
                         consumer.getState() == Thread.State.WAITING);
-        final TestMessage message = new TestMessage(0, 0, MessagePriority.EVENT);
+        final TestMessage message = new TestMessage(0, 0, MailboxMessagePriority.EVENT);
         mailbox.tell(message);
 
         await().atMost(10, TimeUnit.SECONDS).untilTrue(done);
@@ -163,7 +164,7 @@ class DefaultMailboxMpscTest {
         assertThat(Thread.currentThread().isInterrupted()).isFalse();
 
         // the mailbox stays fully usable after a timeout
-        final TestMessage message = new TestMessage(0, 0, MessagePriority.EVENT);
+        final TestMessage message = new TestMessage(0, 0, MailboxMessagePriority.EVENT);
         mailbox.tell(message);
         assertThat(mailbox.awaitNextMessage(0)).isSameAs(message);
     }

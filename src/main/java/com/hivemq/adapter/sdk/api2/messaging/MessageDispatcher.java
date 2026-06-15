@@ -13,29 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.adapter.sdk.api2.actor;
+package com.hivemq.adapter.sdk.api2.messaging;
 
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Binds a {@link Mailbox} to an {@link Actor} and pumps messages. The dispatcher drains the mailbox and feeds
- * {@code receive} one message at a time — the mailbox itself never invokes anything.
+ * Binds a {@link Mailbox} to a {@link MessageHandler} and pumps messages. The dispatcher drains the mailbox and
+ * feeds {@code receive} one message at a time — the mailbox itself never invokes anything.
  * <p>
- * Pluggable: production implementations use a dedicated thread per actor that blocks in
+ * Pluggable: production implementations use a dedicated thread per handler that blocks in
  * {@link Mailbox#awaitNextMessage(long)}; test implementations drain deterministically on the calling thread.
  */
-public interface Dispatcher {
+public interface MessageDispatcher {
 
     /**
-     * Bind the given mailbox to the given actor and start pumping messages.
+     * Bind the given mailbox to the given handler and start pumping messages.
      *
      * @param mailbox       the mailbox to drain; its owner-thread-only methods become the dispatcher's to
      *                      call.
-     * @param actor         the behavior to feed, one message at a time, never concurrently.
-     * @param <MessageType> the message type shared by mailbox and actor.
+     * @param handler       the behavior to feed, one message at a time, never concurrently.
+     * @param <MessageType> the message type shared by mailbox and handler.
      * @return a handle that stops the pumping when closed.
      */
-    <MessageType extends Message> @NotNull ActorHandle attach(
+    <MessageType extends MailboxMessage> @NotNull MessageDispatcherHandle attach(
             @NotNull Mailbox<MessageType> mailbox,
-            @NotNull Actor<MessageType> actor);
+            @NotNull MessageHandler<MessageType> handler);
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.adapter.sdk.api2.actor;
+package com.hivemq.adapter.sdk.api2.messaging;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
@@ -24,11 +24,12 @@ import static org.assertj.core.api.Assertions.assertThat;
  * The priority ladder — {@code CONTROL} &gt; {@code EVENT} &gt; {@code TICK} &gt; {@code DATA}, FIFO within a
  * band — observed through {@link DefaultMailbox#poll()}.
  */
-class MessagePriorityOrderingTest {
+class MailboxMessagePriorityOrderingTest {
 
-    private record TestMessage(@NotNull String label, @NotNull MessagePriority band) implements Message {
+    private record TestMessage(@NotNull String label, @NotNull MailboxMessagePriority band)
+            implements MailboxMessage {
         @Override
-        public @NotNull MessagePriority priority() {
+        public @NotNull MailboxMessagePriority priority() {
             return band;
         }
     }
@@ -37,9 +38,9 @@ class MessagePriorityOrderingTest {
     void controlToldAfterDataBacklog_isPolledFirst() {
         final DefaultMailbox<TestMessage> mailbox = new DefaultMailbox<>();
         for (int i = 0; i < 100; i++) {
-            mailbox.tell(new TestMessage("data-" + i, MessagePriority.DATA));
+            mailbox.tell(new TestMessage("data-" + i, MailboxMessagePriority.DATA));
         }
-        mailbox.tell(new TestMessage("control", MessagePriority.CONTROL));
+        mailbox.tell(new TestMessage("control", MailboxMessagePriority.CONTROL));
 
         final TestMessage first = mailbox.poll();
         assertThat(first).isNotNull();
@@ -49,8 +50,8 @@ class MessagePriorityOrderingTest {
     @Test
     void eventToldAfterTick_isPolledBeforeIt() {
         final DefaultMailbox<TestMessage> mailbox = new DefaultMailbox<>();
-        mailbox.tell(new TestMessage("tick", MessagePriority.TICK));
-        mailbox.tell(new TestMessage("event", MessagePriority.EVENT));
+        mailbox.tell(new TestMessage("tick", MailboxMessagePriority.TICK));
+        mailbox.tell(new TestMessage("event", MailboxMessagePriority.EVENT));
 
         final TestMessage first = mailbox.poll();
         final TestMessage second = mailbox.poll();
@@ -63,10 +64,10 @@ class MessagePriorityOrderingTest {
     @Test
     void fullLadder_toldInReverse_isPolledHighestPriorityFirst() {
         final DefaultMailbox<TestMessage> mailbox = new DefaultMailbox<>();
-        mailbox.tell(new TestMessage("data", MessagePriority.DATA));
-        mailbox.tell(new TestMessage("tick", MessagePriority.TICK));
-        mailbox.tell(new TestMessage("event", MessagePriority.EVENT));
-        mailbox.tell(new TestMessage("control", MessagePriority.CONTROL));
+        mailbox.tell(new TestMessage("data", MailboxMessagePriority.DATA));
+        mailbox.tell(new TestMessage("tick", MailboxMessagePriority.TICK));
+        mailbox.tell(new TestMessage("event", MailboxMessagePriority.EVENT));
+        mailbox.tell(new TestMessage("control", MailboxMessagePriority.CONTROL));
 
         assertThat(pollLabels(mailbox, 4)).containsExactly("control", "event", "tick", "data");
         assertThat(mailbox.isEmpty()).isTrue();
@@ -75,18 +76,18 @@ class MessagePriorityOrderingTest {
     @Test
     void equalPriorityMessages_comeOutInTellOrder() {
         final DefaultMailbox<TestMessage> mailbox = new DefaultMailbox<>();
-        mailbox.tell(new TestMessage("first", MessagePriority.EVENT));
-        mailbox.tell(new TestMessage("second", MessagePriority.EVENT));
-        mailbox.tell(new TestMessage("third", MessagePriority.EVENT));
+        mailbox.tell(new TestMessage("first", MailboxMessagePriority.EVENT));
+        mailbox.tell(new TestMessage("second", MailboxMessagePriority.EVENT));
+        mailbox.tell(new TestMessage("third", MailboxMessagePriority.EVENT));
 
         assertThat(pollLabels(mailbox, 3)).containsExactly("first", "second", "third");
     }
 
     @Test
     void priority_defaultsToEvent() {
-        final Message message = new Message() {
+        final MailboxMessage message = new MailboxMessage() {
         };
-        assertThat(message.priority()).isEqualTo(MessagePriority.EVENT);
+        assertThat(message.priority()).isEqualTo(MailboxMessagePriority.EVENT);
     }
 
     @Test
@@ -95,8 +96,8 @@ class MessagePriorityOrderingTest {
         assertThat(mailbox.isEmpty()).isTrue();
         assertThat(mailbox.size()).isZero();
 
-        mailbox.tell(new TestMessage("control", MessagePriority.CONTROL));
-        mailbox.tell(new TestMessage("data", MessagePriority.DATA));
+        mailbox.tell(new TestMessage("control", MailboxMessagePriority.CONTROL));
+        mailbox.tell(new TestMessage("data", MailboxMessagePriority.DATA));
         assertThat(mailbox.isEmpty()).isFalse();
         assertThat(mailbox.size()).isEqualTo(2);
 

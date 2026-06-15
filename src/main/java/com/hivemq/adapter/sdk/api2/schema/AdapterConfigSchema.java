@@ -13,12 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.hivemq.adapter.sdk.api2.schema;
+
 /**
- * The factory trio: {@link com.hivemq.adapter.sdk.api2.factory.ProtocolAdapterFactory2} constructs adapter
- * instances from a {@link com.hivemq.adapter.sdk.api2.factory.ProtocolAdapterInput2}, which carries the
- * {@link com.hivemq.adapter.sdk.api2.factory.ProtocolAdapterServices2} the framework provides.
+ * The schema describing an adapter type's instance configuration.
  * <p>
- * Capabilities live solely on {@link com.hivemq.adapter.sdk.api2.ProtocolAdapterInformation2}; instance
- * construction is synchronous and cheap (no I/O, no connection).
+ * This is a <b>new v2 schema type</b>, deliberately distinct from the reused v1
+ * {@link com.hivemq.adapter.sdk.api.schema.Schema}: that type describes data points and node values, which is
+ * the wrong abstraction for adapter configuration. This interface is an <b>empty placeholder</b> in this
+ * project; its concrete shape is defined later.
  */
-package com.hivemq.adapter.sdk.api2.factory;
+public interface AdapterConfigSchema {
+}

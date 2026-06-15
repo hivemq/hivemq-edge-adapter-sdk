@@ -13,22 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.adapter.sdk.api2.actor;
+package com.hivemq.adapter.sdk.api2.messaging;
 
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The behavior bound to a {@link Mailbox}. {@link #receive(Message)} handles exactly one message at a time and
- * is never invoked concurrently: the actor's own state therefore needs no locks, as long as it is touched only
- * from inside {@code receive}.
+ * The behavior bound to a {@link Mailbox}. {@link #receive(MailboxMessage)} handles exactly one message at a
+ * time and is never invoked concurrently: the handler's own state therefore needs no locks, as long as it is
+ * touched only from inside {@code receive}.
  *
- * @param <MessageType> the message type this actor handles.
+ * @param <MessageType> the message type this handler handles.
  */
-public interface Actor<MessageType extends Message> {
+public interface MessageHandler<MessageType extends MailboxMessage> {
 
     /**
-     * Handle exactly one message. Invoked by the {@link Dispatcher} on the actor's single dispatch thread,
-     * never concurrently.
+     * Handle exactly one message. Invoked by the {@link MessageDispatcher} on the handler's single dispatch
+     * thread, never concurrently.
      *
      * @param message the next message, drained from the mailbox in priority-band order.
      */
