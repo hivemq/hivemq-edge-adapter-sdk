@@ -17,9 +17,6 @@ package com.hivemq.adapter.sdk.api2.model;
 
 import com.hivemq.adapter.sdk.api.data.DataPoint;
 import com.hivemq.adapter.sdk.api2.ProtocolAdapter2;
-import com.hivemq.adapter.sdk.api2.command.BrowseResultEntry;
-import com.hivemq.adapter.sdk.api2.command.ErrorScope;
-import com.hivemq.adapter.sdk.api2.command.VerifyOutcome;
 import com.hivemq.adapter.sdk.api2.node.Node;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
@@ -105,7 +102,7 @@ public interface ProtocolAdapterOutput2 {
     void writeResult(@NotNull Node node, boolean success, @Nullable String reason);
 
     /**
-     * Answers {@link ProtocolAdapter2#browse(com.hivemq.adapter.sdk.api2.command.BrowseFilter)}.
+     * Answers {@link ProtocolAdapter2#browse(com.hivemq.adapter.sdk.api2.model.BrowseFilter)}.
      *
      * @param entries the discovered nodes.
      */

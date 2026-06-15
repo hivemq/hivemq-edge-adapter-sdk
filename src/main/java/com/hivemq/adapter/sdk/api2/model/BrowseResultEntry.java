@@ -13,18 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.adapter.sdk.api2.command;
+package com.hivemq.adapter.sdk.api2.model;
+
+import com.hivemq.adapter.sdk.api.discovery.NodeType;
+import com.hivemq.adapter.sdk.api2.node.Node;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * The scope of an adapter-reported error: it decides which recovery the framework attempts.
+ * One entry of a browse result. The node kind is the reused v1 {@link NodeType}.
+ *
+ * @param node       the discovered node.
+ * @param type       the kind of node (folder, object, or value).
+ * @param selectable whether the node can be selected as a tag's node definition.
  */
-public enum ErrorScope {
-    /**
-     * The adapter itself failed — not recoverable by reconnecting.
-     */
-    ADAPTER,
-    /**
-     * The connection failed — recoverable by the framework's reconnect policy.
-     */
-    CONNECTION
+public record BrowseResultEntry(@NotNull Node node, @NotNull NodeType type, boolean selectable) {
 }

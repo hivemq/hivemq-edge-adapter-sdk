@@ -16,7 +16,7 @@
 package com.hivemq.adapter.sdk.api2.template;
 
 import com.hivemq.adapter.sdk.api.data.DataPoint;
-import com.hivemq.adapter.sdk.api2.command.WriteEntry;
+import com.hivemq.adapter.sdk.api2.model.WriteEntry;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

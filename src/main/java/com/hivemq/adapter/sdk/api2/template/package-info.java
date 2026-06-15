@@ -20,12 +20,12 @@
  * {@link com.hivemq.adapter.sdk.api2.template.AbstractProtocolAdapter2} turns the asynchronous
  * {@link com.hivemq.adapter.sdk.api2.ProtocolAdapter2} command interface into single-threaded {@code do*}
  * methods: each command method {@code tell}s one immutable
- * {@link com.hivemq.adapter.sdk.api2.messaging.ProtocolAdapterCommand} onto the adapter's own
+ * {@link com.hivemq.adapter.sdk.api2.messaging.command.ProtocolAdapterCommand} onto the adapter's own
  * {@link com.hivemq.adapter.sdk.api2.messaging.DefaultMailbox}, and the
  * {@link com.hivemq.adapter.sdk.api2.messaging.MessageDispatcher} supplied by the framework feeds them to
  * {@code receive} one at a time. An author implements the {@code do*} methods and never thinks about threads.
  * <p>
- * <b>Bands.</b> Lifecycle commands ({@code Start}/{@code Stop}/{@code Connect}/{@code Disconnect}) travel in
+ * <b>Bands.</b> Connection commands ({@code Start}/{@code Stop}/{@code Connect}/{@code Disconnect}) travel in
  * the {@code CONTROL} band; batch and browse commands travel in the {@code DATA} band — a stop or disconnect
  * is never starved behind a queued batch backlog, and FIFO within each band preserves the framework's emit
  * order.

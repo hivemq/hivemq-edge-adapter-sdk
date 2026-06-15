@@ -18,15 +18,17 @@ package com.hivemq.adapter.sdk.api2.template;
 import com.hivemq.adapter.sdk.api.data.DataPoint;
 import com.hivemq.adapter.sdk.api.factories.DataPointFactory;
 import com.hivemq.adapter.sdk.api2.ProtocolAdapter2;
-import com.hivemq.adapter.sdk.api2.command.BrowseFilter;
-import com.hivemq.adapter.sdk.api2.command.VerifyOutcome;
-import com.hivemq.adapter.sdk.api2.command.WriteEntry;
 import com.hivemq.adapter.sdk.api2.messaging.DefaultMailbox;
 import com.hivemq.adapter.sdk.api2.messaging.Mailbox;
 import com.hivemq.adapter.sdk.api2.messaging.MessageHandler;
-import com.hivemq.adapter.sdk.api2.messaging.ProtocolAdapterCommand;
+import com.hivemq.adapter.sdk.api2.messaging.command.ProtocolAdapterBatchProcessCommand;
+import com.hivemq.adapter.sdk.api2.messaging.command.ProtocolAdapterCommand;
+import com.hivemq.adapter.sdk.api2.messaging.command.ProtocolAdapterConnectionCommand;
+import com.hivemq.adapter.sdk.api2.model.BrowseFilter;
 import com.hivemq.adapter.sdk.api2.model.ProtocolAdapterInput2;
 import com.hivemq.adapter.sdk.api2.model.ProtocolAdapterOutput2;
+import com.hivemq.adapter.sdk.api2.model.VerifyOutcome;
+import com.hivemq.adapter.sdk.api2.model.WriteEntry;
 import com.hivemq.adapter.sdk.api2.node.Node;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
@@ -41,11 +43,11 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * <b>Blocking.</b> A {@code do*} implementation may block the dispatch thread — a blocking {@code connect()}
  * against a protocol library is normal. Queued commands simply wait behind it, and the framework's watchdogs
- * bound the damage; a queued {@link ProtocolAdapterCommand.Stop} or {@link ProtocolAdapterCommand.Disconnect},
- * being a {@code CONTROL}-band message, is delivered ahead of queued batch work — but nothing can preempt an
- * in-flight {@code do*}. A long {@link #doBrowse(BrowseFilter)} walk starves polls for its whole duration on
- * the template's single thread: adapters with large address spaces should implement browse asynchronously
- * inside the adapter (issue the walk on library threads, report
+ * bound the damage; a queued {@link ProtocolAdapterConnectionCommand.Stop} or
+ * {@link ProtocolAdapterConnectionCommand.Disconnect}, being a {@code CONTROL}-band message, is delivered ahead
+ * of queued batch work — but nothing can preempt an in-flight {@code do*}. A long {@link #doBrowse(BrowseFilter)}
+ * walk starves polls for its whole duration on the template's single thread: adapters with large address spaces
+ * should implement browse asynchronously inside the adapter (issue the walk on library threads, report
  * {@link ProtocolAdapterOutput2#browseResult(List)} via the thread-safe output).
  * <p>
  * An author who needs a different threading model does not use this template: implement
@@ -94,52 +96,52 @@ public abstract class AbstractProtocolAdapter2 implements ProtocolAdapter2, Mess
 
     @Override
     public final void start() {
-        mailbox.tell(new ProtocolAdapterCommand.Start());
+        mailbox.tell(new ProtocolAdapterConnectionCommand.Start());
     }
 
     @Override
     public final void stop() {
-        mailbox.tell(new ProtocolAdapterCommand.Stop());
+        mailbox.tell(new ProtocolAdapterConnectionCommand.Stop());
     }
 
     @Override
     public final void connect() {
-        mailbox.tell(new ProtocolAdapterCommand.Connect());
+        mailbox.tell(new ProtocolAdapterConnectionCommand.Connect());
     }
 
     @Override
     public final void disconnect() {
-        mailbox.tell(new ProtocolAdapterCommand.Disconnect());
+        mailbox.tell(new ProtocolAdapterConnectionCommand.Disconnect());
     }
 
     @Override
     public final void verifyBatch(final @NotNull List<Node> nodes) {
-        mailbox.tell(new ProtocolAdapterCommand.VerifyBatch(nodes));
+        mailbox.tell(new ProtocolAdapterBatchProcessCommand.VerifyBatch(nodes));
     }
 
     @Override
     public final void pollBatch(final @NotNull List<Node> nodes) {
-        mailbox.tell(new ProtocolAdapterCommand.PollBatch(nodes));
+        mailbox.tell(new ProtocolAdapterBatchProcessCommand.PollBatch(nodes));
     }
 
     @Override
     public final void addSubscriptionBatch(final @NotNull List<Node> nodes) {
-        mailbox.tell(new ProtocolAdapterCommand.AddSubscriptionBatch(nodes));
+        mailbox.tell(new ProtocolAdapterBatchProcessCommand.AddSubscriptionBatch(nodes));
     }
 
     @Override
     public final void removeSubscriptionBatch(final @NotNull List<Node> nodes) {
-        mailbox.tell(new ProtocolAdapterCommand.RemoveSubscriptionBatch(nodes));
+        mailbox.tell(new ProtocolAdapterBatchProcessCommand.RemoveSubscriptionBatch(nodes));
     }
 
     @Override
     public final void writeBatch(final @NotNull List<WriteEntry> entries) {
-        mailbox.tell(new ProtocolAdapterCommand.WriteBatch(entries));
+        mailbox.tell(new ProtocolAdapterBatchProcessCommand.WriteBatch(entries));
     }
 
     @Override
     public final void browse(final @NotNull BrowseFilter filter) {
-        mailbox.tell(new ProtocolAdapterCommand.Browse(filter));
+        mailbox.tell(new ProtocolAdapterBatchProcessCommand.Browse(filter));
     }
 
     // ── MessageHandler: one message at a time on the dispatch thread ─────────────────────────────
@@ -147,18 +149,18 @@ public abstract class AbstractProtocolAdapter2 implements ProtocolAdapter2, Mess
     @Override
     public final void receive(final @NotNull ProtocolAdapterCommand command) {
         switch (command) {
-            case ProtocolAdapterCommand.Start start -> doStart();
-            case ProtocolAdapterCommand.Stop stop -> doStop();
-            case ProtocolAdapterCommand.Connect connect -> doConnect();
-            case ProtocolAdapterCommand.Disconnect disconnect -> doDisconnect();
-            case ProtocolAdapterCommand.VerifyBatch verifyBatch -> doVerifyBatch(verifyBatch.nodes());
-            case ProtocolAdapterCommand.PollBatch pollBatch -> doPollBatch(pollBatch.nodes());
-            case ProtocolAdapterCommand.AddSubscriptionBatch addSubscriptionBatch ->
+            case ProtocolAdapterConnectionCommand.Start start -> doStart();
+            case ProtocolAdapterConnectionCommand.Stop stop -> doStop();
+            case ProtocolAdapterConnectionCommand.Connect connect -> doConnect();
+            case ProtocolAdapterConnectionCommand.Disconnect disconnect -> doDisconnect();
+            case ProtocolAdapterBatchProcessCommand.VerifyBatch verifyBatch -> doVerifyBatch(verifyBatch.nodes());
+            case ProtocolAdapterBatchProcessCommand.PollBatch pollBatch -> doPollBatch(pollBatch.nodes());
+            case ProtocolAdapterBatchProcessCommand.AddSubscriptionBatch addSubscriptionBatch ->
                     doAddSubscriptionBatch(addSubscriptionBatch.nodes());
-            case ProtocolAdapterCommand.RemoveSubscriptionBatch removeSubscriptionBatch ->
+            case ProtocolAdapterBatchProcessCommand.RemoveSubscriptionBatch removeSubscriptionBatch ->
                     doRemoveSubscriptionBatch(removeSubscriptionBatch.nodes());
-            case ProtocolAdapterCommand.WriteBatch writeBatch -> doWriteBatch(writeBatch.entries());
-            case ProtocolAdapterCommand.Browse browse -> doBrowse(browse.filter());
+            case ProtocolAdapterBatchProcessCommand.WriteBatch writeBatch -> doWriteBatch(writeBatch.entries());
+            case ProtocolAdapterBatchProcessCommand.Browse browse -> doBrowse(browse.filter());
         }
     }
 

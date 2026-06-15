@@ -17,7 +17,7 @@ package com.hivemq.adapter.sdk.api2.template;
 
 import com.hivemq.adapter.sdk.api.data.DataPoint;
 import com.hivemq.adapter.sdk.api2.model.ProtocolAdapterOutput2;
-import com.hivemq.adapter.sdk.api2.command.WriteEntry;
+import com.hivemq.adapter.sdk.api2.model.WriteEntry;
 import com.hivemq.adapter.sdk.api2.model.ProtocolAdapterInput2;
 import com.hivemq.adapter.sdk.api2.node.Node;
 import org.jetbrains.annotations.NotNull;

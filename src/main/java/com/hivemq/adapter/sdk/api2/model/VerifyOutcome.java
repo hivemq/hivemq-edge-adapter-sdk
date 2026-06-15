@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.adapter.sdk.api2.command;
+package com.hivemq.adapter.sdk.api2.model;
 
 import org.jetbrains.annotations.NotNull;
 

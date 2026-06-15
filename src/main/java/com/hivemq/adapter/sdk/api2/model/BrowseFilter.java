@@ -13,18 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hivemq.adapter.sdk.api2.command;
+package com.hivemq.adapter.sdk.api2.model;
 
-import com.hivemq.adapter.sdk.api.discovery.NodeType;
 import com.hivemq.adapter.sdk.api2.node.Node;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * One entry of a browse result. The node kind is the reused v1 {@link NodeType}.
+ * The filter of a browse command: the node to browse below. An "empty" node (one carrying no identity) is a
+ * valid filter and addresses the root of the device's address space.
  *
- * @param node       the discovered node.
- * @param type       the kind of node (folder, object, or value).
- * @param selectable whether the node can be selected as a tag's node definition.
+ * @param filterNode the node whose children are to be enumerated.
  */
-public record BrowseResultEntry(@NotNull Node node, @NotNull NodeType type, boolean selectable) {
+public record BrowseFilter(@NotNull Node filterNode) {
 }

@@ -15,8 +15,8 @@
  */
 package com.hivemq.adapter.sdk.api2;
 
-import com.hivemq.adapter.sdk.api2.command.BrowseFilter;
-import com.hivemq.adapter.sdk.api2.command.WriteEntry;
+import com.hivemq.adapter.sdk.api2.model.BrowseFilter;
+import com.hivemq.adapter.sdk.api2.model.WriteEntry;
 import com.hivemq.adapter.sdk.api2.messaging.MailboxMessage;
 import com.hivemq.adapter.sdk.api2.messaging.MailboxMessagePriority;
 import com.hivemq.adapter.sdk.api2.messaging.MessageHandler;

@@ -16,9 +16,9 @@
 package com.hivemq.adapter.sdk.api2.template;
 
 import com.hivemq.adapter.sdk.api.data.DataPoint;
-import com.hivemq.adapter.sdk.api2.command.BrowseResultEntry;
-import com.hivemq.adapter.sdk.api2.command.ErrorScope;
-import com.hivemq.adapter.sdk.api2.command.VerifyOutcome;
+import com.hivemq.adapter.sdk.api2.model.BrowseResultEntry;
+import com.hivemq.adapter.sdk.api2.model.ErrorScope;
+import com.hivemq.adapter.sdk.api2.model.VerifyOutcome;
 import com.hivemq.adapter.sdk.api2.model.ProtocolAdapterOutput2;
 import com.hivemq.adapter.sdk.api2.node.Node;
 import java.util.ArrayList;

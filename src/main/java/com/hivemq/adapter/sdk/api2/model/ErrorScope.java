@@ -13,12 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.hivemq.adapter.sdk.api2.model;
+
 /**
- * Value types crossing the protocol-adapter command/event boundary: write entries, browse filters and results,
- * error scopes, and verification outcomes.
- * <p>
- * Values reuse the v1 types where they exist (reuse boundary, decision D2): a southbound value is the reused
- * {@link com.hivemq.adapter.sdk.api.data.DataPoint}; a browse entry's node kind is the reused
- * {@link com.hivemq.adapter.sdk.api.discovery.NodeType}.
+ * The scope of an adapter-reported error: it decides which recovery the framework attempts.
  */
-package com.hivemq.adapter.sdk.api2.command;
+public enum ErrorScope {
+    /**
+     * The adapter itself failed — not recoverable by reconnecting.
+     */
+    ADAPTER,
+    /**
+     * The connection failed — recoverable by the framework's reconnect policy.
+     */
+    CONNECTION
+}

@@ -15,8 +15,8 @@
  */
 package com.hivemq.adapter.sdk.api2;
 
-import com.hivemq.adapter.sdk.api2.command.BrowseFilter;
-import com.hivemq.adapter.sdk.api2.command.WriteEntry;
+import com.hivemq.adapter.sdk.api2.model.BrowseFilter;
+import com.hivemq.adapter.sdk.api2.model.WriteEntry;
 import com.hivemq.adapter.sdk.api2.model.ProtocolAdapterOutput2;
 import com.hivemq.adapter.sdk.api2.node.Node;
 import java.util.List;
@@ -47,21 +47,21 @@ public interface ProtocolAdapter2 {
     /**
      * Start the adapter (allocate resources; no connection yet). Acknowledged by
      * {@link ProtocolAdapterOutput2#started()} or
-     * {@link ProtocolAdapterOutput2#error(com.hivemq.adapter.sdk.api2.command.ErrorScope, String)} with
+     * {@link ProtocolAdapterOutput2#error(com.hivemq.adapter.sdk.api2.model.ErrorScope, String)} with
      * scope {@code ADAPTER}.
      */
     void start();
 
     /**
      * Stop the adapter (release resources). Acknowledged by {@link ProtocolAdapterOutput2#stopped()} or
-     * {@link ProtocolAdapterOutput2#error(com.hivemq.adapter.sdk.api2.command.ErrorScope, String)} with
+     * {@link ProtocolAdapterOutput2#error(com.hivemq.adapter.sdk.api2.model.ErrorScope, String)} with
      * scope {@code ADAPTER}.
      */
     void stop();
 
     /**
      * Connect to the device. Acknowledged by {@link ProtocolAdapterOutput2#connected()},
-     * {@link ProtocolAdapterOutput2#error(com.hivemq.adapter.sdk.api2.command.ErrorScope, String)} with
+     * {@link ProtocolAdapterOutput2#error(com.hivemq.adapter.sdk.api2.model.ErrorScope, String)} with
      * scope {@code CONNECTION}, or {@link ProtocolAdapterOutput2#disconnected()}.
      */
     void connect();
@@ -73,7 +73,7 @@ public interface ProtocolAdapter2 {
 
     /**
      * Verify the given nodes against the connected device. Each node is acknowledged by one
-     * {@link ProtocolAdapterOutput2#verifyResult(Node, com.hivemq.adapter.sdk.api2.command.VerifyOutcome)}.
+     * {@link ProtocolAdapterOutput2#verifyResult(Node, com.hivemq.adapter.sdk.api2.model.VerifyOutcome)}.
      *
      * @param nodes the nodes to verify.
      */
