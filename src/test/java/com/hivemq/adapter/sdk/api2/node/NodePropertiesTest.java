@@ -18,7 +18,7 @@ package com.hivemq.adapter.sdk.api2.node;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hivemq.adapter.sdk.api2.command.BrowseFilter;
+import com.hivemq.adapter.sdk.api2.model.BrowseFilter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
