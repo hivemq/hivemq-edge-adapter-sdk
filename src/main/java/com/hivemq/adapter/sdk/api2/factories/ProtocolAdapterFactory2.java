@@ -20,7 +20,6 @@ import com.hivemq.adapter.sdk.api2.ProtocolAdapter2;
 import com.hivemq.adapter.sdk.api2.ProtocolAdapterInformation2;
 import com.hivemq.adapter.sdk.api2.model.ProtocolAdapterInput2;
 import com.hivemq.adapter.sdk.api2.model.ProtocolAdapterOutput2;
-import com.hivemq.adapter.sdk.api2.schema.AdapterConfigSchema;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -47,11 +46,9 @@ public interface ProtocolAdapterFactory2 {
             @NotNull ProtocolAdapterOutput2 output);
 
     /**
-     * @return the {@link AdapterConfigSchema} describing this adapter type's instance configuration — a new v2
-     *         schema type, distinct from the reused v1 {@link Schema} (which describes data points and node
-     *         values, not adapter configuration).
+     * @return the reused v1 {@link Schema} describing this adapter type's instance configuration.
      */
-    @NotNull AdapterConfigSchema adapterConfigSchema();
+    @NotNull Schema adapterConfigSchema();
 
     /**
      * @return the reused v1 {@link Schema} describing this adapter type's node definitions.

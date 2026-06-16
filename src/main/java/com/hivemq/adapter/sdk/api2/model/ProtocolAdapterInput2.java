@@ -15,7 +15,7 @@
  */
 package com.hivemq.adapter.sdk.api2.model;
 
-import com.hivemq.adapter.sdk.api.config.ProtocolSpecificAdapterConfig;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.hivemq.adapter.sdk.api2.node.NodeTagPair;
 import com.hivemq.adapter.sdk.api2.services.ProtocolAdapterService;
 import java.util.List;
@@ -32,11 +32,10 @@ public interface ProtocolAdapterInput2 {
     @NotNull String adapterId();
 
     /**
-     * @return the typed instance configuration — a reused v1 {@link ProtocolSpecificAdapterConfig}. Its schema is
-     *         the factory's {@code adapterConfigSchema()}, an
-     *         {@link com.hivemq.adapter.sdk.api2.schema.AdapterConfigSchema}.
+     * @return the instance configuration, validated against
+     *         {@link com.hivemq.adapter.sdk.api2.factories.ProtocolAdapterFactory2#adapterConfigSchema()}.
      */
-    @NotNull ProtocolSpecificAdapterConfig adapterConfig();
+    @NotNull JsonNode adapterConfig();
 
     /**
      * @return the Node/Tag pairs this instance serves.

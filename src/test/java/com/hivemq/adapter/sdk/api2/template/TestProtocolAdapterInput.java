@@ -15,7 +15,8 @@
  */
 package com.hivemq.adapter.sdk.api2.template;
 
-import com.hivemq.adapter.sdk.api.config.ProtocolSpecificAdapterConfig;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.hivemq.adapter.sdk.api.factories.DataPointFactory;
 import com.hivemq.adapter.sdk.api2.messaging.MessageDispatcher;
 import com.hivemq.adapter.sdk.api2.model.ProtocolAdapterInput2;
@@ -25,12 +26,12 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A minimal {@link ProtocolAdapterInput2} for the template tests: an empty typed configuration, no nodes, and
- * the given dispatcher.
+ * A minimal {@link ProtocolAdapterInput2} for the template tests: an empty configuration, no nodes, and the
+ * given dispatcher.
  */
 record TestProtocolAdapterInput(
         @NotNull String adapterId,
-        @NotNull ProtocolSpecificAdapterConfig adapterConfig,
+        @NotNull JsonNode adapterConfig,
         @NotNull List<NodeTagPair> nodes,
         @NotNull ProtocolAdapterService services) implements ProtocolAdapterInput2 {
 
@@ -38,15 +39,9 @@ record TestProtocolAdapterInput(
             final @NotNull String adapterId, final @NotNull MessageDispatcher dispatcher) {
         return new TestProtocolAdapterInput(
                 adapterId,
-                new EmptyConfig(),
+                JsonNodeFactory.instance.objectNode(),
                 List.of(),
                 new TestProtocolAdapterService(new TestDataPointFactory(), dispatcher));
-    }
-
-    /**
-     * A trivial, empty reused-v1 configuration — the template tests carry no adapter-specific settings.
-     */
-    record EmptyConfig() implements ProtocolSpecificAdapterConfig {
     }
 
     record TestProtocolAdapterService(@NotNull DataPointFactory dataPointFactory, @NotNull MessageDispatcher dispatcher)

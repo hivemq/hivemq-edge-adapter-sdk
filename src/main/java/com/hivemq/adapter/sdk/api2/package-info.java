@@ -30,10 +30,9 @@
  * <p>
  * <b>The reuse boundary (decision D2).</b> The protocol-agnostic v1 SDK subset is reused as-is and never
  * duplicated here: values are {@link com.hivemq.adapter.sdk.api.data.DataPoint} (built with
- * {@link com.hivemq.adapter.sdk.api.factories.DataPointFactory}), value and node-definition shapes are
- * {@link com.hivemq.adapter.sdk.api.schema.Schema} (the new-in-v2 adapter-configuration schema is
- * {@link com.hivemq.adapter.sdk.api2.schema.AdapterConfigSchema}, deliberately not the reused {@code Schema}),
- * browse node kinds are {@link com.hivemq.adapter.sdk.api.discovery.NodeType}, and adapter metadata uses
+ * {@link com.hivemq.adapter.sdk.api.factories.DataPointFactory}), value, configuration, and node-definition
+ * shapes are {@link com.hivemq.adapter.sdk.api.schema.Schema}, browse node kinds are
+ * {@link com.hivemq.adapter.sdk.api.discovery.NodeType}, and adapter metadata uses
  * {@link com.hivemq.adapter.sdk.api.ProtocolAdapterCategory} and
  * {@link com.hivemq.adapter.sdk.api.ProtocolAdapterTag}. SDK v1 is not modified.
  * <p>
