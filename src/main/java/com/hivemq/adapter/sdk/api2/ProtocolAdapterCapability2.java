@@ -33,7 +33,7 @@ public enum ProtocolAdapterCapability2 {
     WRITE,
     /**
      * The adapter can enumerate the device's address space
-     * ({@link ProtocolAdapter2#browse(com.hivemq.adapter.sdk.api2.command.BrowseFilter)}).
+     * ({@link ProtocolAdapter2#browse(com.hivemq.adapter.sdk.api2.model.BrowseFilter)}).
      */
     BROWSE
 }
