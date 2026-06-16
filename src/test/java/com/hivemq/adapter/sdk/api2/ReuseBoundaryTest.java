@@ -21,10 +21,11 @@ import com.hivemq.adapter.sdk.api.data.DataPoint;
 import com.hivemq.adapter.sdk.api.discovery.NodeType;
 import com.hivemq.adapter.sdk.api.factories.DataPointFactory;
 import com.hivemq.adapter.sdk.api.schema.Schema;
-import com.hivemq.adapter.sdk.api2.command.BrowseResultEntry;
-import com.hivemq.adapter.sdk.api2.command.WriteEntry;
-import com.hivemq.adapter.sdk.api2.factory.ProtocolAdapterServices2;
+import com.hivemq.adapter.sdk.api2.model.BrowseResultEntry;
+import com.hivemq.adapter.sdk.api2.model.WriteEntry;
+import com.hivemq.adapter.sdk.api2.factories.ProtocolAdapterFactory2;
 import com.hivemq.adapter.sdk.api2.node.Tag2;
+import com.hivemq.adapter.sdk.api2.services.ProtocolAdapterService;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -72,8 +73,12 @@ class ReuseBoundaryTest {
         assertThat(Tag2.class.getMethod("schema").getReturnType()).isEqualTo(Schema.class);
         assertThat(WriteEntry.class.getMethod("value").getReturnType()).isEqualTo(DataPoint.class);
         assertThat(BrowseResultEntry.class.getMethod("type").getReturnType()).isEqualTo(NodeType.class);
-        assertThat(ProtocolAdapterServices2.class.getMethod("dataPointFactory").getReturnType())
+        assertThat(ProtocolAdapterService.class.getMethod("dataPointFactory").getReturnType())
                 .isEqualTo(DataPointFactory.class);
+        assertThat(ProtocolAdapterFactory2.class.getMethod("adapterConfigSchema").getReturnType())
+                .isEqualTo(Schema.class);
+        assertThat(ProtocolAdapterFactory2.class.getMethod("nodeDefinitionSchema").getReturnType())
+                .isEqualTo(Schema.class);
         assertThat(ProtocolAdapterInformation2.class.getMethod("category").getReturnType())
                 .isEqualTo(ProtocolAdapterCategory.class);
 

@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
  * serialized: the computed accessors ({@code nodeId()}, {@code nodeString()}, {@code properties()}) are not
  * bean getters and therefore never appear in the JSON. A node with no fields set is still valid — it
  * serializes an empty JSON object and is a legitimate browse filter
- * ({@link com.hivemq.adapter.sdk.api2.command.BrowseFilter} for "browse from the root").
+ * ({@link com.hivemq.adapter.sdk.api2.model.BrowseFilter} for "browse from the root").
  */
 public abstract class Node {
 
