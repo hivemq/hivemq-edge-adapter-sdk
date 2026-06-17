@@ -53,9 +53,11 @@ public interface ProtocolAdapter {
     void start();
 
     /**
-     * Stop the adapter (release resources). Acknowledged by {@link ProtocolAdapterOutput#stopped()} or
-     * {@link ProtocolAdapterOutput#error(com.hivemq.adapter.sdk.api.v2.model.ErrorScope, String)} with
-     * scope {@code ADAPTER}.
+     * Stop the adapter (release resources). <b>Always</b> acknowledged by
+     * {@link ProtocolAdapterOutput#stopped()} — and only by {@code stopped()}: the framework has already
+     * decided to stop, so a partial teardown failure does not change the outcome. Log it and acknowledge
+     * {@code stopped()} anyway. {@code stop()} never reports
+     * {@link ProtocolAdapterOutput#error(com.hivemq.adapter.sdk.api.v2.model.ErrorScope, String)}.
      */
     void stop();
 
@@ -92,13 +94,19 @@ public interface ProtocolAdapter {
      * Subscribe to value changes of the given nodes. Pushed values arrive as
      * {@link ProtocolAdapterOutput#dataPoint(Node, com.hivemq.adapter.sdk.api.data.DataPoint)}; a failed or
      * lost subscription is reported as {@link ProtocolAdapterOutput#nodeError(Node, String, boolean)}.
+     * <p>
+     * The semantics are <b>incremental add</b>: the adapter maintains a shadow set of currently subscribed
+     * nodes and each call <i>adds</i> to it. The framework may call this multiple times; an implementation
+     * must <b>not</b> reset or replace existing subscriptions — only the given nodes are affected.
      *
      * @param nodes the nodes to subscribe to.
      */
     void addSubscriptionBatch(@NotNull List<Node> nodes);
 
     /**
-     * Remove the subscriptions of the given nodes.
+     * Remove the subscriptions of the given nodes — <b>fire and forget</b>: no acknowledgment is expected.
+     * The adapter drops the given nodes from its shadow set and tears down their protocol-level
+     * subscriptions; a node that is not currently subscribed is ignored silently.
      *
      * @param nodes the nodes to unsubscribe from.
      */
