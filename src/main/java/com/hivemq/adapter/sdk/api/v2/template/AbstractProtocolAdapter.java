@@ -24,6 +24,7 @@ import com.hivemq.adapter.sdk.api.v2.messaging.MessageHandler;
 import com.hivemq.adapter.sdk.api.v2.messaging.command.ProtocolAdapterBatchProcessCommand;
 import com.hivemq.adapter.sdk.api.v2.messaging.command.ProtocolAdapterCommand;
 import com.hivemq.adapter.sdk.api.v2.messaging.command.ProtocolAdapterConnectionCommand;
+import com.hivemq.adapter.sdk.api.v2.model.BrowseContinuation;
 import com.hivemq.adapter.sdk.api.v2.model.BrowseFilter;
 import com.hivemq.adapter.sdk.api.v2.model.ProtocolAdapterInput;
 import com.hivemq.adapter.sdk.api.v2.model.ProtocolAdapterOutput;
@@ -45,10 +46,10 @@ import org.jetbrains.annotations.NotNull;
  * against a protocol library is normal. Queued commands simply wait behind it, and the framework's watchdogs
  * bound the damage; a queued {@link ProtocolAdapterConnectionCommand.Stop} or
  * {@link ProtocolAdapterConnectionCommand.Disconnect}, being a {@code CONTROL}-band message, is delivered ahead
- * of queued batch work — but nothing can preempt an in-flight {@code do*}. A long {@link #doBrowse(BrowseFilter)}
- * walk starves polls for its whole duration on the template's single thread: adapters with large address spaces
- * should implement browse asynchronously inside the adapter (issue the walk on library threads, report
- * {@link ProtocolAdapterOutput#browseResult(List)} via the thread-safe output).
+ * of queued batch work — but nothing can preempt an in-flight {@code do*}. Browse is paginated
+ * ({@link #doBrowse(int, BrowseFilter, int)} / {@link #doBrowseNext(int, BrowseContinuation)}): each call
+ * returns a single page via {@link ProtocolAdapterOutput#browsePage(int, List, BrowseContinuation)}, so a large
+ * address space yields the dispatch thread between pages and never starves polls or {@code CONTROL} commands.
  * <p>
  * An author who needs a different threading model does not use this template: implement
  * {@link ProtocolAdapter} directly, or supply a different
@@ -140,8 +141,13 @@ public abstract class AbstractProtocolAdapter implements ProtocolAdapter, Messag
     }
 
     @Override
-    public final void browse(final @NotNull BrowseFilter filter) {
-        mailbox.tell(new ProtocolAdapterBatchProcessCommand.Browse(filter));
+    public final void browse(final int requestId, final @NotNull BrowseFilter filter, final int maxReferences) {
+        mailbox.tell(new ProtocolAdapterBatchProcessCommand.Browse(requestId, filter, maxReferences));
+    }
+
+    @Override
+    public final void browseNext(final int requestId, final @NotNull BrowseContinuation continuation) {
+        mailbox.tell(new ProtocolAdapterBatchProcessCommand.BrowseNext(requestId, continuation));
     }
 
     // ── MessageHandler: one message at a time on the dispatch thread ─────────────────────────────
@@ -160,7 +166,10 @@ public abstract class AbstractProtocolAdapter implements ProtocolAdapter, Messag
             case ProtocolAdapterBatchProcessCommand.RemoveSubscriptionBatch removeSubscriptionBatch ->
                     doRemoveSubscriptionBatch(removeSubscriptionBatch.nodes());
             case ProtocolAdapterBatchProcessCommand.WriteBatch writeBatch -> doWriteBatch(writeBatch.entries());
-            case ProtocolAdapterBatchProcessCommand.Browse browse -> doBrowse(browse.filter());
+            case ProtocolAdapterBatchProcessCommand.Browse browse ->
+                    doBrowse(browse.requestId(), browse.filter(), browse.maxReferences());
+            case ProtocolAdapterBatchProcessCommand.BrowseNext browseNext ->
+                    doBrowseNext(browseNext.requestId(), browseNext.continuation());
         }
     }
 
@@ -214,13 +223,27 @@ public abstract class AbstractProtocolAdapter implements ProtocolAdapter, Messag
     // ── Optional no-op defaults ───────────────────────────────────────────────────────────────────
 
     /**
-     * Default: answers an empty browse result — for protocols without an enumerable address space. See the
-     * class Javadoc before implementing a long synchronous walk here.
+     * Default: answers a single empty last page — for protocols without an enumerable address space. Override
+     * to enumerate the filter node's children, returning at most {@code maxReferences} entries and a non-null
+     * {@link BrowseContinuation} when more remain.
      *
-     * @param filter the filter selecting where to browse.
+     * @param requestId     correlates this browse's pages.
+     * @param filter        the filter selecting where to browse.
+     * @param maxReferences max entries per page; {@code 0} lets the device decide, {@code >0} forces pagination.
      */
-    protected void doBrowse(final @NotNull BrowseFilter filter) {
-        output.browseResult(List.of());
+    protected void doBrowse(final int requestId, final @NotNull BrowseFilter filter, final int maxReferences) {
+        output.browsePage(requestId, List.of(), null);
+    }
+
+    /**
+     * Default: answers a single empty last page. Override alongside {@link #doBrowse(int, BrowseFilter, int)}
+     * to resume from the given continuation.
+     *
+     * @param requestId    the browse this page belongs to.
+     * @param continuation the opaque token from the previous page.
+     */
+    protected void doBrowseNext(final int requestId, final @NotNull BrowseContinuation continuation) {
+        output.browsePage(requestId, List.of(), null);
     }
 
     /**

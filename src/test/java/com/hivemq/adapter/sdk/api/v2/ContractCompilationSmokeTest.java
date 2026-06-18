@@ -15,6 +15,7 @@
  */
 package com.hivemq.adapter.sdk.api.v2;
 
+import com.hivemq.adapter.sdk.api.v2.model.BrowseContinuation;
 import com.hivemq.adapter.sdk.api.v2.model.BrowseFilter;
 import com.hivemq.adapter.sdk.api.v2.model.WriteEntry;
 import com.hivemq.adapter.sdk.api.v2.messaging.MailboxMessage;
@@ -78,7 +79,11 @@ class ContractCompilationSmokeTest {
         }
 
         @Override
-        public void browse(final @NotNull BrowseFilter filter) {
+        public void browse(final int requestId, final @NotNull BrowseFilter filter, final int maxReferences) {
+        }
+
+        @Override
+        public void browseNext(final int requestId, final @NotNull BrowseContinuation continuation) {
         }
     }
 
