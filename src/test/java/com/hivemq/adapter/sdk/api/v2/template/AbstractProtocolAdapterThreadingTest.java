@@ -87,7 +87,7 @@ class AbstractProtocolAdapterThreadingTest {
         }
 
         @Override
-        protected void doBrowse(final @NotNull BrowseFilter filter) {
+        protected void doBrowse(final int requestId, final @NotNull BrowseFilter filter, final int maxReferences) {
             record("doBrowse:" + filter.filterNode().nodeId());
         }
     }
@@ -116,7 +116,7 @@ class AbstractProtocolAdapterThreadingTest {
         adapter.connect();
         adapter.pollBatch(List.of(new TestNode("node-a")));
         adapter.pollBatch(List.of(new TestNode("node-b")));
-        adapter.browse(new BrowseFilter(new TestNode("root")));
+        adapter.browse(1, new BrowseFilter(new TestNode("root")), 0);
 
         dispatcher.drainAll();
         assertThat(adapter.executed)
