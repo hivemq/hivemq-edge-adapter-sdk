@@ -78,10 +78,10 @@ class DefaultNoOpTest {
         final MinimalAdapter adapter =
                 new MinimalAdapter(TestProtocolAdapterInput.create("adapter-1", dispatcher), callbacks);
 
-        adapter.browse(new BrowseFilter(new TestNode("root")));
+        adapter.browse(7, new BrowseFilter(new TestNode("root")), 0);
 
         dispatcher.drainAll();
-        assertThat(callbacks.invocations()).containsExactly("browseResult");
+        assertThat(callbacks.invocations()).containsExactly("browsePage:7:last");
         assertThat(callbacks.browseResults()).containsExactly(List.of());
     }
 
