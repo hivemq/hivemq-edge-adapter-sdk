@@ -15,7 +15,9 @@
  */
 package com.hivemq.adapter.sdk.api.v2;
 
+import com.hivemq.adapter.sdk.api.v2.model.BrowseContinuation;
 import com.hivemq.adapter.sdk.api.v2.model.BrowseFilter;
+import com.hivemq.adapter.sdk.api.v2.model.BrowseResultEntry;
 import com.hivemq.adapter.sdk.api.v2.model.WriteEntry;
 import com.hivemq.adapter.sdk.api.v2.model.ProtocolAdapterOutput;
 import com.hivemq.adapter.sdk.api.v2.node.Node;
@@ -32,10 +34,10 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * <b>Long-running commands.</b> An implementation may block its own dispatch thread (a blocking
  * {@code connect()} against a protocol library is normal); queued commands simply wait, and the framework's
- * watchdogs bound the damage. A long {@code browse} walk, however, starves polls for its whole duration on a
- * single-threaded implementation — adapters with large address spaces should implement browse asynchronously
- * inside the adapter (issue the walk on library threads, report
- * {@link ProtocolAdapterOutput#browseResult(List)} via the thread-safe callbacks).
+ * watchdogs bound the damage. Browse does <b>not</b> walk a whole address space in one command: it is
+ * <b>paginated</b> ({@link #browse(int, BrowseFilter, int)} / {@link #browseNext(int, BrowseContinuation)}),
+ * so each step is a single round-trip and lifecycle ({@code CONTROL}) commands and polls interleave between
+ * pages — a large address space never starves them.
  */
 public interface ProtocolAdapter {
 
@@ -121,10 +123,26 @@ public interface ProtocolAdapter {
     void writeBatch(@NotNull List<WriteEntry> entries);
 
     /**
-     * Enumerate the device's address space below the filter node. Answered by one
-     * {@link ProtocolAdapterOutput#browseResult(List)}.
+     * Begin enumerating the device's address space below the filter node — <b>one page at a time</b>. Answered
+     * by one {@link ProtocolAdapterOutput#browsePage(int, List, BrowseContinuation)} or
+     * {@link ProtocolAdapterOutput#browseError(int, String)}; if that page carries a non-null
+     * {@link BrowseContinuation}, the framework fetches the next page with
+     * {@link #browseNext(int, BrowseContinuation)}. Pagination keeps each step a single round-trip, so a large
+     * address space never starves lifecycle commands or polls.
      *
-     * @param filter the filter selecting where to browse.
+     * @param requestId     correlates this browse's pages and errors.
+     * @param filter        the filter selecting where to browse.
+     * @param maxReferences max entries per page; {@code 0} lets the device decide, {@code >0} forces pagination.
      */
-    void browse(@NotNull BrowseFilter filter);
+    void browse(int requestId, @NotNull BrowseFilter filter, int maxReferences);
+
+    /**
+     * Fetch the next page of an in-progress browse. Answered by one
+     * {@link ProtocolAdapterOutput#browsePage(int, List, BrowseContinuation)} (continuation {@code null} = last
+     * page) or {@link ProtocolAdapterOutput#browseError(int, String)}.
+     *
+     * @param requestId    the browse these pages belong to.
+     * @param continuation the opaque token from the previous page.
+     */
+    void browseNext(int requestId, @NotNull BrowseContinuation continuation);
 }
