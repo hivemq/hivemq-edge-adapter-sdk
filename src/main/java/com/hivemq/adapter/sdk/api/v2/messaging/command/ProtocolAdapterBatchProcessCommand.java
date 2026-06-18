@@ -17,6 +17,7 @@ package com.hivemq.adapter.sdk.api.v2.messaging.command;
 
 import com.hivemq.adapter.sdk.api.v2.ProtocolAdapter;
 import com.hivemq.adapter.sdk.api.v2.messaging.MailboxMessagePriority;
+import com.hivemq.adapter.sdk.api.v2.model.BrowseContinuation;
 import com.hivemq.adapter.sdk.api.v2.model.BrowseFilter;
 import com.hivemq.adapter.sdk.api.v2.model.WriteEntry;
 import com.hivemq.adapter.sdk.api.v2.node.Node;
@@ -90,10 +91,23 @@ public sealed interface ProtocolAdapterBatchProcessCommand extends ProtocolAdapt
     }
 
     /**
-     * Carries {@link ProtocolAdapter#browse(BrowseFilter)}.
+     * Carries {@link ProtocolAdapter#browse(int, BrowseFilter, int)} — the first page of a browse.
      *
-     * @param filter the filter selecting where to browse.
+     * @param requestId     correlates this browse's pages.
+     * @param filter        the filter selecting where to browse.
+     * @param maxReferences max entries per page; {@code 0} lets the device decide, {@code >0} forces pagination.
      */
-    record Browse(@NotNull BrowseFilter filter) implements ProtocolAdapterBatchProcessCommand {
+    record Browse(int requestId, @NotNull BrowseFilter filter, int maxReferences)
+            implements ProtocolAdapterBatchProcessCommand {
+    }
+
+    /**
+     * Carries {@link ProtocolAdapter#browseNext(int, BrowseContinuation)} — the next page of a browse.
+     *
+     * @param requestId    the browse this page belongs to.
+     * @param continuation the opaque token from the previous page.
+     */
+    record BrowseNext(int requestId, @NotNull BrowseContinuation continuation)
+            implements ProtocolAdapterBatchProcessCommand {
     }
 }

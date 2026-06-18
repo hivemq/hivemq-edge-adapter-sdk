@@ -102,9 +102,21 @@ public interface ProtocolAdapterOutput {
     void writeResult(@NotNull Node node, boolean success, @Nullable String reason);
 
     /**
-     * Answers {@link ProtocolAdapter#browse(com.hivemq.adapter.sdk.api.v2.model.BrowseFilter)}.
+     * Answers one page of {@link ProtocolAdapter#browse(int, BrowseFilter, int)} /
+     * {@link ProtocolAdapter#browseNext(int, BrowseContinuation)}.
      *
-     * @param entries the discovered nodes.
+     * @param requestId    the browse these entries belong to.
+     * @param entries      the discovered nodes in this page.
+     * @param continuation an opaque token to fetch the next page, or {@code null} if this is the last page.
      */
-    void browseResult(@NotNull List<BrowseResultEntry> entries);
+    void browsePage(
+            int requestId, @NotNull List<BrowseResultEntry> entries, @Nullable BrowseContinuation continuation);
+
+    /**
+     * Reports that a browse failed (for example server throttling or an expired continuation point).
+     *
+     * @param requestId the browse that failed.
+     * @param reason    a human-readable description of the failure.
+     */
+    void browseError(int requestId, @NotNull String reason);
 }

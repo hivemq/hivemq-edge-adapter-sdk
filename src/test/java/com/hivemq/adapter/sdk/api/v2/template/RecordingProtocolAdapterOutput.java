@@ -16,6 +16,7 @@
 package com.hivemq.adapter.sdk.api.v2.template;
 
 import com.hivemq.adapter.sdk.api.data.DataPoint;
+import com.hivemq.adapter.sdk.api.v2.model.BrowseContinuation;
 import com.hivemq.adapter.sdk.api.v2.model.BrowseResultEntry;
 import com.hivemq.adapter.sdk.api.v2.model.ErrorScope;
 import com.hivemq.adapter.sdk.api.v2.model.VerifyOutcome;
@@ -85,9 +86,17 @@ final class RecordingProtocolAdapterOutput implements ProtocolAdapterOutput {
     }
 
     @Override
-    public void browseResult(final @NotNull List<BrowseResultEntry> entries) {
-        invocations.add("browseResult");
+    public void browsePage(
+            final int requestId,
+            final @NotNull List<BrowseResultEntry> entries,
+            final @Nullable BrowseContinuation continuation) {
+        invocations.add("browsePage:" + requestId + ":" + (continuation == null ? "last" : "more"));
         browseResults.add(entries);
+    }
+
+    @Override
+    public void browseError(final int requestId, final @NotNull String reason) {
+        invocations.add("browseError:" + requestId + ":" + reason);
     }
 
     @NotNull List<String> invocations() {
