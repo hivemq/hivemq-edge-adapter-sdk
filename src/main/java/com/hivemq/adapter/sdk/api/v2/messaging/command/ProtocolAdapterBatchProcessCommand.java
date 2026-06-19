@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * The batch and browse commands — delivered in the {@link MailboxMessagePriority#DATA} band, so bulk work
- * yields to lifecycle. Sealed over its six immutable record commands (list components are defensively copied).
+ * yields to lifecycle. Sealed over its seven immutable record commands (list components are defensively copied).
  */
 public sealed interface ProtocolAdapterBatchProcessCommand extends ProtocolAdapterCommand {
 
@@ -109,5 +109,18 @@ public sealed interface ProtocolAdapterBatchProcessCommand extends ProtocolAdapt
      */
     record BrowseNext(int requestId, @NotNull BrowseContinuation continuation)
             implements ProtocolAdapterBatchProcessCommand {
+    }
+
+    /**
+     * Carries {@link ProtocolAdapter#readNodeAttributes(int, List)} — the RESOLVE step of a browse.
+     *
+     * @param requestId correlates this resolve with the browse that discovered the nodes.
+     * @param nodes     the discovered nodes whose attributes to resolve.
+     */
+    record ReadNodeAttributes(int requestId, @NotNull List<Node> nodes)
+            implements ProtocolAdapterBatchProcessCommand {
+        public ReadNodeAttributes {
+            nodes = List.copyOf(nodes);
+        }
     }
 }
