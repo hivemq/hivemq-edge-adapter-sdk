@@ -21,10 +21,18 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * One entry of a browse result. The node kind is the reused v1 {@link NodeType}.
+ * <p>
+ * {@code browseName} is the node's human-meaningful name within its parent (for OPC-UA, the BrowseName
+ * attribute, e.g. {@code "Temperature"}) — distinct from {@link Node#nodeId()}, which is the machine address.
+ * The framework needs it <b>at discovery time</b> to assemble a node's path from its ancestors' browse names
+ * (e.g. {@code /Plant/Line1/Temperature}) and from that a default tag name; this cannot be recovered later,
+ * because the parentage is known only while walking. Empty when the protocol has no such name.
  *
  * @param node       the discovered node.
  * @param type       the kind of node (folder, object, or value).
  * @param selectable whether the node can be selected as a tag's node definition.
+ * @param browseName the node's name within its parent, used to build paths and default tag names.
  */
-public record BrowseResultEntry(@NotNull Node node, @NotNull NodeType type, boolean selectable) {
+public record BrowseResultEntry(
+        @NotNull Node node, @NotNull NodeType type, boolean selectable, @NotNull String browseName) {
 }
