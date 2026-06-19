@@ -85,6 +85,10 @@ class ContractCompilationSmokeTest {
         @Override
         public void browseNext(final int requestId, final @NotNull BrowseContinuation continuation) {
         }
+
+        @Override
+        public void readNodeAttributes(final int requestId, final @NotNull List<Node> nodes) {
+        }
     }
 
     private record TestMessage() implements MailboxMessage {

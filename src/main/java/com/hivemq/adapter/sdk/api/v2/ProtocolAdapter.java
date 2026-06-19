@@ -145,4 +145,19 @@ public interface ProtocolAdapter {
      * @param continuation the opaque token from the previous page.
      */
     void browseNext(int requestId, @NotNull BrowseContinuation continuation);
+
+    /**
+     * Resolve the device attributes (datatype, access, description) of the given nodes — the RESOLVE half of a
+     * browse. {@link #browse(int, BrowseFilter, int)} DISCOVERs which nodes exist; this reads their attributes so
+     * the framework can build typed tag definitions. Like browse it is <b>pure mechanism</b>: one server
+     * round-trip per call (the framework batches the discovered variables), answered by a single
+     * {@link ProtocolAdapterOutput#readAttributesResult(int, List)} carrying one
+     * {@link com.hivemq.adapter.sdk.api.v2.model.ResolvedAttributes} per node, or by
+     * {@link ProtocolAdapterOutput#browseError(int, String)} on failure. Correlated to its browse by
+     * {@code requestId}.
+     *
+     * @param requestId correlates this resolve with the browse that discovered the nodes.
+     * @param nodes     the discovered nodes whose attributes to resolve.
+     */
+    void readNodeAttributes(int requestId, @NotNull List<Node> nodes);
 }
