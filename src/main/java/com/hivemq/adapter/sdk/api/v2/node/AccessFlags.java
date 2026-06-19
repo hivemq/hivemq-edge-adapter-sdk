@@ -32,4 +32,49 @@ public record AccessFlags(
         @NotNull AccessTriState writable,
         @NotNull AccessTriState pollable,
         @NotNull AccessTriState subscribable) {
+
+    /**
+     * @return a builder for {@link AccessFlags}. The four capabilities are all {@link AccessTriState} and so are
+     *         trivially transposed when passed positionally to the canonical constructor; the builder names each
+     *         at the call site. Every capability defaults to {@link AccessTriState#NO} until set.
+     */
+    public static @NotNull Builder builder() {
+        return new Builder();
+    }
+
+    /**
+     * Names each {@link AccessFlags} capability at the call site instead of relying on positional order.
+     */
+    public static final class Builder {
+        private @NotNull AccessTriState readable = AccessTriState.NO;
+        private @NotNull AccessTriState writable = AccessTriState.NO;
+        private @NotNull AccessTriState pollable = AccessTriState.NO;
+        private @NotNull AccessTriState subscribable = AccessTriState.NO;
+
+        private Builder() {}
+
+        public @NotNull Builder readable(final @NotNull AccessTriState readable) {
+            this.readable = readable;
+            return this;
+        }
+
+        public @NotNull Builder writable(final @NotNull AccessTriState writable) {
+            this.writable = writable;
+            return this;
+        }
+
+        public @NotNull Builder pollable(final @NotNull AccessTriState pollable) {
+            this.pollable = pollable;
+            return this;
+        }
+
+        public @NotNull Builder subscribable(final @NotNull AccessTriState subscribable) {
+            this.subscribable = subscribable;
+            return this;
+        }
+
+        public @NotNull AccessFlags build() {
+            return new AccessFlags(readable, writable, pollable, subscribable);
+        }
+    }
 }
