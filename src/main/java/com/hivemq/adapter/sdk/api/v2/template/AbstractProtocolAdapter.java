@@ -49,7 +49,9 @@ import org.jetbrains.annotations.NotNull;
  * of queued batch work — but nothing can preempt an in-flight {@code do*}. Browse is paginated
  * ({@link #doBrowse(int, BrowseFilter, int)} / {@link #doBrowseNext(int, BrowseContinuation)}): each call
  * returns a single page via {@link ProtocolAdapterOutput#browsePage(int, List, BrowseContinuation)}, so a large
- * address space yields the dispatch thread between pages and never starves polls or {@code CONTROL} commands.
+ * address space yields the dispatch thread between pages and never starves polls or {@code CONTROL} commands. The
+ * RESOLVE step ({@link #doReadNodeAttributes(int, List)}) reads the discovered nodes' attributes in the same
+ * {@code DATA} band, one batched round-trip at a time.
  * <p>
  * An author who needs a different threading model does not use this template: implement
  * {@link ProtocolAdapter} directly, or supply a different
@@ -150,6 +152,11 @@ public abstract class AbstractProtocolAdapter implements ProtocolAdapter, Messag
         mailbox.tell(new ProtocolAdapterBatchProcessCommand.BrowseNext(requestId, continuation));
     }
 
+    @Override
+    public final void readNodeAttributes(final int requestId, final @NotNull List<Node> nodes) {
+        mailbox.tell(new ProtocolAdapterBatchProcessCommand.ReadNodeAttributes(requestId, nodes));
+    }
+
     // ── MessageHandler: one message at a time on the dispatch thread ─────────────────────────────
 
     @Override
@@ -170,6 +177,8 @@ public abstract class AbstractProtocolAdapter implements ProtocolAdapter, Messag
                     doBrowse(browse.requestId(), browse.filter(), browse.maxReferences());
             case ProtocolAdapterBatchProcessCommand.BrowseNext browseNext ->
                     doBrowseNext(browseNext.requestId(), browseNext.continuation());
+            case ProtocolAdapterBatchProcessCommand.ReadNodeAttributes readNodeAttributes ->
+                    doReadNodeAttributes(readNodeAttributes.requestId(), readNodeAttributes.nodes());
         }
     }
 
@@ -244,6 +253,18 @@ public abstract class AbstractProtocolAdapter implements ProtocolAdapter, Messag
      */
     protected void doBrowseNext(final int requestId, final @NotNull BrowseContinuation continuation) {
         output.browsePage(requestId, List.of(), null);
+    }
+
+    /**
+     * Default: answers an empty result — for protocols that cannot resolve node attributes. Override alongside
+     * {@link #doBrowse(int, BrowseFilter, int)} to read each node's datatype, access, and description and report
+     * them with {@link ProtocolAdapterOutput#readAttributesResult(int, List)}.
+     *
+     * @param requestId correlates this resolve with the browse that discovered the nodes.
+     * @param nodes     the discovered nodes whose attributes to resolve.
+     */
+    protected void doReadNodeAttributes(final int requestId, final @NotNull List<Node> nodes) {
+        output.readAttributesResult(requestId, List.of());
     }
 
     /**

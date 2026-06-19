@@ -113,9 +113,22 @@ public interface ProtocolAdapterOutput {
             int requestId, @NotNull List<BrowseResultEntry> entries, @Nullable BrowseContinuation continuation);
 
     /**
-     * Reports that a browse failed (for example server throttling or an expired continuation point).
+     * Answers {@link ProtocolAdapter#readNodeAttributes(int, List)} — the RESOLVE step of a browse — with the
+     * device-resolved attributes of the requested nodes, one {@link ResolvedAttributes} per node, reported once
+     * for the whole batch.
      *
-     * @param requestId the browse that failed.
+     * @param requestId  the browse/resolve these attributes belong to.
+     * @param attributes the resolved attributes, one per requested node.
+     */
+    void readAttributesResult(int requestId, @NotNull List<ResolvedAttributes> attributes);
+
+    /**
+     * Reports that a browse step failed — a {@link ProtocolAdapter#browse(int, BrowseFilter, int)} /
+     * {@link ProtocolAdapter#browseNext(int, BrowseContinuation)} page or a
+     * {@link ProtocolAdapter#readNodeAttributes(int, List)} resolve (for example server throttling or an expired
+     * continuation point). Correlated to its request by {@code requestId}.
+     *
+     * @param requestId the browse/resolve that failed.
      * @param reason    a human-readable description of the failure.
      */
     void browseError(int requestId, @NotNull String reason);
