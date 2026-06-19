@@ -23,6 +23,7 @@
  * to the framework. The boundary value types — {@link com.hivemq.adapter.sdk.api.v2.model.WriteEntry},
  * {@link com.hivemq.adapter.sdk.api.v2.model.BrowseFilter},
  * {@link com.hivemq.adapter.sdk.api.v2.model.BrowseResultEntry},
+ * {@link com.hivemq.adapter.sdk.api.v2.model.ResolvedAttributes},
  * {@link com.hivemq.adapter.sdk.api.v2.model.ErrorScope}, and
  * {@link com.hivemq.adapter.sdk.api.v2.model.VerifyOutcome} — reuse the v1 types where they exist (a southbound
  * value is the reused {@link com.hivemq.adapter.sdk.api.data.DataPoint}; a browse entry's node kind is the
