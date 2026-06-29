@@ -38,7 +38,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 /**
- * EDG-734 — independent, adversarial concurrency verification of {@link DefaultMailbox}, deliberately disjoint
+ * Independent, adversarial concurrency verification of {@link DefaultMailbox}, deliberately disjoint
  * from {@code DefaultMailboxMpscTest} (which already proves exactly-once delivery, within-band FIFO, a single
  * wake-on-tell, and clean timeout). This class attacks only what that test leaves open, exclusively on REAL
  * threads, Awaitility only — never {@code Thread.sleep}:
