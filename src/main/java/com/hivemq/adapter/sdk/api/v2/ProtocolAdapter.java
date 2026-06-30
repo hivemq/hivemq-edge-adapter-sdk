@@ -160,4 +160,20 @@ public interface ProtocolAdapter {
      * @param nodes     the discovered nodes whose attributes to resolve.
      */
     void readNodeAttributes(int requestId, @NotNull List<Node> nodes);
+
+    /**
+     * Abandon an in-flight browse: the framework calls this when it gives up on a browse (a request deadline or
+     * a lost connection) so the adapter can release any device-side resource the paginated walk holds open —
+     * for OPC-UA, the server continuation point ({@code ReleaseContinuationPoints}). It expects <b>no</b>
+     * answer: any page, attribute result, or error the adapter still emits for {@code requestId} is ignored.
+     * The default does nothing, which is correct for protocols that hold no per-browse server state.
+     * <p>
+     * <b>Browse request contract.</b> The framework runs <b>one browse at a time per adapter</b> and owns the
+     * {@code requestId}, allocating a fresh one per browse and stamping every {@code browse} / {@code browseNext}
+     * / {@code readNodeAttributes} with it. An adapter need not validate the id; it simply echoes it on every
+     * answer so the framework can discard answers from a superseded browse.
+     *
+     * @param requestId the browse to abandon and release.
+     */
+    default void browseCancel(final int requestId) {}
 }
