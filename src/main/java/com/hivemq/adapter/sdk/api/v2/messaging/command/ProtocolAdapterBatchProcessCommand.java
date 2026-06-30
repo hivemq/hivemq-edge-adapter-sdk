@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * The batch and browse commands — delivered in the {@link MailboxMessagePriority#DATA} band, so bulk work
- * yields to lifecycle. Sealed over its seven immutable record commands (list components are defensively copied).
+ * yields to lifecycle. Sealed over its eight immutable record commands (list components are defensively copied).
  */
 public sealed interface ProtocolAdapterBatchProcessCommand extends ProtocolAdapterCommand {
 
@@ -122,5 +122,14 @@ public sealed interface ProtocolAdapterBatchProcessCommand extends ProtocolAdapt
         public ReadNodeAttributes {
             nodes = List.copyOf(nodes);
         }
+    }
+
+    /**
+     * Carries {@link ProtocolAdapter#browseCancel(int)} — abandon an in-flight browse and release any device-side
+     * resource it holds open. No answer is expected.
+     *
+     * @param requestId the browse to abandon and release.
+     */
+    record BrowseCancel(int requestId) implements ProtocolAdapterBatchProcessCommand {
     }
 }
