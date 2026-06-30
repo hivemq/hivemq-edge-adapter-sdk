@@ -28,7 +28,7 @@
  * ({@code CONTROL} &gt; {@code EVENT} &gt; {@code TICK} &gt; {@code DATA}), FIFO within a band. Adapter code
  * may call any output method from any thread with no locking.
  * <p>
- * <b>The reuse boundary (decision D2).</b> The protocol-agnostic v1 SDK subset is reused as-is and never
+ * <b>The reuse boundary.</b> The protocol-agnostic v1 SDK subset is reused as-is and never
  * duplicated here: values are {@link com.hivemq.adapter.sdk.api.data.DataPoint} (built with
  * {@link com.hivemq.adapter.sdk.api.factories.DataPointFactory}), value, configuration, and node-definition
  * shapes are {@link com.hivemq.adapter.sdk.api.schema.Schema}, browse node kinds are
