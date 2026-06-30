@@ -157,6 +157,11 @@ public abstract class AbstractProtocolAdapter implements ProtocolAdapter, Messag
         mailbox.tell(new ProtocolAdapterBatchProcessCommand.ReadNodeAttributes(requestId, nodes));
     }
 
+    @Override
+    public final void browseCancel(final int requestId) {
+        mailbox.tell(new ProtocolAdapterBatchProcessCommand.BrowseCancel(requestId));
+    }
+
     // ── MessageHandler: one message at a time on the dispatch thread ─────────────────────────────
 
     @Override
@@ -179,6 +184,8 @@ public abstract class AbstractProtocolAdapter implements ProtocolAdapter, Messag
                     doBrowseNext(browseNext.requestId(), browseNext.continuation());
             case ProtocolAdapterBatchProcessCommand.ReadNodeAttributes readNodeAttributes ->
                     doReadNodeAttributes(readNodeAttributes.requestId(), readNodeAttributes.nodes());
+            case ProtocolAdapterBatchProcessCommand.BrowseCancel browseCancel ->
+                    doBrowseCancel(browseCancel.requestId());
         }
     }
 
@@ -266,6 +273,15 @@ public abstract class AbstractProtocolAdapter implements ProtocolAdapter, Messag
     protected void doReadNodeAttributes(final int requestId, final @NotNull List<Node> nodes) {
         output.readAttributesResult(requestId, List.of());
     }
+
+    /**
+     * Default: does nothing — correct for protocols that hold no per-browse server state. Override alongside
+     * {@link #doBrowse(int, BrowseFilter, int)} to release a device-side resource an abandoned paginated walk
+     * holds open (for OPC-UA, {@code ReleaseContinuationPoints}). No answer is expected.
+     *
+     * @param requestId the browse to abandon and release.
+     */
+    protected void doBrowseCancel(final int requestId) {}
 
     /**
      * Default: reports {@link VerifyOutcome.Success} — for protocols that cannot verify a node ahead of use.
