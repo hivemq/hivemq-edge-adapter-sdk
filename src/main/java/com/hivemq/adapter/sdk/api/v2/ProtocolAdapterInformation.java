@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
  * Identity, display metadata, and capabilities of a protocol adapter type. This is the <b>single</b> home of
  * {@link #capabilities()} — the factory deliberately has no capability accessor.
  * <p>
- * Category and search tags are the reused v1 enums (reuse boundary, decision D2).
+ * Category and search tags are the reused v1 enums (the reuse boundary).
  */
 public interface ProtocolAdapterInformation {
 
