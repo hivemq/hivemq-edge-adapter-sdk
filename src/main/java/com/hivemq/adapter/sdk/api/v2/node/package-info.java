@@ -24,6 +24,6 @@
  * lookup map anywhere.
  * <p>
  * A tag's value shape is the <b>reused</b> v1 {@link com.hivemq.adapter.sdk.api.schema.Schema} — no v2
- * duplicate exists (reuse boundary, decision D2).
+ * duplicate exists (the reuse boundary).
  */
 package com.hivemq.adapter.sdk.api.v2.node;
