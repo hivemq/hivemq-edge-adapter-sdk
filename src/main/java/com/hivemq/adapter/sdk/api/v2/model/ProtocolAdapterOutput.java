@@ -110,7 +110,7 @@ public interface ProtocolAdapterOutput {
      * @param continuation an opaque token to fetch the next page, or {@code null} if this is the last page.
      */
     void browsePage(
-            int requestId, @NotNull List<BrowseResultEntry> entries, @Nullable BrowseContinuation continuation);
+            int requestId, @NotNull List<BrowseNode> entries, @Nullable BrowseContinuation continuation);
 
     /**
      * Answers {@link ProtocolAdapter#readNodeAttributes(int, List)} — the RESOLVE step of a browse — with the

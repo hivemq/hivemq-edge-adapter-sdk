@@ -22,7 +22,7 @@
  * {@link com.hivemq.adapter.sdk.api.v2.model.ProtocolAdapterOutput} is the adapter's thread-safe tell-façade back
  * to the framework. The boundary value types — {@link com.hivemq.adapter.sdk.api.v2.model.WriteEntry},
  * {@link com.hivemq.adapter.sdk.api.v2.model.BrowseFilter},
- * {@link com.hivemq.adapter.sdk.api.v2.model.BrowseResultEntry},
+ * {@link com.hivemq.adapter.sdk.api.v2.model.BrowseNode},
  * {@link com.hivemq.adapter.sdk.api.v2.model.ResolvedAttributes},
  * {@link com.hivemq.adapter.sdk.api.v2.model.ErrorScope}, and
  * {@link com.hivemq.adapter.sdk.api.v2.model.VerifyOutcome} — reuse the v1 types where they exist (a southbound
