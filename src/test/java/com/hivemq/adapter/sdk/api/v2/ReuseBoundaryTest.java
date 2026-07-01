@@ -40,7 +40,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * The reuse boundary (decision D2) and naming rule N2: {@code api.v2} references the reused v1 types
+ * The SDK reuse boundary and its no-abbreviations naming rule: {@code api.v2} references the reused v1 types
  * — {@link DataPoint}, {@link Schema}, {@link NodeType}, the category and search-tag enums — and never shadows
  * them; the package name carries the version, so no type takes a {@code 2} suffix and no identifier contains a
  * known abbreviation.
