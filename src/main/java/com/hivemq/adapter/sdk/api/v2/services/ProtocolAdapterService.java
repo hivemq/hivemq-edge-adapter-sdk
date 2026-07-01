@@ -30,8 +30,11 @@ public interface ProtocolAdapterService {
     @NotNull DataPointFactory dataPointFactory();
 
     /**
-     * @return the dispatcher a message-driven adapter attaches its mailbox to (single-threaded behavior). An
-     *         author who needs a different threading model supplies a different {@link MessageDispatcher}.
+     * @return the dispatcher a message-driven adapter attaches its mailbox to (single-threaded behavior). Every
+     *         binding opened through this dispatcher is owned by the framework and released when the adapter instance
+     *         is discarded (removal, full recreate, or subsystem shutdown), so an adapter need not be
+     *         {@link AutoCloseable} to have its dispatch thread cleaned up. An author who needs a different threading
+     *         model supplies a different {@link MessageDispatcher}.
      */
     @NotNull MessageDispatcher dispatcher();
 }
