@@ -20,7 +20,7 @@ import com.hivemq.adapter.sdk.api.v2.node.Node;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * One entry of a browse result. The node kind is the reused v1 {@link NodeType}.
+ * A single node discovered by a browse. The node kind is the reused v1 {@link NodeType}.
  * <p>
  * {@code browseName} is the node's human-meaningful name within its parent (for OPC-UA, the BrowseName
  * attribute, e.g. {@code "Temperature"}) — distinct from {@link Node#nodeId()}, which is the machine address.
@@ -33,6 +33,6 @@ import org.jetbrains.annotations.NotNull;
  * @param selectable whether the node can be selected as a tag's node definition.
  * @param browseName the node's name within its parent, used to build paths and default tag names.
  */
-public record BrowseResultEntry(
+public record BrowseNode(
         @NotNull Node node, @NotNull NodeType type, boolean selectable, @NotNull String browseName) {
 }
