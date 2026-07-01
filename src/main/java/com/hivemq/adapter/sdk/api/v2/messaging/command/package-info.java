@@ -22,7 +22,7 @@
  * split into the {@link com.hivemq.adapter.sdk.api.v2.messaging.command.ProtocolAdapterConnectionCommand}
  * ({@code CONTROL}) and {@link com.hivemq.adapter.sdk.api.v2.messaging.command.ProtocolAdapterBatchProcessCommand}
  * ({@code DATA}) bands. The value types those commands and their acknowledgements carry — write entries, browse
- * filters and results, error scopes, and verification outcomes — live in
+ * filters and results, resolved attributes, error scopes, and verification outcomes — live in
  * {@link com.hivemq.adapter.sdk.api.v2.model}.
  */
 package com.hivemq.adapter.sdk.api.v2.messaging.command;

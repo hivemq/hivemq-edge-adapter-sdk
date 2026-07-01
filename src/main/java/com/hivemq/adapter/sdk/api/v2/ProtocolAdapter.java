@@ -15,7 +15,9 @@
  */
 package com.hivemq.adapter.sdk.api.v2;
 
+import com.hivemq.adapter.sdk.api.v2.model.BrowseContinuation;
 import com.hivemq.adapter.sdk.api.v2.model.BrowseFilter;
+import com.hivemq.adapter.sdk.api.v2.model.BrowseNode;
 import com.hivemq.adapter.sdk.api.v2.model.WriteEntry;
 import com.hivemq.adapter.sdk.api.v2.model.ProtocolAdapterOutput;
 import com.hivemq.adapter.sdk.api.v2.node.Node;
@@ -32,10 +34,10 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * <b>Long-running commands.</b> An implementation may block its own dispatch thread (a blocking
  * {@code connect()} against a protocol library is normal); queued commands simply wait, and the framework's
- * watchdogs bound the damage. A long {@code browse} walk, however, starves polls for its whole duration on a
- * single-threaded implementation — adapters with large address spaces should implement browse asynchronously
- * inside the adapter (issue the walk on library threads, report
- * {@link ProtocolAdapterOutput#browseResult(List)} via the thread-safe callbacks).
+ * watchdogs bound the damage. Browse does <b>not</b> walk a whole address space in one command: it is
+ * <b>paginated</b> ({@link #browse(int, BrowseFilter, int)} / {@link #browseNext(int, BrowseContinuation)}),
+ * so each step is a single round-trip and lifecycle ({@code CONTROL}) commands and polls interleave between
+ * pages — a large address space never starves them.
  */
 public interface ProtocolAdapter {
 
@@ -121,10 +123,57 @@ public interface ProtocolAdapter {
     void writeBatch(@NotNull List<WriteEntry> entries);
 
     /**
-     * Enumerate the device's address space below the filter node. Answered by one
-     * {@link ProtocolAdapterOutput#browseResult(List)}.
+     * Begin enumerating the device's address space below the filter node — <b>one page at a time</b>. Answered
+     * by one {@link ProtocolAdapterOutput#browsePage(int, List, BrowseContinuation)} or
+     * {@link ProtocolAdapterOutput#browseError(int, String)}; if that page carries a non-null
+     * {@link BrowseContinuation}, the framework fetches the next page with
+     * {@link #browseNext(int, BrowseContinuation)}. Pagination keeps each step a single round-trip, so a large
+     * address space never starves lifecycle commands or polls.
      *
-     * @param filter the filter selecting where to browse.
+     * @param requestId     correlates this browse's pages and errors.
+     * @param filter        the filter selecting where to browse.
+     * @param maxReferences max entries per page; {@code 0} lets the device decide, {@code >0} forces pagination.
      */
-    void browse(@NotNull BrowseFilter filter);
+    void browse(int requestId, @NotNull BrowseFilter filter, int maxReferences);
+
+    /**
+     * Fetch the next page of an in-progress browse. Answered by one
+     * {@link ProtocolAdapterOutput#browsePage(int, List, BrowseContinuation)} (continuation {@code null} = last
+     * page) or {@link ProtocolAdapterOutput#browseError(int, String)}.
+     *
+     * @param requestId    the browse these pages belong to.
+     * @param continuation the opaque token from the previous page.
+     */
+    void browseNext(int requestId, @NotNull BrowseContinuation continuation);
+
+    /**
+     * Resolve the device attributes (datatype, access, description) of the given nodes — the RESOLVE half of a
+     * browse. {@link #browse(int, BrowseFilter, int)} DISCOVERs which nodes exist; this reads their attributes so
+     * the framework can build typed tag definitions. Like browse it is <b>pure mechanism</b>: one server
+     * round-trip per call (the framework batches the discovered variables), answered by a single
+     * {@link ProtocolAdapterOutput#readAttributesResult(int, List)} carrying one
+     * {@link com.hivemq.adapter.sdk.api.v2.model.ResolvedAttributes} per node, or by
+     * {@link ProtocolAdapterOutput#browseError(int, String)} on failure. Correlated to its browse by
+     * {@code requestId}.
+     *
+     * @param requestId correlates this resolve with the browse that discovered the nodes.
+     * @param nodes     the discovered nodes whose attributes to resolve.
+     */
+    void readNodeAttributes(int requestId, @NotNull List<Node> nodes);
+
+    /**
+     * Abandon an in-flight browse: the framework calls this when it gives up on a browse (a request deadline or
+     * a lost connection) so the adapter can release any device-side resource the paginated walk holds open —
+     * for OPC-UA, the server continuation point ({@code ReleaseContinuationPoints}). It expects <b>no</b>
+     * answer: any page, attribute result, or error the adapter still emits for {@code requestId} is ignored.
+     * The default does nothing, which is correct for protocols that hold no per-browse server state.
+     * <p>
+     * <b>Browse request contract.</b> The framework runs <b>one browse at a time per adapter</b> and owns the
+     * {@code requestId}, allocating a fresh one per browse and stamping every {@code browse} / {@code browseNext}
+     * / {@code readNodeAttributes} with it. An adapter need not validate the id; it simply echoes it on every
+     * answer so the framework can discard answers from a superseded browse.
+     *
+     * @param requestId the browse to abandon and release.
+     */
+    default void browseCancel(final int requestId) {}
 }
