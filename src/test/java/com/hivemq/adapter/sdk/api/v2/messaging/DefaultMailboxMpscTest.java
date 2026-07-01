@@ -35,7 +35,7 @@ import static org.awaitility.Awaitility.await;
 
 /**
  * The multi-producer / single-consumer contract of {@link DefaultMailbox} on REAL threads — Awaitility only,
- * never {@code Thread.sleep}. (Scenario S23 at the SDK level.)
+ * never {@code Thread.sleep}.
  */
 class DefaultMailboxMpscTest {
 
