@@ -16,8 +16,10 @@
 package com.hivemq.adapter.sdk.api.v2.template;
 
 import com.hivemq.adapter.sdk.api.data.DataPoint;
-import com.hivemq.adapter.sdk.api.v2.model.BrowseResultEntry;
+import com.hivemq.adapter.sdk.api.v2.model.BrowseContinuation;
+import com.hivemq.adapter.sdk.api.v2.model.BrowseNode;
 import com.hivemq.adapter.sdk.api.v2.model.ErrorScope;
+import com.hivemq.adapter.sdk.api.v2.model.ResolvedAttributes;
 import com.hivemq.adapter.sdk.api.v2.model.VerifyOutcome;
 import com.hivemq.adapter.sdk.api.v2.model.ProtocolAdapterOutput;
 import com.hivemq.adapter.sdk.api.v2.node.Node;
@@ -35,7 +37,8 @@ final class RecordingProtocolAdapterOutput implements ProtocolAdapterOutput {
     private final @NotNull List<String> invocations = new ArrayList<>();
     private final @NotNull List<DataPoint> dataPoints = new ArrayList<>();
     private final @NotNull List<VerifyOutcome> verifyOutcomes = new ArrayList<>();
-    private final @NotNull List<List<BrowseResultEntry>> browseResults = new ArrayList<>();
+    private final @NotNull List<List<BrowseNode>> browseResults = new ArrayList<>();
+    private final @NotNull List<List<ResolvedAttributes>> resolveResults = new ArrayList<>();
 
     @Override
     public void started() {
@@ -85,9 +88,23 @@ final class RecordingProtocolAdapterOutput implements ProtocolAdapterOutput {
     }
 
     @Override
-    public void browseResult(final @NotNull List<BrowseResultEntry> entries) {
-        invocations.add("browseResult");
+    public void browsePage(
+            final int requestId,
+            final @NotNull List<BrowseNode> entries,
+            final @Nullable BrowseContinuation continuation) {
+        invocations.add("browsePage:" + requestId + ":" + (continuation == null ? "last" : "more"));
         browseResults.add(entries);
+    }
+
+    @Override
+    public void readAttributesResult(final int requestId, final @NotNull List<ResolvedAttributes> attributes) {
+        invocations.add("readAttributesResult:" + requestId + ":" + attributes.size());
+        resolveResults.add(attributes);
+    }
+
+    @Override
+    public void browseError(final int requestId, final @NotNull String reason) {
+        invocations.add("browseError:" + requestId + ":" + reason);
     }
 
     @NotNull List<String> invocations() {
@@ -102,7 +119,11 @@ final class RecordingProtocolAdapterOutput implements ProtocolAdapterOutput {
         return verifyOutcomes;
     }
 
-    @NotNull List<List<BrowseResultEntry>> browseResults() {
+    @NotNull List<List<BrowseNode>> browseResults() {
         return browseResults;
+    }
+
+    @NotNull List<List<ResolvedAttributes>> resolveResults() {
+        return resolveResults;
     }
 }

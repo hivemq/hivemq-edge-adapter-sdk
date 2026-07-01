@@ -15,16 +15,16 @@
  */
 package com.hivemq.adapter.sdk.api.v2.model;
 
-import com.hivemq.adapter.sdk.api.discovery.NodeType;
-import com.hivemq.adapter.sdk.api.v2.node.Node;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * One entry of a browse result. The node kind is the reused v1 {@link NodeType}.
+ * An opaque continuation token for a paginated browse. The adapter produces one on a
+ * {@link ProtocolAdapterOutput#browsePage(int, java.util.List, BrowseContinuation)} when more pages remain,
+ * and the framework hands it back verbatim on
+ * {@link com.hivemq.adapter.sdk.api.v2.ProtocolAdapter#browseNext(int, BrowseContinuation)}. It is opaque to
+ * the framework — the adapter owns the encoding (for example an OPC-UA continuation point, base64-encoded).
  *
- * @param node       the discovered node.
- * @param type       the kind of node (folder, object, or value).
- * @param selectable whether the node can be selected as a tag's node definition.
+ * @param token the adapter-owned opaque resume token.
  */
-public record BrowseResultEntry(@NotNull Node node, @NotNull NodeType type, boolean selectable) {
+public record BrowseContinuation(@NotNull String token) {
 }

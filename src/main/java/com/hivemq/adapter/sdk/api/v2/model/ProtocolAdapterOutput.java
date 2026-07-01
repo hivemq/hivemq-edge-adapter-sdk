@@ -102,9 +102,34 @@ public interface ProtocolAdapterOutput {
     void writeResult(@NotNull Node node, boolean success, @Nullable String reason);
 
     /**
-     * Answers {@link ProtocolAdapter#browse(com.hivemq.adapter.sdk.api.v2.model.BrowseFilter)}.
+     * Answers one page of {@link ProtocolAdapter#browse(int, BrowseFilter, int)} /
+     * {@link ProtocolAdapter#browseNext(int, BrowseContinuation)}.
      *
-     * @param entries the discovered nodes.
+     * @param requestId    the browse these entries belong to.
+     * @param entries      the discovered nodes in this page.
+     * @param continuation an opaque token to fetch the next page, or {@code null} if this is the last page.
      */
-    void browseResult(@NotNull List<BrowseResultEntry> entries);
+    void browsePage(
+            int requestId, @NotNull List<BrowseNode> entries, @Nullable BrowseContinuation continuation);
+
+    /**
+     * Answers {@link ProtocolAdapter#readNodeAttributes(int, List)} — the RESOLVE step of a browse — with the
+     * device-resolved attributes of the requested nodes, one {@link ResolvedAttributes} per node, reported once
+     * for the whole batch.
+     *
+     * @param requestId  the browse/resolve these attributes belong to.
+     * @param attributes the resolved attributes, one per requested node.
+     */
+    void readAttributesResult(int requestId, @NotNull List<ResolvedAttributes> attributes);
+
+    /**
+     * Reports that a browse step failed — a {@link ProtocolAdapter#browse(int, BrowseFilter, int)} /
+     * {@link ProtocolAdapter#browseNext(int, BrowseContinuation)} page or a
+     * {@link ProtocolAdapter#readNodeAttributes(int, List)} resolve (for example server throttling or an expired
+     * continuation point). Correlated to its request by {@code requestId}.
+     *
+     * @param requestId the browse/resolve that failed.
+     * @param reason    a human-readable description of the failure.
+     */
+    void browseError(int requestId, @NotNull String reason);
 }
