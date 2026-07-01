@@ -20,11 +20,13 @@ import com.hivemq.adapter.sdk.api.factories.DataPointFactory;
 import com.hivemq.adapter.sdk.api.v2.ProtocolAdapter;
 import com.hivemq.adapter.sdk.api.v2.messaging.DefaultMailbox;
 import com.hivemq.adapter.sdk.api.v2.messaging.Mailbox;
+import com.hivemq.adapter.sdk.api.v2.messaging.MessageDispatcherHandle;
 import com.hivemq.adapter.sdk.api.v2.messaging.MessageHandler;
 import com.hivemq.adapter.sdk.api.v2.messaging.command.ProtocolAdapterBatchProcessCommand;
 import com.hivemq.adapter.sdk.api.v2.messaging.command.ProtocolAdapterCommand;
 import com.hivemq.adapter.sdk.api.v2.messaging.command.ProtocolAdapterConnectionCommand;
 import com.hivemq.adapter.sdk.api.v2.model.BrowseFilter;
+import com.hivemq.adapter.sdk.api.v2.model.ErrorScope;
 import com.hivemq.adapter.sdk.api.v2.model.ProtocolAdapterInput;
 import com.hivemq.adapter.sdk.api.v2.model.ProtocolAdapterOutput;
 import com.hivemq.adapter.sdk.api.v2.model.VerifyOutcome;
@@ -54,8 +56,16 @@ import org.jetbrains.annotations.NotNull;
  * {@link ProtocolAdapter} directly, or supply a different
  * {@link com.hivemq.adapter.sdk.api.v2.messaging.MessageDispatcher} via
  * {@link com.hivemq.adapter.sdk.api.v2.services.ProtocolAdapterService#dispatcher()}.
+ * <p>
+ * <b>Teardown.</b> The adapter owns one long-lived dispatch thread, attached at construction. It is
+ * {@link AutoCloseable} so the framework can release that thread when the adapter instance is discarded — on
+ * removal, a full recreate, or subsystem shutdown. {@link #close()} is the framework's teardown seam, distinct from
+ * {@link #stop()}: a stopped adapter may be started again, so the dispatch thread is detached only by {@code close()},
+ * never by a plain {@code stop()}. An author releases protocol-library resources in {@link #doStop()} and never calls
+ * {@code close()}.
  */
-public abstract class AbstractProtocolAdapter implements ProtocolAdapter, MessageHandler<ProtocolAdapterCommand> {
+public abstract class AbstractProtocolAdapter
+        implements ProtocolAdapter, MessageHandler<ProtocolAdapterCommand>, AutoCloseable {
 
     /**
      * The adapter's output to the framework — its state-and-event tell-façade. Thread-safe: callable from any
@@ -70,10 +80,12 @@ public abstract class AbstractProtocolAdapter implements ProtocolAdapter, Messag
 
     private final @NotNull String adapterId;
     private final @NotNull Mailbox<ProtocolAdapterCommand> mailbox;
+    private final @NotNull MessageDispatcherHandle dispatcherHandle;
 
     /**
      * Creates the adapter's mailbox and attaches it, with the adapter as the message handler, to the
-     * framework-supplied dispatcher. Construction is synchronous and cheap: no I/O, no connection.
+     * framework-supplied dispatcher, retaining the binding handle so the framework can detach the dispatch thread on
+     * teardown. Construction is synchronous and cheap: no I/O, no connection.
      *
      * @param input         everything this adapter instance is constructed from.
      * @param output the framework's state-and-event reporter.
@@ -84,12 +96,23 @@ public abstract class AbstractProtocolAdapter implements ProtocolAdapter, Messag
         this.dataPointFactory = input.services().dataPointFactory();
         this.adapterId = input.adapterId();
         this.mailbox = new DefaultMailbox<>();
-        input.services().dispatcher().attach(mailbox, this);
+        this.dispatcherHandle = input.services().dispatcher().attach(mailbox, this);
     }
 
     @Override
     public final @NotNull String adapterId() {
         return adapterId;
+    }
+
+    /**
+     * Detach this adapter's dispatch thread from the framework dispatcher. The framework calls this once, only when
+     * the adapter instance is discarded (removal, full recreate, or subsystem shutdown) — never on a plain
+     * {@link #stop()}, since a stopped adapter may be started again. Idempotent; an in-flight {@code do*} completes
+     * first.
+     */
+    @Override
+    public final void close() {
+        dispatcherHandle.close();
     }
 
     // ── ProtocolAdapter: every command is one thread-safe tell ──────────────────────────────────
@@ -148,6 +171,14 @@ public abstract class AbstractProtocolAdapter implements ProtocolAdapter, Messag
 
     @Override
     public final void receive(final @NotNull ProtocolAdapterCommand command) {
+        try {
+            dispatch(command);
+        } catch (final RuntimeException failure) {
+            reportCommandFailure(command, failure);
+        }
+    }
+
+    private void dispatch(final @NotNull ProtocolAdapterCommand command) {
         switch (command) {
             case ProtocolAdapterConnectionCommand.Start start -> doStart();
             case ProtocolAdapterConnectionCommand.Stop stop -> doStop();
@@ -162,6 +193,27 @@ public abstract class AbstractProtocolAdapter implements ProtocolAdapter, Messag
             case ProtocolAdapterBatchProcessCommand.WriteBatch writeBatch -> doWriteBatch(writeBatch.entries());
             case ProtocolAdapterBatchProcessCommand.Browse browse -> doBrowse(browse.filter());
         }
+    }
+
+    /**
+     * A {@code do*} method threw an unchecked exception: surface it to the framework instead of letting it escape the
+     * dispatch thread (where it would terminate the actor). A failed {@code doStop()} still acknowledges
+     * {@link ProtocolAdapterOutput#stopped()} — the framework has decided to stop, and a partial teardown failure does
+     * not change that — while every other command reports an {@link ErrorScope#ADAPTER} error, which the framework
+     * turns into the wrapper's {@code ERROR} state with a clear reason.
+     *
+     * @param command the command whose {@code do*} method failed.
+     * @param failure the unchecked exception it threw.
+     */
+    private void reportCommandFailure(
+            final @NotNull ProtocolAdapterCommand command, final @NotNull RuntimeException failure) {
+        if (command instanceof ProtocolAdapterConnectionCommand.Stop) {
+            output.stopped();
+            return;
+        }
+        output.error(
+                ErrorScope.ADAPTER,
+                "adapter [" + adapterId + "] command " + command.getClass().getSimpleName() + " failed: " + failure);
     }
 
     // ── Default batch fallbacks: loop the single-node methods; a native override wins ────────────
