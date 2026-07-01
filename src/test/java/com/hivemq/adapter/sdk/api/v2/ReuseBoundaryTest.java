@@ -22,7 +22,7 @@ import com.hivemq.adapter.sdk.api.discovery.NodeType;
 import com.hivemq.adapter.sdk.api.factories.DataPointFactory;
 import com.hivemq.adapter.sdk.api.schema.Schema;
 import com.hivemq.adapter.sdk.api.v2.factories.ProtocolAdapterFactory;
-import com.hivemq.adapter.sdk.api.v2.model.BrowseResultEntry;
+import com.hivemq.adapter.sdk.api.v2.model.BrowseNode;
 import com.hivemq.adapter.sdk.api.v2.model.WriteEntry;
 import com.hivemq.adapter.sdk.api.v2.node.Tag;
 import com.hivemq.adapter.sdk.api.v2.services.ProtocolAdapterService;
@@ -73,7 +73,7 @@ class ReuseBoundaryTest {
     void apiV2_referencesTheReusedV1Types() throws Exception {
         assertThat(Tag.class.getMethod("schema").getReturnType()).isEqualTo(Schema.class);
         assertThat(WriteEntry.class.getMethod("value").getReturnType()).isEqualTo(DataPoint.class);
-        assertThat(BrowseResultEntry.class.getMethod("type").getReturnType()).isEqualTo(NodeType.class);
+        assertThat(BrowseNode.class.getMethod("type").getReturnType()).isEqualTo(NodeType.class);
         assertThat(ProtocolAdapterService.class.getMethod("dataPointFactory").getReturnType())
                 .isEqualTo(DataPointFactory.class);
         assertThat(ProtocolAdapterFactory.class.getMethod("adapterConfigSchema").getReturnType())
