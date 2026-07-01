@@ -17,7 +17,7 @@ package com.hivemq.adapter.sdk.api.v2.template;
 
 import com.hivemq.adapter.sdk.api.data.DataPoint;
 import com.hivemq.adapter.sdk.api.v2.model.BrowseContinuation;
-import com.hivemq.adapter.sdk.api.v2.model.BrowseResultEntry;
+import com.hivemq.adapter.sdk.api.v2.model.BrowseNode;
 import com.hivemq.adapter.sdk.api.v2.model.ErrorScope;
 import com.hivemq.adapter.sdk.api.v2.model.ResolvedAttributes;
 import com.hivemq.adapter.sdk.api.v2.model.VerifyOutcome;
@@ -37,7 +37,7 @@ final class RecordingProtocolAdapterOutput implements ProtocolAdapterOutput {
     private final @NotNull List<String> invocations = new ArrayList<>();
     private final @NotNull List<DataPoint> dataPoints = new ArrayList<>();
     private final @NotNull List<VerifyOutcome> verifyOutcomes = new ArrayList<>();
-    private final @NotNull List<List<BrowseResultEntry>> browseResults = new ArrayList<>();
+    private final @NotNull List<List<BrowseNode>> browseResults = new ArrayList<>();
     private final @NotNull List<List<ResolvedAttributes>> resolveResults = new ArrayList<>();
 
     @Override
@@ -90,7 +90,7 @@ final class RecordingProtocolAdapterOutput implements ProtocolAdapterOutput {
     @Override
     public void browsePage(
             final int requestId,
-            final @NotNull List<BrowseResultEntry> entries,
+            final @NotNull List<BrowseNode> entries,
             final @Nullable BrowseContinuation continuation) {
         invocations.add("browsePage:" + requestId + ":" + (continuation == null ? "last" : "more"));
         browseResults.add(entries);
@@ -119,7 +119,7 @@ final class RecordingProtocolAdapterOutput implements ProtocolAdapterOutput {
         return verifyOutcomes;
     }
 
-    @NotNull List<List<BrowseResultEntry>> browseResults() {
+    @NotNull List<List<BrowseNode>> browseResults() {
         return browseResults;
     }
 
