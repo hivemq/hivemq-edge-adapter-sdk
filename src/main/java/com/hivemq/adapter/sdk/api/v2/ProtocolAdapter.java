@@ -151,10 +151,15 @@ public interface ProtocolAdapter {
      * browse. {@link #browse(int, BrowseFilter, int)} DISCOVERs which nodes exist; this reads their attributes so
      * the framework can build typed tag definitions. Like browse it is <b>pure mechanism</b>: one server
      * round-trip per call (the framework batches the discovered variables), answered by a single
-     * {@link ProtocolAdapterOutput#readAttributesResult(int, List)} carrying one
-     * {@link com.hivemq.adapter.sdk.api.v2.model.ResolvedAttributes} per node, or by
+     * {@link ProtocolAdapterOutput#readAttributesResult(int, List)} carrying exactly one
+     * {@link com.hivemq.adapter.sdk.api.v2.model.ResolvedAttributes} per requested node, or by
      * {@link ProtocolAdapterOutput#browseError(int, String)} on failure. Correlated to its browse by
      * {@code requestId}.
+     * <p>
+     * The answer must cover the whole batch: one attribute per requested node, no missing, duplicate, or
+     * unrequested node. The framework fails the entire browse on a mismatch rather than dropping the unmatched
+     * node — if the device cannot resolve a node, report {@link ProtocolAdapterOutput#browseError(int, String)}
+     * instead of answering short.
      *
      * @param requestId correlates this resolve with the browse that discovered the nodes.
      * @param nodes     the discovered nodes whose attributes to resolve.

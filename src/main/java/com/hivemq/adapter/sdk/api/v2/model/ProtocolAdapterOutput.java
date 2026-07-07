@@ -116,9 +116,15 @@ public interface ProtocolAdapterOutput {
      * Answers {@link ProtocolAdapter#readNodeAttributes(int, List)} — the RESOLVE step of a browse — with the
      * device-resolved attributes of the requested nodes, one {@link ResolvedAttributes} per node, reported once
      * for the whole batch.
+     * <p>
+     * The result must be <b>exact and complete</b>: exactly one entry per requested node, with no missing,
+     * duplicate, or unrequested node. The framework does <b>not</b> silently drop a node it cannot match — a batch
+     * that does not resolve every requested node exactly once fails the whole browse. If the device genuinely cannot
+     * resolve some node (a denied attribute read, throttling, an expired continuation), report a real failure through
+     * {@link #browseError(int, String)} rather than answering short.
      *
      * @param requestId  the browse/resolve these attributes belong to.
-     * @param attributes the resolved attributes, one per requested node.
+     * @param attributes the resolved attributes, exactly one per requested node.
      */
     void readAttributesResult(int requestId, @NotNull List<ResolvedAttributes> attributes);
 
