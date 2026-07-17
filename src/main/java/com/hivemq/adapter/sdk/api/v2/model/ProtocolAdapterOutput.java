@@ -82,6 +82,20 @@ public interface ProtocolAdapterOutput {
     void dataPoint(@NotNull Node node, @NotNull DataPoint value);
 
     /**
+     * Reports that the poll for this node has produced all its values — possibly zero — so the framework resumes the
+     * node's poll cadence. A poll may report any number of values with {@link #dataPoint(Node, DataPoint)} before its
+     * completion; values never end a poll, only this signal (or a {@link #nodeError(Node, String, boolean)}) does.
+     * <p>
+     * A synchronous adapter built on the template never calls this — the template completes each poll automatically
+     * after {@code doPoll} returns. An adapter whose poll finishes asynchronously (the value arrives on a client
+     * thread after {@code doPoll} returned) opts out of the automatic completion and calls this from its completion
+     * callback instead.
+     *
+     * @param node the node whose poll is complete.
+     */
+    void pollComplete(@NotNull Node node);
+
+    /**
      * Reports a per-node failure (failed poll, failed or lost subscription).
      *
      * @param node        the node the failure belongs to.

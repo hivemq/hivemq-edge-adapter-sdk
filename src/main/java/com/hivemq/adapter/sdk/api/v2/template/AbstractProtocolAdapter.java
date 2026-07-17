@@ -253,12 +253,39 @@ public abstract class AbstractProtocolAdapter
     }
 
     /**
-     * Default: one {@link #doPoll(Node)} per node. Override for a native batch read.
+     * Default: one {@link #doPoll(Node)} per node. On the synchronous path (see
+     * {@link #pollCompletesSynchronously()}) every node's poll is completed automatically with
+     * {@link ProtocolAdapterOutput#pollComplete(Node)} after its {@code doPoll} returns — even when {@code doPoll}
+     * throws — so a poll can never leave its node's cadence hanging. Override for a native batch read; a native
+     * override owns the completion of every node it polls.
      *
      * @param nodes the nodes to poll.
      */
     protected void doPollBatch(final @NotNull List<Node> nodes) {
-        nodes.forEach(this::doPoll);
+        if (pollCompletesSynchronously()) {
+            for (final Node node : nodes) {
+                try {
+                    doPoll(node);
+                } finally {
+                    output.pollComplete(node);
+                }
+            }
+        } else {
+            nodes.forEach(this::doPoll);
+        }
+    }
+
+    /**
+     * Whether a poll has produced all its values when {@link #doPoll(Node)} returns. Defaults to {@code true} — the
+     * template then completes each poll automatically. An adapter whose {@code doPoll} returns before its values
+     * arrive (an asynchronous client reporting on its own threads) overrides this to {@code false} and calls
+     * {@link ProtocolAdapterOutput#pollComplete(Node)} from its completion callback instead, on every completion
+     * path — a poll that never completes leaves its node waiting until the adapter disconnects.
+     *
+     * @return {@code true} if {@code doPoll} reports every value before returning.
+     */
+    protected boolean pollCompletesSynchronously() {
+        return true;
     }
 
     /**
@@ -375,9 +402,11 @@ public abstract class AbstractProtocolAdapter
     protected abstract void doDisconnect();
 
     /**
-     * Read the node's current value and report it with
-     * {@link ProtocolAdapterOutput#dataPoint(Node, DataPoint)} — build the value with
-     * {@link #dataPointFactory}; the framework stamps the tag name and adapter identifier.
+     * Read the node's current values — any number, possibly zero — and report each with
+     * {@link ProtocolAdapterOutput#dataPoint(Node, DataPoint)} — build the values with
+     * {@link #dataPointFactory}; the framework stamps the tag name and adapter identifier. On the synchronous path
+     * the template completes the poll when this returns; see {@link #pollCompletesSynchronously()} for adapters
+     * whose values arrive after this returns.
      *
      * @param node the node to poll.
      */

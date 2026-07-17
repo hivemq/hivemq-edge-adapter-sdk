@@ -78,6 +78,11 @@ final class RecordingProtocolAdapterOutput implements ProtocolAdapterOutput {
     }
 
     @Override
+    public void pollComplete(final @NotNull Node node) {
+        invocations.add("pollComplete:" + node.nodeId());
+    }
+
+    @Override
     public void nodeError(final @NotNull Node node, final @NotNull String reason, final boolean spontaneous) {
         invocations.add("nodeError:" + node.nodeId() + ":" + reason + ":" + spontaneous);
     }

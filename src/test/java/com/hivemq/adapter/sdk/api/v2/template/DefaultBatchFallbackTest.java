@@ -88,6 +88,32 @@ class DefaultBatchFallbackTest {
         }
     }
 
+    private static final class AsynchronouslyCompletingAdapter extends SingleNodeRecordingAdapter {
+
+        AsynchronouslyCompletingAdapter(
+                final @NotNull ProtocolAdapterInput input, final @NotNull ProtocolAdapterOutput reporter) {
+            super(input, reporter);
+        }
+
+        @Override
+        protected boolean pollCompletesSynchronously() {
+            return false;
+        }
+    }
+
+    private static final class ThrowingPollAdapter extends SingleNodeRecordingAdapter {
+
+        ThrowingPollAdapter(
+                final @NotNull ProtocolAdapterInput input, final @NotNull ProtocolAdapterOutput reporter) {
+            super(input, reporter);
+        }
+
+        @Override
+        protected void doPoll(final @NotNull Node node) {
+            throw new IllegalStateException("the device fell over");
+        }
+    }
+
     @Test
     void pollBatch_fallsBackToOneDoPollPerNode_inBatchOrder() {
         final ManualDispatcher dispatcher = new ManualDispatcher();
@@ -98,6 +124,48 @@ class DefaultBatchFallbackTest {
 
         dispatcher.drainAll();
         assertThat(adapter.executed).containsExactly("doPoll:node-a", "doPoll:node-b");
+    }
+
+    @Test
+    void pollBatch_completesEveryNodeAutomaticallyOnTheSynchronousPath() {
+        final ManualDispatcher dispatcher = new ManualDispatcher();
+        final RecordingProtocolAdapterOutput output = new RecordingProtocolAdapterOutput();
+        final SingleNodeRecordingAdapter adapter = new SingleNodeRecordingAdapter(
+                TestProtocolAdapterInput.create("adapter-1", dispatcher), output);
+
+        adapter.pollBatch(List.of(new TestNode("node-a"), new TestNode("node-b")));
+
+        dispatcher.drainAll();
+        assertThat(output.invocations()).containsExactly("pollComplete:node-a", "pollComplete:node-b");
+    }
+
+    @Test
+    void pollBatch_completesTheNodeEvenWhenItsPollThrows() {
+        final ManualDispatcher dispatcher = new ManualDispatcher();
+        final RecordingProtocolAdapterOutput output = new RecordingProtocolAdapterOutput();
+        final ThrowingPollAdapter adapter = new ThrowingPollAdapter(
+                TestProtocolAdapterInput.create("adapter-1", dispatcher), output);
+
+        adapter.pollBatch(List.of(new TestNode("node-a")));
+
+        dispatcher.drainAll();
+        assertThat(output.invocations()).hasSize(2);
+        assertThat(output.invocations().get(0)).isEqualTo("pollComplete:node-a");
+        assertThat(output.invocations().get(1)).startsWith("error:ADAPTER");
+    }
+
+    @Test
+    void pollBatch_doesNotAutoCompleteWhenTheAdapterCompletesAsynchronously() {
+        final ManualDispatcher dispatcher = new ManualDispatcher();
+        final RecordingProtocolAdapterOutput output = new RecordingProtocolAdapterOutput();
+        final AsynchronouslyCompletingAdapter adapter = new AsynchronouslyCompletingAdapter(
+                TestProtocolAdapterInput.create("adapter-1", dispatcher), output);
+
+        adapter.pollBatch(List.of(new TestNode("node-a"), new TestNode("node-b")));
+
+        dispatcher.drainAll();
+        assertThat(adapter.executed).containsExactly("doPoll:node-a", "doPoll:node-b");
+        assertThat(output.invocations()).isEmpty();
     }
 
     @Test
