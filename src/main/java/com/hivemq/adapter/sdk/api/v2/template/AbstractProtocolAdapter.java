@@ -253,39 +253,16 @@ public abstract class AbstractProtocolAdapter
     }
 
     /**
-     * Default: one {@link #doPoll(Node)} per node. On the synchronous path (see
-     * {@link #pollCompletesSynchronously()}) every node's poll is completed automatically with
-     * {@link ProtocolAdapterOutput#pollComplete(Node)} after its {@code doPoll} returns — even when {@code doPoll}
-     * throws — so a poll can never leave its node's cadence hanging. Override for a native batch read; a native
-     * override owns the completion of every node it polls.
+     * Default: one {@link #doPoll(Node)} per node — the template never completes a poll on the adapter's behalf.
+     * Each {@code doPoll} owns its own terminator (a completing {@link ProtocolAdapterOutput#dataPoint(Node, DataPoint)},
+     * a {@link ProtocolAdapterOutput#pollComplete(Node)}, or a {@link ProtocolAdapterOutput#nodeError(Node, String, boolean)}),
+     * so a poll that reports nothing at all leaves its node's cadence waiting until the adapter disconnects. Override
+     * for a native batch read.
      *
      * @param nodes the nodes to poll.
      */
     protected void doPollBatch(final @NotNull List<Node> nodes) {
-        if (pollCompletesSynchronously()) {
-            for (final Node node : nodes) {
-                try {
-                    doPoll(node);
-                } finally {
-                    output.pollComplete(node);
-                }
-            }
-        } else {
-            nodes.forEach(this::doPoll);
-        }
-    }
-
-    /**
-     * Whether a poll has produced all its values when {@link #doPoll(Node)} returns. Defaults to {@code true} — the
-     * template then completes each poll automatically. An adapter whose {@code doPoll} returns before its values
-     * arrive (an asynchronous client reporting on its own threads) overrides this to {@code false} and calls
-     * {@link ProtocolAdapterOutput#pollComplete(Node)} from its completion callback instead, on every completion
-     * path — a poll that never completes leaves its node waiting until the adapter disconnects.
-     *
-     * @return {@code true} if {@code doPoll} reports every value before returning.
-     */
-    protected boolean pollCompletesSynchronously() {
-        return true;
+        nodes.forEach(this::doPoll);
     }
 
     /**
@@ -402,11 +379,18 @@ public abstract class AbstractProtocolAdapter
     protected abstract void doDisconnect();
 
     /**
-     * Read the node's current values — any number, possibly zero — and report each with
-     * {@link ProtocolAdapterOutput#dataPoint(Node, DataPoint)} — build the values with
-     * {@link #dataPointFactory}; the framework stamps the tag name and adapter identifier. On the synchronous path
-     * the template completes the poll when this returns; see {@link #pollCompletesSynchronously()} for adapters
-     * whose values arrive after this returns.
+     * Read the node's current values — any number, possibly zero — and report them, building the values with
+     * {@link #dataPointFactory} (the framework stamps the tag name and adapter identifier). Every path must end the
+     * poll with its own terminator:
+     * <ul>
+     * <li>one value → {@link ProtocolAdapterOutput#dataPoint(Node, DataPoint)} (it completes the poll);</li>
+     * <li>many values → {@link ProtocolAdapterOutput#dataPoints(Node, List)} (repeatable) then
+     *     {@link ProtocolAdapterOutput#pollComplete(Node)};</li>
+     * <li>no value → {@link ProtocolAdapterOutput#pollComplete(Node)};</li>
+     * <li>a failure → {@link ProtocolAdapterOutput#nodeError(Node, String, boolean)}.</li>
+     * </ul>
+     * An adapter whose values arrive after this returns (an asynchronous client reporting on its own threads) issues
+     * the same terminating calls from its completion callback. The template does not complete the poll for it.
      *
      * @param node the node to poll.
      */

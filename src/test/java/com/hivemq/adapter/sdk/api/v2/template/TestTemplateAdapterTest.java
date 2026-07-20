@@ -67,12 +67,8 @@ class TestTemplateAdapterTest {
         adapter.pollBatch(List.of(new TestNode("temperature"), new TestNode("pressure")));
 
         dispatcher.drainAll();
-        assertThat(callbacks.invocations())
-                .containsExactly(
-                        "dataPoint:temperature",
-                        "pollComplete:temperature",
-                        "dataPoint:pressure",
-                        "pollComplete:pressure");
+        // A single dataPoint per node completes each poll itself — the template adds no pollComplete.
+        assertThat(callbacks.invocations()).containsExactly("dataPoint:temperature", "dataPoint:pressure");
         assertThat(callbacks.dataPoints()).hasSize(2);
 
         final DataPoint first = callbacks.dataPoints().get(0);

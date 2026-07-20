@@ -74,7 +74,14 @@ public interface ProtocolAdapterOutput {
     void verifyResult(@NotNull Node node, @NotNull VerifyOutcome outcome);
 
     /**
-     * Reports one value — a poll response or a subscription push; the {@link Node} is the correlation key.
+     * Reports one value; the {@link Node} is the correlation key. For a <b>poll</b> this value also <b>completes</b>
+     * the poll — the common single-value case — so the framework resumes the node's poll cadence and no
+     * {@link #pollComplete(Node)} is needed. For a <b>subscription</b> it is a pushed value; the completion is
+     * meaningless there (a subscription never completes) and is ignored.
+     * <p>
+     * A poll that produces more than one value uses {@link #dataPoints(Node, List)} for the non-final values and
+     * terminates with {@link #pollComplete(Node)} (or this method, or a {@link #nodeError(Node, String, boolean)});
+     * see the class contract.
      *
      * @param node  the node the value belongs to.
      * @param value the reused v1 value; tag name and adapter identifier are stamped by the framework.
@@ -82,14 +89,24 @@ public interface ProtocolAdapterOutput {
     void dataPoint(@NotNull Node node, @NotNull DataPoint value);
 
     /**
-     * Reports that the poll for this node has produced all its values — possibly zero — so the framework resumes the
-     * node's poll cadence. A poll may report any number of values with {@link #dataPoint(Node, DataPoint)} before its
-     * completion; values never end a poll, only this signal (or a {@link #nodeError(Node, String, boolean)}) does.
+     * Reports zero or more values for this node that do <b>not</b> complete its poll. Call it once, or repeatedly to
+     * stream a large result set page by page without materializing it whole, and end the poll with an explicit
+     * {@link #pollComplete(Node)} (or a {@link #nodeError(Node, String, boolean)} on a mid-stream failure). Each
+     * value is stamped and published in order; an empty list is a no-op that leaves the poll open.
      * <p>
-     * A synchronous adapter built on the template never calls this — the template completes each poll automatically
-     * after {@code doPoll} returns. An adapter whose poll finishes asynchronously (the value arrives on a client
-     * thread after {@code doPoll} returned) opts out of the automatic completion and calls this from its completion
-     * callback instead.
+     * For a <b>subscription</b> this simply pushes each value; there is no poll to keep open.
+     *
+     * @param node   the node the values belong to.
+     * @param values the reused v1 values, in order; tag name and adapter identifier are stamped by the framework.
+     */
+    void dataPoints(@NotNull Node node, @NotNull List<DataPoint> values);
+
+    /**
+     * Completes the poll for this node with no further value — the empty-result or deduplicated no-op case, or the
+     * terminator after one or more {@link #dataPoints(Node, List)} calls — so the framework resumes the node's poll
+     * cadence. A single-value poll does not need this: {@link #dataPoint(Node, DataPoint)} already completes it. The
+     * adapter always emits its own terminator (a completing {@code dataPoint}, this call, or a {@code nodeError});
+     * the template never completes a poll on the adapter's behalf.
      *
      * @param node the node whose poll is complete.
      */

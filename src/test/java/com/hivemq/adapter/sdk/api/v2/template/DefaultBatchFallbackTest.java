@@ -88,19 +88,6 @@ class DefaultBatchFallbackTest {
         }
     }
 
-    private static final class AsynchronouslyCompletingAdapter extends SingleNodeRecordingAdapter {
-
-        AsynchronouslyCompletingAdapter(
-                final @NotNull ProtocolAdapterInput input, final @NotNull ProtocolAdapterOutput reporter) {
-            super(input, reporter);
-        }
-
-        @Override
-        protected boolean pollCompletesSynchronously() {
-            return false;
-        }
-    }
-
     private static final class ThrowingPollAdapter extends SingleNodeRecordingAdapter {
 
         ThrowingPollAdapter(
@@ -127,7 +114,7 @@ class DefaultBatchFallbackTest {
     }
 
     @Test
-    void pollBatch_completesEveryNodeAutomaticallyOnTheSynchronousPath() {
+    void pollBatch_doesNotCompleteOnTheAdaptersBehalf() {
         final ManualDispatcher dispatcher = new ManualDispatcher();
         final RecordingProtocolAdapterOutput output = new RecordingProtocolAdapterOutput();
         final SingleNodeRecordingAdapter adapter = new SingleNodeRecordingAdapter(
@@ -136,11 +123,14 @@ class DefaultBatchFallbackTest {
         adapter.pollBatch(List.of(new TestNode("node-a"), new TestNode("node-b")));
 
         dispatcher.drainAll();
-        assertThat(output.invocations()).containsExactly("pollComplete:node-a", "pollComplete:node-b");
+        // The template loops doPoll; each poll owns its own terminator, so a doPoll that reports nothing leaves the
+        // output empty — the template never completes a poll on the adapter's behalf.
+        assertThat(adapter.executed).containsExactly("doPoll:node-a", "doPoll:node-b");
+        assertThat(output.invocations()).isEmpty();
     }
 
     @Test
-    void pollBatch_completesTheNodeEvenWhenItsPollThrows() {
+    void pollBatch_reportsAnAdapterErrorWhenAPollThrows() {
         final ManualDispatcher dispatcher = new ManualDispatcher();
         final RecordingProtocolAdapterOutput output = new RecordingProtocolAdapterOutput();
         final ThrowingPollAdapter adapter = new ThrowingPollAdapter(
@@ -149,23 +139,9 @@ class DefaultBatchFallbackTest {
         adapter.pollBatch(List.of(new TestNode("node-a")));
 
         dispatcher.drainAll();
-        assertThat(output.invocations()).hasSize(2);
-        assertThat(output.invocations().get(0)).isEqualTo("pollComplete:node-a");
-        assertThat(output.invocations().get(1)).startsWith("error:ADAPTER");
-    }
-
-    @Test
-    void pollBatch_doesNotAutoCompleteWhenTheAdapterCompletesAsynchronously() {
-        final ManualDispatcher dispatcher = new ManualDispatcher();
-        final RecordingProtocolAdapterOutput output = new RecordingProtocolAdapterOutput();
-        final AsynchronouslyCompletingAdapter adapter = new AsynchronouslyCompletingAdapter(
-                TestProtocolAdapterInput.create("adapter-1", dispatcher), output);
-
-        adapter.pollBatch(List.of(new TestNode("node-a"), new TestNode("node-b")));
-
-        dispatcher.drainAll();
-        assertThat(adapter.executed).containsExactly("doPoll:node-a", "doPoll:node-b");
-        assertThat(output.invocations()).isEmpty();
+        // An uncaught doPoll exception surfaces as an ADAPTER error; there is no template-issued completion.
+        assertThat(output.invocations()).hasSize(1);
+        assertThat(output.invocations().get(0)).startsWith("error:ADAPTER");
     }
 
     @Test
