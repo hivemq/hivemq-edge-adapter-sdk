@@ -1,7 +1,10 @@
 [versions]
+assertj = "3.27.7"
+awaitility = "4.3.0"
 jackson= "2.22.1"
 jetbrains-annotations = "24.1.0"
 swagger-annotations = "2.2.52"
+junit-jupiter = "5.14.4"
 victools="4.38.0"
 
 #Plugin Versions
@@ -14,9 +17,13 @@ plugin-spotless = "7.2.1"
 
 
 [libraries]
+assertj = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+awaitility = { module = "org.awaitility:awaitility", version.ref = "awaitility" }
 jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations" }
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
 jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrains-annotations" }
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit-jupiter" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
 swagger-annotations = { module = "io.swagger.core.v3:swagger-annotations", version.ref = "swagger-annotations" }
 
 
