@@ -37,6 +37,6 @@
     "mochawesome-merge": "^5.1.0",
     "mochawesome-report-generator": "^6.3.2",
     "typescript": "5.9.3",
-    "vite": "5.4.21"
+    "vite": "8.1.5"
   }
 }
