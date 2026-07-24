@@ -2,7 +2,7 @@
 jackson= "2.22.1"
 jetbrains-annotations = "24.1.0"
 swagger-annotations = "2.2.52"
-victools="4.38.0"
+victools="5.0.0"
 
 #Plugin Versions
 plugin-defaults = "0.3.0"
