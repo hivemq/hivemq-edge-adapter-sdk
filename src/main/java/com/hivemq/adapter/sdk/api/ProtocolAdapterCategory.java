@@ -22,7 +22,8 @@ public enum ProtocolAdapterCategory {
     CONNECTIVITY("Connectivity", "A standard connectivity based protocol, typically web standard.", null),
     INDUSTRIAL("Industrial", "Industrial, typically field bus protocols.", null),
     BUILDING_AUTOMATION("Building Automation", "Protocols related to building automation", null),
-    SIMULATION("Simulation", "Simulation protocols, that emulate real world devices", null);
+    SIMULATION("Simulation", "Simulation protocols, that emulate real world devices", null),
+    TELEMETRY("Telemetry", "Provide Telemetry about the running Edge instance and protocol adapters", null);
 
     ProtocolAdapterCategory(
             final @NotNull String displayName,
