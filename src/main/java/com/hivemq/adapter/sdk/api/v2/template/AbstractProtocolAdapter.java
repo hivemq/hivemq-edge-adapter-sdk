@@ -253,7 +253,11 @@ public abstract class AbstractProtocolAdapter
     }
 
     /**
-     * Default: one {@link #doPoll(Node)} per node. Override for a native batch read.
+     * Default: one {@link #doPoll(Node)} per node — the template never completes a poll on the adapter's behalf.
+     * Each {@code doPoll} owns its own terminator (a completing {@link ProtocolAdapterOutput#dataPoint(Node, DataPoint)},
+     * a {@link ProtocolAdapterOutput#pollComplete(Node)}, or a {@link ProtocolAdapterOutput#nodeError(Node, String, boolean)}),
+     * so a poll that reports nothing at all leaves its node's cadence waiting until the adapter disconnects. Override
+     * for a native batch read.
      *
      * @param nodes the nodes to poll.
      */
@@ -375,9 +379,18 @@ public abstract class AbstractProtocolAdapter
     protected abstract void doDisconnect();
 
     /**
-     * Read the node's current value and report it with
-     * {@link ProtocolAdapterOutput#dataPoint(Node, DataPoint)} — build the value with
-     * {@link #dataPointFactory}; the framework stamps the tag name and adapter identifier.
+     * Read the node's current values — any number, possibly zero — and report them, building the values with
+     * {@link #dataPointFactory} (the framework stamps the tag name and adapter identifier). Every path must end the
+     * poll with its own terminator:
+     * <ul>
+     * <li>one value → {@link ProtocolAdapterOutput#dataPoint(Node, DataPoint)} (it completes the poll);</li>
+     * <li>many values → {@link ProtocolAdapterOutput#dataPoints(Node, List)} (repeatable) then
+     *     {@link ProtocolAdapterOutput#pollComplete(Node)};</li>
+     * <li>no value → {@link ProtocolAdapterOutput#pollComplete(Node)};</li>
+     * <li>a failure → {@link ProtocolAdapterOutput#nodeError(Node, String, boolean)}.</li>
+     * </ul>
+     * An adapter whose values arrive after this returns (an asynchronous client reporting on its own threads) issues
+     * the same terminating calls from its completion callback. The template does not complete the poll for it.
      *
      * @param node the node to poll.
      */
