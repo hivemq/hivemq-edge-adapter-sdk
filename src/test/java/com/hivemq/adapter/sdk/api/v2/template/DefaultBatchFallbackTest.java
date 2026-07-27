@@ -88,6 +88,19 @@ class DefaultBatchFallbackTest {
         }
     }
 
+    private static final class ThrowingPollAdapter extends SingleNodeRecordingAdapter {
+
+        ThrowingPollAdapter(
+                final @NotNull ProtocolAdapterInput input, final @NotNull ProtocolAdapterOutput reporter) {
+            super(input, reporter);
+        }
+
+        @Override
+        protected void doPoll(final @NotNull Node node) {
+            throw new IllegalStateException("the device fell over");
+        }
+    }
+
     @Test
     void pollBatch_fallsBackToOneDoPollPerNode_inBatchOrder() {
         final ManualDispatcher dispatcher = new ManualDispatcher();
@@ -98,6 +111,37 @@ class DefaultBatchFallbackTest {
 
         dispatcher.drainAll();
         assertThat(adapter.executed).containsExactly("doPoll:node-a", "doPoll:node-b");
+    }
+
+    @Test
+    void pollBatch_doesNotCompleteOnTheAdaptersBehalf() {
+        final ManualDispatcher dispatcher = new ManualDispatcher();
+        final RecordingProtocolAdapterOutput output = new RecordingProtocolAdapterOutput();
+        final SingleNodeRecordingAdapter adapter = new SingleNodeRecordingAdapter(
+                TestProtocolAdapterInput.create("adapter-1", dispatcher), output);
+
+        adapter.pollBatch(List.of(new TestNode("node-a"), new TestNode("node-b")));
+
+        dispatcher.drainAll();
+        // The template loops doPoll; each poll owns its own terminator, so a doPoll that reports nothing leaves the
+        // output empty — the template never completes a poll on the adapter's behalf.
+        assertThat(adapter.executed).containsExactly("doPoll:node-a", "doPoll:node-b");
+        assertThat(output.invocations()).isEmpty();
+    }
+
+    @Test
+    void pollBatch_reportsAnAdapterErrorWhenAPollThrows() {
+        final ManualDispatcher dispatcher = new ManualDispatcher();
+        final RecordingProtocolAdapterOutput output = new RecordingProtocolAdapterOutput();
+        final ThrowingPollAdapter adapter = new ThrowingPollAdapter(
+                TestProtocolAdapterInput.create("adapter-1", dispatcher), output);
+
+        adapter.pollBatch(List.of(new TestNode("node-a")));
+
+        dispatcher.drainAll();
+        // An uncaught doPoll exception surfaces as an ADAPTER error; there is no template-issued completion.
+        assertThat(output.invocations()).hasSize(1);
+        assertThat(output.invocations().get(0)).startsWith("error:ADAPTER");
     }
 
     @Test
