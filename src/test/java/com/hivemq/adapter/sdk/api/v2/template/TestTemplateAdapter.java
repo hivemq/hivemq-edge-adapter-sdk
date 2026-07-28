@@ -67,7 +67,7 @@ final class TestTemplateAdapter extends AbstractProtocolAdapter {
     }
 
     @Override
-    protected void doWrite(final @NotNull Node node, final @NotNull DataPoint value) {
-        output.writeResult(node, true, null);
+    protected void doWrite(final @NotNull Node node, final @NotNull DataPoint value, final long attemptId) {
+        output.writeResult(node, attemptId, true, null);
     }
 }

@@ -125,12 +125,19 @@ public interface ProtocolAdapterOutput {
 
     /**
      * Acknowledges one entry of a {@link ProtocolAdapter#writeBatch(List)}.
+     * <p>
+     * <b>Echo the entry's {@link WriteEntry#attemptId()} unchanged.</b> The node alone does not say <i>which</i>
+     * write is being acknowledged, and the framework serves at most one write per node at a time: without the id, a
+     * result reported twice for the same node is indistinguishable from a fresh result for the write that followed
+     * it, and the framework would credit the second write with an acknowledgment it never received — silently
+     * discarding a queued command while recording it as delivered. With the id, a stale result is simply dropped.
      *
-     * @param node    the node the write targeted.
-     * @param success whether the write succeeded.
-     * @param reason  a human-readable description of the failure, or {@code null} on success.
+     * @param node      the node the write targeted.
+     * @param attemptId the {@link WriteEntry#attemptId()} of the entry being acknowledged, echoed unchanged.
+     * @param success   whether the write succeeded.
+     * @param reason    a human-readable description of the failure, or {@code null} on success.
      */
-    void writeResult(@NotNull Node node, boolean success, @Nullable String reason);
+    void writeResult(@NotNull Node node, long attemptId, boolean success, @Nullable String reason);
 
     /**
      * Answers one page of {@link ProtocolAdapter#browse(int, BrowseFilter, int)} /

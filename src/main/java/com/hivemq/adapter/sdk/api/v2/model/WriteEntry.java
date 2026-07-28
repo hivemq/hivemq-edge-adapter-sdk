@@ -26,5 +26,22 @@ import org.jetbrains.annotations.NotNull;
  * @param node  the node to write to.
  * @param value the value to write.
  */
-public record WriteEntry(@NotNull Node node, @NotNull DataPoint value) {
+public record WriteEntry(@NotNull Node node, @NotNull DataPoint value, long attemptId) {
+
+    /**
+     * The attempt id of a write nobody is correlating — the value carried by entries built outside the framework
+     * (test rigs, and any adapter that constructs a {@code WriteEntry} itself). Framework-minted ids are strictly
+     * positive, so this can never collide with one.
+     */
+    public static final long UNCORRELATED = 0L;
+
+    /**
+     * A write with no correlation id, for callers outside the framework.
+     *
+     * @param node  the node to write to.
+     * @param value the value to write.
+     */
+    public WriteEntry(final @NotNull Node node, final @NotNull DataPoint value) {
+        this(node, value, UNCORRELATED);
+    }
 }

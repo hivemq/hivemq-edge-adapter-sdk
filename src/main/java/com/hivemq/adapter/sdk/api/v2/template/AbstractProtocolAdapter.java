@@ -284,12 +284,12 @@ public abstract class AbstractProtocolAdapter
     }
 
     /**
-     * Default: one {@link #doWrite(Node, DataPoint)} per entry. Override for a native batch write.
+     * Default: one {@link #doWrite(Node, DataPoint, long)} per entry. Override for a native batch write.
      *
      * @param entries the node/value pairs to write.
      */
     protected void doWriteBatch(final @NotNull List<WriteEntry> entries) {
-        entries.forEach(entry -> doWrite(entry.node(), entry.value()));
+        entries.forEach(entry -> doWrite(entry.node(), entry.value(), entry.attemptId()));
     }
 
     // ── Optional no-op defaults ───────────────────────────────────────────────────────────────────
@@ -406,10 +406,12 @@ public abstract class AbstractProtocolAdapter
 
     /**
      * Write the value to the node and acknowledge with
-     * {@link ProtocolAdapterOutput#writeResult(Node, boolean, String)}.
+     * {@link ProtocolAdapterOutput#writeResult(Node, long, boolean, String)}, echoing {@code attemptId} unchanged.
      *
-     * @param node  the node to write to.
-     * @param value the value to write.
+     * @param node      the node to write to.
+     * @param value     the value to write.
+     * @param attemptId the framework's correlation for this write; pass it back verbatim when acknowledging, so a
+     *                  result reported twice cannot be mistaken for the acknowledgment of the write that followed.
      */
-    protected abstract void doWrite(@NotNull Node node, @NotNull DataPoint value);
+    protected abstract void doWrite(@NotNull Node node, @NotNull DataPoint value, long attemptId);
 }
