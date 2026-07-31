@@ -22,7 +22,7 @@
     "@rjsf/core": "5.24.13",
     "@rjsf/utils": "5.24.13",
     "@rjsf/validator-ajv8": "5.24.13",
-    "framer-motion": "10.18.0",
+    "framer-motion": "12.42.2",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "react-router-dom": "^7.12.0"
@@ -30,13 +30,13 @@
   "devDependencies": {
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
-    "@vitejs/plugin-react": "4.7.0",
-    "cypress": "13.17.0",
+    "@vitejs/plugin-react": "6.0.4",
+    "cypress": "15.19.0",
     "cypress-real-events": "^1.15.0",
     "mochawesome": "^7.1.4",
     "mochawesome-merge": "^5.1.0",
     "mochawesome-report-generator": "^6.3.2",
     "typescript": "5.9.3",
-    "vite": "5.4.21"
+    "vite": "8.1.5"
   }
 }
