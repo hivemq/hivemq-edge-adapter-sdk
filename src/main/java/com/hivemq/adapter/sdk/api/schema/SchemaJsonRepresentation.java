@@ -49,6 +49,33 @@ public final class SchemaJsonRepresentation {
     }
 
     /**
+     * Assembles the read view of a data point — the {@code tagName}/{@code timestamp} envelope around the
+     * value, plus optional metadata and context — and renders it as a JSON Schema document.
+     *
+     * @deprecated composition is no longer this class's concern: it converts between {@link Schema} and JSON
+     *     Schema, and the caller that owns the {@link TagSchemaCreationOutput.DataPointSchema} decides which
+     *     direction to assemble. Retained so adapters built against an earlier SDK keep working. Use
+     *     {@link #toJsonSchemaDocument(Schema)} on a schema you have assembled yourself.
+     */
+    @Deprecated(forRemoval = true)
+    public @NotNull ObjectNode toCompositeSchema(final @NotNull TagSchemaCreationOutput.DataPointSchema dps) {
+        final var builder = new SchemaBuilder().startObject();
+
+        builder.property("tagName").scalar(ScalarType.STRING).readable().writable(false);
+        builder.property("timestamp").scalar(ScalarType.LONG).readable().writable(false);
+        builder.property("value").required().schema(dps.valueSchema()).readable().writable();
+
+        if (dps.metadataSchema() != null) {
+            builder.property("metadata").schema(dps.metadataSchema()).readable().writable(false);
+        }
+        if (dps.context() != null) {
+            builder.property("context").schema(dps.context()).readable().writable(false);
+        }
+
+        return toJsonSchemaDocument(builder.endObject().build());
+    }
+
+    /**
      * Renders a schema as a standalone JSON Schema <em>document</em> — i.e. {@link #toJsonSchema} plus the
      * {@code $schema} declaration that makes the result a self-contained document.
      * <p>
