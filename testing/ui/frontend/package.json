@@ -4,7 +4,7 @@
   "description": "Visual testing app for HiveMQ Edge protocol adapter configuration forms",
   "type": "module",
   "engines": {
-    "node": "^20.19.0 || ^22.12.0 || >=24.0.0"
+    "node": "^22.22.0 || >=24.0.0"
   },
   "scripts": {
     "dev": "vite",
@@ -36,7 +36,7 @@
     "@vitejs/plugin-react": "6.0.4",
     "cypress": "15.19.0",
     "cypress-real-events": "^1.15.0",
-    "mochawesome": "^7.1.4",
+    "mochawesome": "^8.0.1",
     "mochawesome-merge": "^5.1.0",
     "mochawesome-report-generator": "^6.3.2",
     "typescript": "5.9.3",
