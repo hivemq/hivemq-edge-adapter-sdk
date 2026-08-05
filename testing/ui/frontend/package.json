@@ -15,7 +15,7 @@
     "cypress:ci": "rm -rf cypress/results && cypress run",
     "qa:merge": "npx mochawesome-merge cypress/results/*.json > cypress/results/combined.json",
     "qa:report": "node scripts/generate-report.mjs cypress/results/combined.json",
-    "qa:check": "npm run cypress:ci && npm run qa:merge && npm run qa:report"
+    "qa:check": "npm run cypress:ci; s=$?; npm run qa:merge && npm run qa:report || exit 1; exit $s"
   },
   "dependencies": {
     "@chakra-ui/react": "2.10.10",

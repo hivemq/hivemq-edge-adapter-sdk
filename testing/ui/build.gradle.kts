@@ -1,5 +1,5 @@
 import java.net.HttpURLConnection
-import java.net.URL
+import java.net.URI
 import java.util.concurrent.TimeUnit
 
 plugins {
@@ -98,26 +98,15 @@ tasks.jar {
     }
 }
 
-// Task to copy frontend dist to resources for JAR packaging
-tasks.register<Copy>("copyFrontendDist") {
-    from("frontend/dist")
-    into("build/resources/main/static")
-    doFirst {
-        if (!file("frontend/dist").exists()) {
-            logger.warn("Frontend dist directory not found. Run 'npm run build' in frontend/ first.")
-        }
-    }
-}
+/* ******************** Frontend Build Tasks ******************** */
 
-tasks.processResources {
-    dependsOn("copyFrontendDist")
-}
-
-/* ******************** QA Check Tasks ******************** */
+// `frontend/dist` is git-ignored, so a fresh checkout has no built frontend and the server would
+// serve nothing. Gradle therefore has to own the whole chain -- npm install, vite build, copy --
+// rather than assuming someone ran the npm commands by hand beforehand.
 
 // Install npm dependencies
 tasks.register<Exec>("npmInstall") {
-    group = "verification"
+    group = "build"
     description = "Install npm dependencies for the frontend"
     workingDir = file("frontend")
     commandLine("npm", "install")
@@ -125,6 +114,39 @@ tasks.register<Exec>("npmInstall") {
     inputs.file("frontend/package-lock.json")
     outputs.dir("frontend/node_modules")
 }
+
+// Build the React frontend into frontend/dist
+tasks.register<Exec>("buildFrontend") {
+    group = "build"
+    description = "Build the React frontend (tsc + vite build) into frontend/dist"
+    dependsOn("npmInstall")
+    workingDir = file("frontend")
+    commandLine("npm", "run", "build")
+    inputs.dir("frontend/src")
+    inputs.files("frontend/index.html", "frontend/vite.config.ts", "frontend/tsconfig.json")
+    inputs.file("frontend/package.json")
+    outputs.dir("frontend/dist")
+}
+
+// Task to copy frontend dist to resources for JAR packaging
+tasks.register<Copy>("copyFrontendDist") {
+    dependsOn("buildFrontend")
+    from("frontend/dist")
+    into("build/resources/main/static")
+}
+
+tasks.processResources {
+    dependsOn("copyFrontendDist")
+}
+
+// `frontend/dist` is a declared resources srcDir (see the sourceSets block above), so every task that
+// reads the main resources consumes buildFrontend's output and has to say so. processResources gets
+// there via copyFrontendDist; sourcesJar needs it spelled out.
+tasks.named("sourcesJar") {
+    dependsOn("buildFrontend")
+}
+
+/* ******************** QA Check Tasks ******************** */
 
 // Start test server in background and return process handle
 val serverPort = 8080
@@ -144,14 +166,28 @@ tasks.register("qaCheck") {
     group = "verification"
     description = "Run full QA check: start server, run Cypress tests, generate report"
 
+    // The task spawns `java -cp <runtimeClasspath>` and points Cypress at the served frontend, so
+    // both have to exist before doLast runs. Reading sourceSets["main"].runtimeClasspath below only
+    // names the output directories; it does not schedule the tasks that fill them.
+    dependsOn("classes", "processResources", "npmInstall")
+
+    // Everything the action needs is resolved here, at configuration time. Reaching for `project`
+    // (or `file()`/`sourceSets`, which go through it) from inside doLast is deprecated and becomes an
+    // error in Gradle 10, because it cannot work with the configuration cache.
+    val adapterJarParam = project.findProperty("adapterJar") as String?
+    val runtimeClasspath = sourceSets["main"].runtimeClasspath
+    val libsDir = file("build/libs")
+    val parentLibsDir = file("../build/libs")
+    val frontendDir = file("frontend")
+    val serverLog = file("build/qa-server.log")
+    val workingDir = projectDir
+
     doLast {
         // Determine adapter JAR: explicit parameter or auto-detect
-        val adapterJarParam = project.findProperty("adapterJar") as String?
         val adapterJar: String = if (adapterJarParam != null) {
             adapterJarParam
         } else {
             // Auto-detect: look for *-all.jar (shadowJar) in build/libs
-            val libsDir = file("build/libs")
             val shadowJar = libsDir.listFiles()?.find { it.name.endsWith("-all.jar") }
 
             if (shadowJar != null) {
@@ -159,7 +195,6 @@ tasks.register("qaCheck") {
                 shadowJar.absolutePath
             } else {
                 // Check parent project's build/libs (when run from adapter project with testing-ui as submodule)
-                val parentLibsDir = file("../build/libs")
                 val parentShadowJar = parentLibsDir.listFiles()?.find { it.name.endsWith("-all.jar") }
 
                 if (parentShadowJar != null) {
@@ -177,23 +212,28 @@ tasks.register("qaCheck") {
             }
         }
 
-        if (!file(adapterJar).exists()) {
+        val adapterJarFile = File(adapterJar)
+        if (!adapterJarFile.exists()) {
             throw GradleException("Adapter JAR not found: $adapterJar")
         }
 
-        val classpath = sourceSets["main"].runtimeClasspath + files(adapterJar)
-        val classpathString = classpath.asPath
+        val classpathString = runtimeClasspath.asPath + File.pathSeparator + adapterJarFile.absolutePath
 
-        // Start server process
-        logger.lifecycle("Starting test server on port $serverPort...")
+        // Start server process. The output MUST go to a file rather than an undrained pipe: the server
+        // logs on every request, and nothing here reads getInputStream(), so with the default pipe the
+        // server blocks forever on write once the OS buffer fills. That shows up much later as Cypress
+        // specs timing out on requests that "never respond", with no hint as to why.
+        serverLog.parentFile.mkdirs()
+        logger.lifecycle("Starting test server on port $serverPort (log: ${serverLog.relativeTo(workingDir)})...")
         val serverProcess = ProcessBuilder(
             "java",
             "-cp", classpathString,
             "-Dserver.port=$serverPort",
             "com.hivemq.edge.adapters.testing.AdapterTestServer"
         )
-            .directory(projectDir)
+            .directory(workingDir)
             .redirectErrorStream(true)
+            .redirectOutput(serverLog)
             .start()
 
         // Wait for server to be ready
@@ -201,7 +241,8 @@ tasks.register("qaCheck") {
         var serverReady = false
         while (System.currentTimeMillis() - startTime < serverStartupTimeout) {
             try {
-                val conn = URL("http://localhost:$serverPort/api/v1/management/protocol-adapters/types")
+                val conn = URI("http://localhost:$serverPort/api/v1/management/protocol-adapters/types")
+                    .toURL()
                     .openConnection() as HttpURLConnection
                 conn.connectTimeout = 1000
                 conn.readTimeout = 1000
@@ -219,15 +260,16 @@ tasks.register("qaCheck") {
         }
         logger.lifecycle("Server ready at http://localhost:$serverPort")
 
+        var exitCode = -1
         try {
             // Run Cypress QA check
             logger.lifecycle("Running QA checks...")
             val npmProcess = ProcessBuilder("npm", "run", "qa:check")
-                .directory(file("frontend"))
+                .directory(frontendDir)
                 .inheritIO()
                 .start()
 
-            val exitCode = npmProcess.waitFor()
+            exitCode = npmProcess.waitFor()
 
             if (exitCode != 0) {
                 logger.warn("QA check completed with failures (exit code: $exitCode)")
@@ -246,6 +288,14 @@ tasks.register("qaCheck") {
             logger.lifecycle("Stopping test server...")
             serverProcess.destroyForcibly()
             serverProcess.waitFor(5, TimeUnit.SECONDS)
+        }
+
+        // Fail after the server is stopped and the report is on disk, so a failing suite still
+        // leaves its artifacts behind. Logging the exit code without rethrowing made every Cypress
+        // failure -- and every failed merge or report generation -- come back as BUILD SUCCESSFUL,
+        // which is worse than having no gate at all.
+        if (exitCode != 0) {
+            throw GradleException("QA check failed with exit code $exitCode. See frontend/qa-report.json")
         }
     }
 }

@@ -1,8 +1,9 @@
 # Dependencies
 node_modules/
 
-# Build output (we DO want to commit dist/ for Java devs)
-# dist/
+# Build output. Not committed -- the root .gitignore ignores /testing/ui/frontend/dist/ and Gradle's
+# `buildFrontend` task produces it, so Java devs get it from `./gradlew build` rather than from git.
+dist/
 
 # IDE
 .idea/
