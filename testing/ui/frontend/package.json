@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Visual testing app for HiveMQ Edge protocol adapter configuration forms",
   "type": "module",
+  "engines": {
+    "node": "^20.19.0 || ^22.12.0 || >=24.0.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -25,7 +28,7 @@
     "framer-motion": "12.42.2",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "react-router-dom": "^7.12.0"
+    "react-router": "8.3.0"
   },
   "devDependencies": {
     "@types/react": "19.2.17",

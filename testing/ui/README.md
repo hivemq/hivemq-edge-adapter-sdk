@@ -198,7 +198,9 @@ cd ../hivemq-edge-adapter-sdk/testing/ui
 ### Prerequisites
 
 - **Java 21+** - For the backend server
-- **Node.js 18+** - Only needed if modifying the React frontend
+- **Node.js `^20.19.0 || ^22.12.0 || >=24.0.0`** - Only needed if modifying the React frontend.
+  This is the intersection of Vite 8's and Cypress 15's own floors; older 20.x/22.x patch releases
+  install but fail once Vite or Cypress starts.
 
 ### Building from Source
 
@@ -424,7 +426,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
 
       - name: Build adapter
         run: ./gradlew shadowJar

@@ -21,7 +21,7 @@ import {
   TabPanel,
   Code,
 } from '@chakra-ui/react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { AdapterForm } from '../components/AdapterForm'
 import { useAdapterTypes } from '../hooks/useAdapterTypes'
 
