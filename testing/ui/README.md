@@ -197,25 +197,31 @@ cd ../hivemq-edge-adapter-sdk/testing/ui
 
 ### Prerequisites
 
-- **Java 21+** - For the backend server
-- **Node.js `^20.19.0 || ^22.12.0 || >=24.0.0`** - Only needed if modifying the React frontend.
-  This is the intersection of Vite 8's and Cypress 15's own floors; older 20.x/22.x patch releases
-  install but fail once Vite or Cypress starts.
+- **Java 25** - The build sets `JavaLanguageVersion.of(25)`, so Gradle needs a JDK 25 toolchain.
+  Gradle itself also runs on the JVM you launch it with, and running Gradle on Java 25 requires
+  Gradle 9.1+; the wrapper in this directory is 9.4.1.
+- **Node.js `^22.22.0 || >=24.0.0`** - Needed for every build, not only frontend changes (see below).
+  This is the intersection of the direct toolchain floors: React Router 8 requires `>=22.22.0`,
+  Vite 8 requires `^20.19.0 || >=22.12.0`, and Cypress 15 requires `^20.1.0 || ^22.0.0 || >=24.0.0`.
+  Router 8's floor is what rules out the whole 20.x line and 22.0-22.21.
 
 ### Building from Source
 
-The React frontend is pre-built and committed to `frontend/dist/`. You only need to rebuild it if you modify the frontend code.
+`frontend/dist/` is **not** committed - it is git-ignored. Gradle builds it for you: `processResources`
+depends on `copyFrontendDist` -> `buildFrontend` -> `npmInstall`, so a plain `./gradlew build` on a
+clean clone installs npm packages, runs `tsc && vite build`, and packages the result.
 
 ```bash
-# Build everything (Java + copies pre-built frontend)
+# Build everything (npm install + vite build + Java)
 ./gradlew build
+```
 
-# If you modified the React app, rebuild it first:
-cd frontend
-npm install
-npm run build
-cd ..
-./gradlew build
+Gradle tracks `frontend/src`, `index.html`, `vite.config.ts`, `tsconfig.json`, and `package.json` as
+inputs, so the frontend is only rebuilt when one of them changes. To drive the frontend build on its
+own:
+
+```bash
+./gradlew buildFrontend
 ```
 
 ### Running in Development Mode
@@ -336,10 +342,15 @@ The task auto-detects adapter JARs in `build/libs/*-all.jar`. If auto-detection 
 ```
 
 This will:
-1. Start the test server with your adapter
-2. Run all Cypress tests
-3. Generate the QA report
-4. Stop the server
+1. Compile the Java server and build the React frontend (via `classes` / `processResources`)
+2. Start the test server with your adapter
+3. Run all Cypress tests
+4. Generate the QA report
+5. Stop the server
+6. **Fail the build** if the QA suite exited non-zero
+
+Step 6 matters for CI: the report is always written and the server is always stopped, but a failing
+suite makes `qaCheck` itself exit non-zero, so the surrounding workflow step goes red.
 
 **Available Gradle tasks:**
 
@@ -348,6 +359,7 @@ This will:
 | `./gradlew qaCheck` | Full QA pipeline (auto-detects JAR in build/libs/) |
 | `./gradlew qaCheck -PadapterJar=...` | Full QA pipeline with explicit JAR path |
 | `./gradlew qaReport` | View the last generated report |
+| `./gradlew buildFrontend` | Build the React frontend into `frontend/dist` |
 | `./gradlew testUI` | Interactive mode (start server for manual testing) |
 
 ### Using npm directly
@@ -437,11 +449,8 @@ jobs:
           repository: hivemq/hivemq-edge-adapter-sdk
           path: sdk
 
-      - name: Install npm dependencies
-        run: |
-          cd sdk/testing/ui/frontend
-          npm ci
-
+      # No separate npm step is needed: qaCheck depends on classes, processResources and npmInstall,
+      # so Gradle compiles the server and builds the frontend before starting anything.
       - name: Run QA checks
         run: |
           cd sdk/testing/ui
