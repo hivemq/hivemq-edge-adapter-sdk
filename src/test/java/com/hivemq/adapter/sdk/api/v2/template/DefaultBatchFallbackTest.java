@@ -70,7 +70,7 @@ class DefaultBatchFallbackTest {
         }
 
         @Override
-        protected void doWrite(final @NotNull Node node, final @NotNull DataPoint value) {
+        protected void doWrite(final @NotNull Node node, final @NotNull DataPoint value, final long attemptId) {
             executed.add("doWrite:" + node.nodeId() + ":" + value.getTagValue());
         }
     }

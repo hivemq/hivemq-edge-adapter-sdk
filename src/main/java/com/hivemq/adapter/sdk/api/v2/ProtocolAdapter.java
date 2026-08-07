@@ -116,7 +116,7 @@ public interface ProtocolAdapter {
 
     /**
      * Write the given values southbound. Each entry is acknowledged by one
-     * {@link ProtocolAdapterOutput#writeResult(Node, boolean, String)}.
+     * {@link ProtocolAdapterOutput#writeResult(Node, long, boolean, String)}.
      *
      * @param entries the node/value pairs to write.
      */
