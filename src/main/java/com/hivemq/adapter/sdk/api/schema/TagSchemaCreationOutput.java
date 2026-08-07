@@ -62,5 +62,35 @@ public interface TagSchemaCreationOutput {
      */
     void tagNotFound(@NotNull String errorMessage);
 
-    record DataPointSchema(@NotNull Schema valueSchema, @Nullable Schema metadataSchema, @Nullable Schema context){};
+    /**
+     * The schema(s) describing a tag's data point.
+     *
+     * @param valueSchema    the readable value shape (northbound / read direction).
+     * @param metadataSchema optional metadata shape; read-only.
+     * @param context        optional context shape; read-only.
+     * @param writeSchema    optional explicit write (southbound) shape. When {@code null}, the write view falls
+     *                       back to {@code valueSchema}. Set this only when the write shape is <em>not</em> a
+     *                       projection of the read shape — e.g. an OPC-UA condition tag whose write target is
+     *                       {@code {eventId, method, comment}}. Note that read-only fields are not pruned from
+     *                       the write view: write-permission cannot be expressed correctly by a static schema
+     *                       (an array of read-only items admits only {@code []}; a required read-only member
+     *                       makes the object unsatisfiable), so it is enforced at validation time, not here.
+     */
+    record DataPointSchema(
+            @NotNull Schema valueSchema,
+            @Nullable Schema metadataSchema,
+            @Nullable Schema context,
+            @Nullable Schema writeSchema) {
+
+        /**
+         * Convenience constructor for the common case: no explicit write schema (the write view is derived
+         * from {@code valueSchema}).
+         */
+        public DataPointSchema(
+                final @NotNull Schema valueSchema,
+                final @Nullable Schema metadataSchema,
+                final @Nullable Schema context) {
+            this(valueSchema, metadataSchema, context, null);
+        }
+    }
 }
