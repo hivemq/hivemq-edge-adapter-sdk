@@ -65,32 +65,64 @@ public interface TagSchemaCreationOutput {
     /**
      * The schema(s) describing a tag's data point.
      *
-     * @param valueSchema    the readable value shape (northbound / read direction).
-     * @param metadataSchema optional metadata shape; read-only.
-     * @param context        optional context shape; read-only.
-     * @param writeSchema    optional explicit write (southbound) shape. When {@code null}, the write view falls
-     *                       back to {@code valueSchema}. Set this only when the write shape is <em>not</em> a
-     *                       projection of the read shape — e.g. an OPC-UA condition tag whose write target is
-     *                       {@code {eventId, method, comment}}. Note that read-only fields are not pruned from
-     *                       the write view: write-permission cannot be expressed correctly by a static schema
-     *                       (an array of read-only items admits only {@code []}; a required read-only member
-     *                       makes the object unsatisfiable), so it is enforced at validation time, not here.
+     * @param valueSchema       the readable value shape (northbound / read direction).
+     * @param metadataSchema    optional metadata shape; read-only.
+     * @param context           optional context shape; read-only.
+     * @param southboundSchema  optional explicit southbound (write) shape. When {@code null}, the southbound view
+     *                          falls back to {@code valueSchema}. Set this only when the southbound shape is
+     *                          <em>not</em> a projection of the read shape — e.g. an OPC-UA condition tag whose
+     *                          write target is {@code {eventId, method, comment}}.
+     *                          <p>
+     *                          <b>Mark it writable.</b> {@link SchemaBuilder} defaults every node to
+     *                          {@code writable = false}, which renders as {@code readOnly: true}. A consumer of
+     *                          the southbound schema — including Edge's own mapping editor — treats a read-only
+     *                          field as a non-destination and does not offer it, so a southbound schema built
+     *                          without {@code .writable()} on its root and on each writable member describes a
+     *                          shape with no write destinations at all. Chain {@code .writable()} explicitly:
+     *                          <pre>{@code
+     * new SchemaBuilder()
+     *         .startObject()
+     *         .property("eventId").required().scalar(ScalarType.STRING).writable()
+     *         .property("method").required().scalar(ScalarType.LONG).writable()
+     *         .property("comment").scalar(ScalarType.STRING).writable()
+     *         .endObject()
+     *         .writable()
+     *         .build()
+     * }</pre>
+     *                          <p>
+     *                          Read-only fields are <em>not</em> pruned from the southbound view: write-permission
+     *                          cannot be expressed correctly by a static schema (an array of read-only items admits
+     *                          only {@code []}; a required read-only member makes the object unsatisfiable). Note
+     *                          that {@code readOnly} is <em>descriptive metadata only</em> — it is a JSON Schema
+     *                          annotation, not an assertion, and no Edge runtime currently rejects a write because
+     *                          it carries a read-only field. Do not rely on it as a safety boundary.
      */
     record DataPointSchema(
             @NotNull Schema valueSchema,
             @Nullable Schema metadataSchema,
             @Nullable Schema context,
-            @Nullable Schema writeSchema) {
+            @Nullable Schema southboundSchema) {
 
         /**
-         * Convenience constructor for the common case: no explicit write schema (the write view is derived
-         * from {@code valueSchema}).
+         * Convenience constructor for the common case: no explicit southbound schema (the southbound view is
+         * derived from {@code valueSchema}).
          */
         public DataPointSchema(
                 final @NotNull Schema valueSchema,
                 final @Nullable Schema metadataSchema,
                 final @Nullable Schema context) {
             this(valueSchema, metadataSchema, context, null);
+        }
+
+        /**
+         * @deprecated "write" is only accurate for a variable-shaped tag. For a condition, method or polled tag
+         *     the southbound shape is a request/command, not a written projection of state — which is precisely
+         *     the case this component exists for. Use {@link #southboundSchema()}, matching the
+         *     {@code NORTHBOUND} / {@code SOUTHBOUND} vocabulary of the public REST API.
+         */
+        @Deprecated(forRemoval = true)
+        public @Nullable Schema writeSchema() {
+            return southboundSchema();
         }
     }
 }
