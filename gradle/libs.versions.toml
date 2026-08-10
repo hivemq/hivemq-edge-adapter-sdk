@@ -1,6 +1,6 @@
 [versions]
 jackson= "2.22.1"
-jetbrains-annotations = "24.1.0"
+jetbrains-annotations = "26.1.0"
 swagger-annotations = "2.2.52"
 victools="4.38.0"
 
