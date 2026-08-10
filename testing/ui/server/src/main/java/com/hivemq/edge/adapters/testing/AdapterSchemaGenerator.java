@@ -16,8 +16,7 @@
 package com.hivemq.edge.adapters.testing;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.victools.jsonschema.generator.FieldScope;
 import com.github.victools.jsonschema.generator.MemberScope;
 import com.github.victools.jsonschema.generator.MethodScope;
@@ -29,8 +28,8 @@ import com.github.victools.jsonschema.generator.SchemaGeneratorConfig;
 import com.github.victools.jsonschema.generator.SchemaGeneratorConfigBuilder;
 import com.github.victools.jsonschema.generator.SchemaGeneratorConfigPart;
 import com.github.victools.jsonschema.generator.SchemaVersion;
-import com.github.victools.jsonschema.module.jackson.JacksonModule;
 import com.github.victools.jsonschema.module.jackson.JacksonOption;
+import com.github.victools.jsonschema.module.jackson.JacksonSchemaModule;
 import com.hivemq.adapter.sdk.api.annotations.ModuleConfigField;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -57,6 +56,13 @@ public class AdapterSchemaGenerator {
     public static final String ENUM_NAMES_ATTRIBUTE = "enumNames";
 
     /**
+     * victools 5 emits its schema tree using the Jackson 3 ({@code tools.jackson}) node model, but this
+     * class' public contract and the HTTP layer that serialises the result stay on Jackson 2. This mapper
+     * re-parses the generated tree back into a Jackson 2 tree.
+     */
+    private static final @NotNull ObjectMapper JACKSON_2_MAPPER = new ObjectMapper();
+
+    /**
      * Generates a JSON Schema for the given configuration class.
      *
      * @param clazz the configuration class to generate schema for
@@ -65,7 +71,7 @@ public class AdapterSchemaGenerator {
     public @NotNull JsonNode generateJsonSchema(final @NotNull Class<?> clazz) {
         final SchemaGeneratorConfigBuilder configBuilder =
                 new SchemaGeneratorConfigBuilder(SchemaVersion.DRAFT_2020_12, OptionPreset.PLAIN_JSON)
-                        .with(new JacksonModule(
+                        .with(new JacksonSchemaModule(
                                 JacksonOption.RESPECT_JSONPROPERTY_REQUIRED,
                                 JacksonOption.INCLUDE_ONLY_JSONPROPERTY_ANNOTATED_METHODS,
                                 JacksonOption.RESPECT_JSONPROPERTY_ORDER))
@@ -73,7 +79,20 @@ public class AdapterSchemaGenerator {
         withEnumDisplayNameProvider(configBuilder);
         final SchemaGeneratorConfig config = configBuilder.build();
         final SchemaGenerator generator = new SchemaGenerator(config);
-        return generator.generateSchema(clazz);
+        return toJackson2Tree(generator.generateSchema(clazz));
+    }
+
+    /**
+     * Bridges a victools 5 (Jackson 3 / {@code tools.jackson}) schema tree back into the Jackson 2
+     * ({@code com.fasterxml.jackson}) tree consumed by the rest of the test server, by round-tripping
+     * through the serialized JSON.
+     */
+    private static @NotNull JsonNode toJackson2Tree(final @NotNull tools.jackson.databind.JsonNode schema) {
+        try {
+            return JACKSON_2_MAPPER.readTree(schema.toString());
+        } catch (final com.fasterxml.jackson.core.JsonProcessingException e) {
+            throw new IllegalStateException("Failed to convert generated JSON schema to a Jackson 2 tree", e);
+        }
     }
 
     /**
@@ -87,7 +106,8 @@ public class AdapterSchemaGenerator {
             if (configField != null) {
                 final String[] displayValues = configField.enumDisplayValues();
                 if (displayValues != null && displayValues.length > 0) {
-                    ArrayNode node = (ArrayNode) collectedMemberAttributes.get(ENUM_NAMES_ATTRIBUTE);
+                    tools.jackson.databind.node.ArrayNode node =
+                            (tools.jackson.databind.node.ArrayNode) collectedMemberAttributes.get(ENUM_NAMES_ATTRIBUTE);
                     if (node == null) {
                         node = collectedMemberAttributes.putArray(ENUM_NAMES_ATTRIBUTE);
                     }
@@ -131,7 +151,7 @@ public class AdapterSchemaGenerator {
         }
 
         private void customAttributes(
-                final @NotNull ObjectNode jsonNodes,
+                final @NotNull tools.jackson.databind.node.ObjectNode jsonNodes,
                 final @NotNull MemberScope<?, ?> memberScope,
                 final @NotNull SchemaGenerationContext schemaGenerationContext) {
             final ModuleConfigField fieldInfo = getModuleFieldInfo(memberScope);
