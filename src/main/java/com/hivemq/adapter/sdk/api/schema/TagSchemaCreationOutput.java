@@ -113,16 +113,5 @@ public interface TagSchemaCreationOutput {
                 final @Nullable Schema context) {
             this(valueSchema, metadataSchema, context, null);
         }
-
-        /**
-         * @deprecated "write" is only accurate for a variable-shaped tag. For a condition, method or polled tag
-         *     the southbound shape is a request/command, not a written projection of state — which is precisely
-         *     the case this component exists for. Use {@link #southboundSchema()}, matching the
-         *     {@code NORTHBOUND} / {@code SOUTHBOUND} vocabulary of the public REST API.
-         */
-        @Deprecated(forRemoval = true)
-        public @Nullable Schema writeSchema() {
-            return southboundSchema();
-        }
     }
 }
