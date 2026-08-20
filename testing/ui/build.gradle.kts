@@ -35,7 +35,7 @@ dependencies {
 
     // Logging
     implementation("org.slf4j:slf4j-api:2.0.18")
-    runtimeOnly("ch.qos.logback:logback-classic:1.6.1")
+    runtimeOnly("ch.qos.logback:logback-classic:1.6.3")
 }
 
 java {
