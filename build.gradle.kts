@@ -63,6 +63,20 @@ dependencies {
     compileOnly(libs.jackson.annotations)
     compileOnly(libs.jackson.databind)
     compileOnly(libs.swagger.annotations)
+
+    constraints {
+        // JUnit 6 pulls jspecify transitively at 1.0.0. Every other repo in the composite also has Guava on the test
+        // classpath, which raises it to 1.0.1 — this SDK has no Guava, so without the constraint it would be the one
+        // module resolving 1.0.0 and the cross-repo version check would flag the split.
+        testImplementation(libs.jspecify)
+    }
+
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.assertj)
+    testImplementation(libs.awaitility)
+    testImplementation(libs.jackson.databind)
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 /* ******************** java ******************** */
@@ -77,6 +91,10 @@ java {
 
 tasks.withType<JavaCompile>().configureEach {
     options.release.set(21)
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 tasks.withType<Jar>().configureEach {
