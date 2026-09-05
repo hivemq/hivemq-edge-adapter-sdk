@@ -34,7 +34,7 @@ dependencies {
     implementation("commons-io:commons-io:2.22.0")
 
     // Logging
-    implementation("org.slf4j:slf4j-api:2.0.18")
+    implementation("org.slf4j:slf4j-api:2.0.19")
     runtimeOnly("ch.qos.logback:logback-classic:1.6.3")
 }
 
