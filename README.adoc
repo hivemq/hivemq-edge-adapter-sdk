@@ -5,7 +5,7 @@
 
 = HiveMQ Edge Adapter SDK
 
-image:https://maven-badges.herokuapp.com/maven-central/com.hivemq/hivemq-edge-adapter-sdk/badge.svg?style=for-the-badge["Maven Central",link="https://maven-badges.herokuapp.com/maven-central/com.hivemq/hivemq-edge-adapter-sdk"]
+image:https://img.shields.io/maven-central/v/com.hivemq/hivemq-edge-adapter-sdk?style=for-the-badge["Maven Central",link="https://central.sonatype.com/artifact/com.hivemq/hivemq-edge-adapter-sdk"]
 image:https://javadoc.io/badge2/com.hivemq/hivemq-edge-adapter-sdk/javadoc.svg?style=for-the-badge["javadoc",link=https://javadoc.io/doc/com.hivemq/hivemq-edge-adapter-sdk]
 
 {hivemq-edge}[HiveMQ Edge] offers this free, open source adapter SDK.
@@ -28,7 +28,7 @@ To use the SDK, add the following dependency to your Maven project:
 <dependency>
     <groupId>com.hivemq</groupId>
     <artifactId>hivemq-edge-adapter-sdk</artifactId>
-    <version>2024.4</version>
+    <version>2026.14</version>
 </dependency>
 ----
 
