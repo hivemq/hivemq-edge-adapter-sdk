@@ -6,7 +6,6 @@
 = HiveMQ Edge Adapter SDK
 
 image:https://img.shields.io/maven-central/v/com.hivemq/hivemq-edge-adapter-sdk?style=for-the-badge["Maven Central",link="https://central.sonatype.com/artifact/com.hivemq/hivemq-edge-adapter-sdk"]
-image:https://javadoc.io/badge2/com.hivemq/hivemq-edge-adapter-sdk/javadoc.svg?style=for-the-badge["javadoc",link=https://javadoc.io/doc/com.hivemq/hivemq-edge-adapter-sdk]
 
 {hivemq-edge}[HiveMQ Edge] offers this free, open source adapter SDK.
 The HiveMQ Edge adapter framework provides an open API that allows developers to create custom protocol adapter that suit their specific infrastructures.
