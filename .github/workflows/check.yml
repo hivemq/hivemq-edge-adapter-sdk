@@ -1,0 +1,39 @@
+name: CI Check
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+
+      - name: Setup Java
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5
+        with:
+          distribution: 'adopt'
+          java-version: '25'
+
+      - uses: burrunan/gradle-cache-action@4b67497abd37a511d6c1dc6299bdd84ff39f7bf5 # v3.0.2
+        name: Check
+        with:
+          arguments: check
+          gradle-version: wrapper
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@f3a4c8ee80460c780d2932e55fb914138ecaca2c
+        if: always()
+        with:
+          files: |
+            ${{ github.workspace }}/**/build/test-results/**/*.xml
