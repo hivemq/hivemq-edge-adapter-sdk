@@ -8,7 +8,7 @@ victools="5.0.0"
 plugin-defaults = "0.3.0"
 plugin-javadoc-links = "0.10.0"
 plugin-license = "0.16.1"
-plugin-maven-central-publishing = "0.5.0"
+plugin-maven-central-publishing = "0.6.0"
 plugin-metadata = "0.7.0"
 
 
